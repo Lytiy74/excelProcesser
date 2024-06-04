@@ -1,14 +1,15 @@
 {
   "article": [
+    "артикул",
     "article",
     "modell",
-    "artikelnr",
-    "артикул"
+    "artikelnr"
   ],
   "productName": [
+    "найменування",
     "назва",
-    "перевод назви",
-    "найменування"
+    "найменування (UA)",
+    "перевод назви"
   ],
   "sizes": [
     "розмір",
@@ -16,41 +17,45 @@
     "grösse"
   ],
   "tradeMark": [
-    "бренд"
+    "бренд",
+    "торгівельна марка"
   ],
   "countryOrigin": [
-    "країна",
     "виробник",
-    "origin"
+    "країна",
+    "origin",
+    "назва країни"
   ],
   "quantity": [
+    "кількість",
     "quantity",
     "stück",
-    "menge",
-    "кількість"
+    "menge"
   ],
   "composition": [
-    "composition",
     "склад",
+    "composition",
     "zusammensetzung"
   ],
   "gender": [
-    "gender",
-    "стать"
+    "стать",
+    "gender"
   ],
   "hsCode": [
+    "митний код",
     "hscode",
     "warennummer",
     "zolltarifnummer",
+    "уктзед",
     "код"
   ],
   "bruttoWeight": [
-    "brutto",
-    "брутто"
+    "брутто",
+    "brutto"
   ],
   "price": [
-    "price",
     "ціна",
+    "price",
     "preis o. rabatt"
   ]
 }
