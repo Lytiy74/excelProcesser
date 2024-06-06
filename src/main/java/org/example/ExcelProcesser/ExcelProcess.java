@@ -20,11 +20,11 @@ public class ExcelProcess {
     private final ExcelColumnIdentifier columnIdentifier;
 
 
-    public ExcelProcess(Workbook workbook, int sheetIndex) {
+    public ExcelProcess(Workbook workbook, int sheetIndex, HashMap<String, List<String>> targetColumns) {
         this.workbook = workbook;
         this.sheet = workbook.getSheetAt(sheetIndex);
         columnIdentifier = new ExcelColumnIdentifier();
-        identifiedColumns = columnIdentifier.identifyColumns(workbook.getSheetAt(sheetIndex));
+        identifiedColumns = columnIdentifier.identifyColumns(workbook.getSheetAt(sheetIndex).getRow(0),targetColumns);
         this.productProcess = new ProductProcess();
         this.cellValueExtractor = new CellValueExtractor(identifiedColumns);
     }
@@ -34,7 +34,7 @@ public class ExcelProcess {
         int rowIndex = 0;
 
         // Create header row
-        List<String> headers = columnIdentifier.getColumnsHeaders();
+        List<String> headers = null;
         Row headerRow = sheet1.createRow(rowIndex);
         for (int i = 0; i < headers.size(); i++) {
             headerRow.createCell(i).setCellValue(headers.get(i));
