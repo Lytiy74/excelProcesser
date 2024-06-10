@@ -3,6 +3,7 @@ package org.example.ExcelProcesser;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.example.Util.JaccardCalculation;
 
 import java.util.*;
 
@@ -38,14 +39,6 @@ class ExcelColumnIdentifier {
         }
         return columnKeyMap;
     }
-    private double jaccardSimilarity(Set<String> set1, Set<String> set2){
-        Set<String> intersection = new HashSet<>(set1);
-        intersection.retainAll(set2);
-        Set<String> union = new HashSet<>();
-        union.addAll(set2);
-        return (double) intersection.size() / union.size();
-
-    }
     private String finbBestMatch(String columnName,HashMap<String, String> columnKeyMap){
         Set<String> columnSet = new HashSet<>(List.of(columnName.split("\\s+")));
         String bestCategory = "UNKNOWN";
@@ -55,7 +48,7 @@ class ExcelColumnIdentifier {
             String possibleName = entry.getKey();
             String category = entry.getValue();
             Set<String> possibleSet = new HashSet<>(List.of(possibleName.split("\\s+")));
-            double score = jaccardSimilarity(columnSet, possibleSet);
+            double score = JaccardCalculation.jaccardSimilarity(columnSet, possibleSet);
             if (score > bestScore){
                 bestScore = score;
                 bestCategory = category;

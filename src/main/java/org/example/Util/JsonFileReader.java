@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class JsonFileReader implements Reader {
@@ -34,11 +35,11 @@ public class JsonFileReader implements Reader {
 
     // Метод для читання JSON-файлу і перетворення його на мапу
     public HashMap<String, List<String>> readJsonObjectArrayToMap(String filePath) {
-        HashMap<String, List<String>> map;
+        LinkedHashMap<String, List<String>> map;
         try {
             String jsonContent = new String(Files.readAllBytes(Paths.get(filePath)));
             ObjectMapper objectMapper = new ObjectMapper();
-            map = objectMapper.readValue(jsonContent, new TypeReference<HashMap<String, List<String>>>() {});
+            map = objectMapper.readValue(jsonContent, new TypeReference<LinkedHashMap<String, List<String>>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

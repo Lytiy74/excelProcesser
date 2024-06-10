@@ -8,7 +8,7 @@ class MaterialTranslator {
     private static HashMap<String, String> materialTranslationMap;
 
     MaterialTranslator(HashMap<String, String> translationMap) {
-        this.materialTranslationMap = translationMap;
+        materialTranslationMap = translationMap;
     }
 
     /**
@@ -36,5 +36,9 @@ class MaterialTranslator {
 
         // Return the translated LinkedHashMap
         return translatedComposition;
+    }
+    String translateMaterial(String inputString){
+        String translated = materialTranslationMap.get(inputString);
+        return translated == null ? inputString : translated;
     }
 }

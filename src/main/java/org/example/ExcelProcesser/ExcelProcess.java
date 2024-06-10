@@ -29,12 +29,11 @@ public class ExcelProcess {
         this.cellValueExtractor = new CellValueExtractor(identifiedColumns);
     }
 
-    public void addProductsToSheet(HashMap<String, ProductPosition> products) {
+    public void addProductsToSheet(HashMap<String, ProductPosition> products, List<String> headers) {
         Sheet sheet1 = this.workbook.createSheet("Processed");
         int rowIndex = 0;
 
         // Create header row
-        List<String> headers = null;
         Row headerRow = sheet1.createRow(rowIndex);
         for (int i = 0; i < headers.size(); i++) {
             headerRow.createCell(i).setCellValue(headers.get(i));
