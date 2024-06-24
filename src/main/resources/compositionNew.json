@@ -1,39 +1,184 @@
 {
-  "ацетат": ["acetate", "ca"],
-  "акрил": ["acryl", "acrylic", "ma", "pan", "pc"],
-  "алюміній": ["aluminium"],
-  "бавовна": ["baumwolle", "co", "cot", "cotton", "PIMA COTTON"],
-  "волокно рами": ["ra"],
-  "вовна": ["alpaca", "cashmere", "wool", "wa", "wb", "wg", "wk", "wl", "wm", "wo", "wp", "wt", "wu", "wv", "wy", "ws"],
-  "джут": ["ju"],
-  "еластан": ["ea", "el", "elastan"],
-  "еластодієн": ["elastodien"],
-  "еластомультиестер": ["elastomultiester", "em"],
-  "еластерел": ["elasterell"],
-  "жакард": ["jaquard"],
-  "джут": ["ju"],
-  "конопля": ["аb"],
-  "купро": ["cupro"],
-  "латунь": ["brass"],
-  "ліоцел": ["cly-t", "cly", "ly", "lyocell"],
-  "лікра": ["lycra"],
-  "льон": ["flax", "flaxlinen", "linen/flax", "linen", "leinen", "li"],
-  "метал": ["me", "metal", "metallised fiber", "mtf", "mz"],
-  "модал": ["cmd", "md", "modal", "mo"],
-  "нейлон": ["nylon", "ny"],
-  "інші": ["af", "other fibres", "other"],
-  "пвх": ["polyvinyl chloride", "pvc", "pvcf"],
-  "поліамід": ["pa", "polyamid", "polyamide"],
-  "поліестер": ["pes", "pe2", "pl", "polyester"],
-  "поліетилен": ["pe", "polyethylene"],
-  "поліпропілен": ["polypropylene", "pp"],
-  "поліуретан": ["polyurethane", "pu"],
-  "район": ["ryn"],
-  "скло": ["glass"],
-  "спандекс": ["spandex"],
-  "титан": ["titanium"],
-  "триацетат": ["cta", "ta", "triacetate"],
-  "фліс": ["fls"],
-  "шовк": ["se", "seide", "silk", "si"],
-  "шкіра": ["calfskin", "le", "leather", "GOAT SKIN - CAPRA HIRCUS", "lamb"]
+  "ацетат": [
+    "acetate",
+    "ca"
+  ],
+  "акрил": [
+    "acryl",
+    "acrylic",
+    "ma",
+    "pan",
+    "pc"
+  ],
+  "алюміній": [
+    "aluminium"
+  ],
+  "бавовна": [
+    "baumwolle",
+    "co",
+    "cot",
+    "cotton",
+    "PIMA COTTON"
+  ],
+  "волокно рами": [
+    "ra"
+  ],
+  "віскоза": [
+    "viskose"
+  ],
+  "вовна": [
+    "alpaca",
+    "cashmere",
+    "kaschmir",
+    "wolle",
+    "wool",
+    "wa",
+    "wb",
+    "wg",
+    "wk",
+    "wl",
+    "wm",
+    "wo",
+    "wp",
+    "wt",
+    "wu",
+    "wv",
+    "wy",
+    "ws"
+  ],
+  "джут": [
+    "ju"
+  ],
+  "еластан": [
+    "ea",
+    "el",
+    "elastan"
+  ],
+  "еластодієн": [
+    "elastodien"
+  ],
+  "еластомультиестер": [
+    "elastomultiester",
+    "em"
+  ],
+  "еластерел": [
+    "elasterell"
+  ],
+  "жакард": [
+    "jaquard"
+  ],
+  "джут": [
+    "ju"
+  ],
+  "конопля": [
+    "аb"
+  ],
+  "купро": [
+    "cupro"
+  ],
+  "латунь": [
+    "brass"
+  ],
+  "ліоцел": [
+    "cly-t",
+    "cly",
+    "ly",
+    "lyocell"
+  ],
+  "лікра": [
+    "lycra"
+  ],
+  "льон": [
+    "flax",
+    "flaxlinen",
+    "linen/flax",
+    "linen",
+    "leinen",
+    "li"
+  ],
+  "метал": [
+    "me",
+    "metal",
+    "metall",
+    "metallised fiber",
+    "mtf",
+    "mz"
+  ],
+  "модал": [
+    "cmd",
+    "md",
+    "modal",
+    "mo"
+  ],
+  "нейлон": [
+    "nylon",
+    "ny"
+  ],
+  "інші": [
+    "af",
+    "other fibres",
+    "other"
+  ],
+  "пвх": [
+    "polyvinyl chloride",
+    "pvc",
+    "pvcf"
+  ],
+  "поліамід": [
+    "pa",
+    "polyamid",
+    "polyamide"
+  ],
+  "поліестер": [
+    "pes",
+    "pe2",
+    "pl",
+    "polyester"
+  ],
+  "поліетилен": [
+    "pe",
+    "polyethylene"
+  ],
+  "поліпропілен": [
+    "polypropylene",
+    "pp"
+  ],
+  "поліуретан": [
+    "polyurethane",
+    "pu"
+  ],
+  "район": [
+    "ryn"
+  ],
+  "скло": [
+    "glass"
+  ],
+  "спандекс": [
+    "spandex"
+  ],
+  "титан": [
+    "titanium"
+  ],
+  "триацетат": [
+    "cta",
+    "ta",
+    "triacetate"
+  ],
+  "фліс": [
+    "fls"
+  ],
+  "шовк": [
+    "se",
+    "seide",
+    "silk",
+    "si"
+  ],
+  "шкіра": [
+    "calfskin",
+    "leader",
+    "le",
+    "leather",
+    "GOAT SKIN - CAPRA HIRCUS",
+    "lamb"
+  ]
 }
