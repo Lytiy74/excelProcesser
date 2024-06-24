@@ -40,14 +40,14 @@ class ExcelColumnIdentifier {
         return columnKeyMap;
     }
     private String finbBestMatch(String columnName,HashMap<String, String> columnKeyMap){
-        Set<String> columnSet = new HashSet<>(List.of(columnName.split("\\s+")));
+        Set<Character> columnSet = stringToCharSet(columnName);
         String bestCategory = "UNKNOWN";
         double bestScore = Double.MIN_VALUE;
 
         for(Map.Entry<String, String> entry : columnKeyMap.entrySet()){
             String possibleName = entry.getKey();
             String category = entry.getValue();
-            Set<String> possibleSet = new HashSet<>(List.of(possibleName.split("\\s+")));
+            Set<Character> possibleSet =stringToCharSet(possibleName);
             double score = JaccardCalculation.jaccardSimilarity(columnSet, possibleSet);
             if (score > bestScore){
                 bestScore = score;
@@ -55,5 +55,12 @@ class ExcelColumnIdentifier {
             }
         }
         return bestCategory;
+    }
+    private Set<Character> stringToCharSet(String str) {
+        Set<Character> charSet = new HashSet<>();
+        for (char c : str.toCharArray()) {
+            charSet.add(c);
+        }
+        return charSet;
     }
 }
