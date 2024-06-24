@@ -1,6 +1,6 @@
 package org.example.ProductProcess.Composition;
 
-import org.example.Util.JsonFileReader;
+import org.example.Util.IO.JsonFileReader;
 import org.example.Util.MapConverter;
 
 import java.util.HashMap;

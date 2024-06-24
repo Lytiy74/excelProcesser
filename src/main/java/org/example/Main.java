@@ -5,8 +5,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.ExcelProcesser.ExcelProcess;
 import org.example.Product.ProductPosition;
 import org.example.ProductProcess.Composition.MaterialProcess;
-import org.example.Util.ExcelFileWriter;
-import org.example.Util.JsonFileReader;
+import org.example.Util.IO.ExcelFileWriter;
+import org.example.Util.IO.JsonFileReader;
 
 import java.io.IOException;
 import java.util.HashMap;
