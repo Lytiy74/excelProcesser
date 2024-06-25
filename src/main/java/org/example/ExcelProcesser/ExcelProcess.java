@@ -94,4 +94,11 @@ public class ExcelProcess {
         return workbook;
     }
 
+    public HashMap<String, Integer> getIdentifiedColumns() {
+        return identifiedColumns;
+    }
+
+    public Sheet getSheet() {
+        return sheet;
+    }
 }

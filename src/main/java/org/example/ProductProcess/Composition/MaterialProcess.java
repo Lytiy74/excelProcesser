@@ -23,8 +23,13 @@ public class MaterialProcess {
     public String generateCompositionString(String composition) {
         LinkedHashMap<String, Integer> compositionMap = parser.parseStringCompositionToMap(composition);
         LinkedHashMap<String, Integer> translatedMap = new LinkedHashMap<>();
-        for (String key : compositionMap.keySet()){
-            translatedMap.put(translator.translateMaterial(key), compositionMap.get(key));
+        for (String key : compositionMap.keySet()) {
+            String translated = translator.translateMaterial(key);
+            if (!translatedMap.containsKey(translated)) {
+                translatedMap.put(translated, compositionMap.get(key));
+            } else {
+                translatedMap.put(translated, translatedMap.get(translated) + compositionMap.get(key));
+            }
         }
         return materialStringBuilder.buildCompositionString(translatedMap);
     }
