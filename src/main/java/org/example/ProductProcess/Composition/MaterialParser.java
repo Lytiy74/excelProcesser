@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class MaterialParser {
-    private static final Pattern COMPOSITION_PATTERN = Pattern.compile("(\\d+)%*\\s*([A-Za-z]+)");
+    private static final Pattern COMPOSITION_PATTERN = Pattern.compile("(\\d+)%\\s*([A-Za-z]+\\s*[A-Za-z]*)");
 
     /**
      * This method processes a string representing a composition of materials and their percentages.

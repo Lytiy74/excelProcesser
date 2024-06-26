@@ -1,5 +1,12 @@
 package org.example.Product;
 
+/**
+ * This class represents a product position in an inventory or order.
+ * It contains various attributes such as article, product name, sizes, trademark, country of origin,
+ * quantity, composition, gender, HS code, brutto weight, and price.
+ * <p>
+ * The class also provides a builder pattern for creating instances of ProductPosition.
+ */
 public class ProductPosition {
     private String article;
     private String productName;
@@ -13,8 +20,31 @@ public class ProductPosition {
     private double bruttoWeight;
     private double price;
 
-    public ProductPosition(){};
+    /**
+     * Default constructor for ProductPosition.
+     * Initializes all attributes to default values.
+     */
+    public ProductPosition() {
+    }
 
+    ;
+
+    /**
+     * Constructor for ProductPosition.
+     * Initializes all attributes with the provided values.
+     *
+     * @param article       the article of the product
+     * @param productName   the name of the product
+     * @param sizes         the sizes of the product
+     * @param tradeMark     the trademark of the product
+     * @param countryOrigin the country of origin of the product
+     * @param quantity      the quantity of the product
+     * @param composition   the composition of the product
+     * @param gender        the gender of the product
+     * @param hsCode        the HS code of the product
+     * @param bruttoWeight  the brutto weight of the product
+     * @param price         the price of the product
+     */
     public ProductPosition(String article, String productName,
                            String sizes, String tradeMark,
                            String countryOrigin, int quantity,
@@ -33,6 +63,7 @@ public class ProductPosition {
         this.price = price;
     }
 
+    // getters and setters for all attributes
     public String getArticle() {
         return article;
     }
@@ -121,34 +152,38 @@ public class ProductPosition {
         this.price = price;
     }
 
-    public static Builder newBuilder(){
+    public static Builder newBuilder() {
         return new ProductPosition().new Builder();
     }
 
+    // builder pattern for creating instances of ProductPosition
     public class Builder {
         private Builder() {
 
         }
 
+        // builder methods for setting attributes
         public Builder setArticle(String article) {
             ProductPosition.this.article = article;
             return this;
         }
 
-        public Builder setProductName(String productName){
+        public Builder setProductName(String productName) {
             ProductPosition.this.productName = productName;
             return this;
         }
 
-        public Builder setSizes(String sizes){
+        public Builder setSizes(String sizes) {
             ProductPosition.this.sizes = sizes;
             return this;
         }
-        public Builder setTradeMark(String tradeMark){
+
+        public Builder setTradeMark(String tradeMark) {
             ProductPosition.this.tradeMark = tradeMark;
             return this;
         }
-        public Builder setCountryOrigin(String countryOrigin){
+
+        public Builder setCountryOrigin(String countryOrigin) {
             ProductPosition.this.countryOrigin = countryOrigin;
             return this;
         }
@@ -184,7 +219,7 @@ public class ProductPosition {
         }
 
         public ProductPosition build() {
-            return  ProductPosition.this;
+            return ProductPosition.this;
         }
     }
 
