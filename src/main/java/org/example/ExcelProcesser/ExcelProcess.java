@@ -19,7 +19,13 @@ public class ExcelProcess {
     private final HashMap<String, Integer> identifiedColumns;
     private final ExcelColumnIdentifier columnIdentifier;
 
-
+    /**
+     * Constructor for ExcelProcess class.
+     *
+     * @param workbook The Apache POI Workbook object representing the Excel workbook.
+     * @param sheetIndex The index of the sheet within the workbook to process.
+     * @param targetColumns A HashMap containing the predefined categories and their corresponding column names.
+     */
     public ExcelProcess(Workbook workbook, int sheetIndex, HashMap<String, List<String>> targetColumns) {
         this.workbook = workbook;
         this.sheet = workbook.getSheetAt(sheetIndex);
@@ -28,7 +34,12 @@ public class ExcelProcess {
         this.productProcess = new ProductProcess();
         this.cellValueExtractor = new CellValueExtractor(identifiedColumns);
     }
-
+    /**
+     * Adds the processed products to a new sheet in the workbook.
+     *
+     * @param products A HashMap containing the article numbers as keys and ProductPosition objects as values.
+     * @param headers A List containing the column headers for the new sheet.
+     */
     public void addProductsToSheet(HashMap<String, ProductPosition> products, List<String> headers) {
         Sheet sheet1 = this.workbook.createSheet("Processed");
         int rowIndex = 0;
@@ -57,7 +68,11 @@ public class ExcelProcess {
             rowIndex++;
         }
     }
-
+    /**
+     * Collects the products from the Excel sheet and returns them as a HashMap.
+     *
+     * @return A HashMap containing the article numbers as keys and ProductPosition objects as values.
+     */
     public HashMap<String, ProductPosition> collectProducts() {
         HashMap<String, ProductPosition> products = new HashMap<>();
         for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
@@ -73,7 +88,12 @@ public class ExcelProcess {
         return products;
     }
 
-
+    /**
+     * Builds a ProductPosition object from the data in a given row.
+     *
+     * @param row The Apache POI Row object containing the data.
+     * @return A ProductPosition object representing the data in the row.
+     */
     private ProductPosition buildProductPosition(Row row) {
         return ProductPosition.newBuilder()
                 .setArticle(cellValueExtractor.getCellValue(row, "article"))
