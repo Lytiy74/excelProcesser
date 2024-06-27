@@ -4,6 +4,7 @@ package org.example.ExcelProcesser;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.example.Util.JaccardCalculation;
+import org.example.Util.MapConverter;
 
 import java.util.*;
 
@@ -21,7 +22,7 @@ class ExcelColumnIdentifier {
      */
     public HashMap<String, Integer> identifyColumns(Row sourceRow, HashMap<String, List<String>> targetColumns){
         // Invert the target column map for efficient lookup
-        HashMap<String, String> columnKeyMap =  invertColumnMap(targetColumns);
+        HashMap<String, String> columnKeyMap = MapConverter.invertColumnMap(targetColumns);
 
         // Extract column names from the source row
         List<String> sourceColumns = extractColumnNames(sourceRow);
@@ -65,28 +66,6 @@ class ExcelColumnIdentifier {
 
         // Return the list of column names
         return sourceColumns;
-    }
-
-    /**
-     * Inverts the target column map for efficient lookup.
-     *
-     * @param targetColumns The original target column map.
-     * @return The inverted target column map.
-     */
-    private HashMap<String, String> invertColumnMap(HashMap<String, List<String>> targetColumns) {
-        HashMap<String, String> columnKeyMap = new HashMap<>();
-
-        // Iterate through the categories in the target column map
-        for (String key : targetColumns.keySet()) {
-            // Iterate through the column names for the current category
-            for (String value : targetColumns.get(key)) {
-                // Add the column name and its category to the inverted map
-                columnKeyMap.put(value, key);
-            }
-        }
-
-        // Return the inverted target column map
-        return columnKeyMap;
     }
 
     /**
