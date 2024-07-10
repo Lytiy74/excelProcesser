@@ -33,7 +33,7 @@ class ExcelColumnIdentifier {
         // Iterate through the source columns
         for (String column : sourceColumns){
             // Find the best match category for the current column
-            String bestMatchCategory = findBestMatch(column, columnKeyMap);
+            String bestMatchCategory = JaccardCalculation.findBestMatch(column, columnKeyMap);
 
             // Add the identified category and its column index to the map
             identifiedColumns.put(bestMatchCategory, sourceColumns.indexOf(column));
@@ -68,60 +68,4 @@ class ExcelColumnIdentifier {
         return sourceColumns;
     }
 
-    /**
-     * Finds the best match category for a given column name based on the Jaccard similarity score.
-     *
-     * @param columnName The name of the column to find a match for.
-     * @param columnKeyMap The inverted target column map.
-     * @return The best match category for the given column name.
-     */
-    private String findBestMatch(String columnName, HashMap<String, String> columnKeyMap){
-        // Convert the column name to a set of characters
-        Set<Character> columnSet = stringToCharSet(columnName);
-
-        // Initialize variables to store the best match category and score
-        String bestCategory = "UNKNOWN";
-        double bestScore = Double.MIN_VALUE;
-
-        // Iterate through the entries in the inverted column map
-        for(Map.Entry<String, String> entry : columnKeyMap.entrySet()){
-            // Get the possible column name and its category
-            String possibleName = entry.getKey();
-            String category = entry.getValue();
-
-            // Convert the possible column name to a set of characters
-            Set<Character> possibleSet =stringToCharSet(possibleName);
-
-            // Calculate the Jaccard similarity score between the column name and the possible column name
-            double score = JaccardCalculation.jaccardSimilarity(columnSet, possibleSet);
-
-            // If the score is higher than the current best score, update the best match category and score
-            if (score > bestScore){
-                bestScore = score;
-                bestCategory = category;
-            }
-        }
-
-        // Return the best match category
-        return bestCategory;
-    }
-
-    /**
-     * Converts a string to a set of characters.
-     *
-     * @param str The string to convert.
-     * @return A set of characters.
-     */
-    private Set<Character> stringToCharSet(String str) {
-        Set<Character> charSet = new HashSet<>();
-
-        // Iterate through the characters in the string
-        for (char c : str.toCharArray()) {
-            // Add the character to the set
-            charSet.add(c);
-        }
-
-        // Return the set of characters
-        return charSet;
-    }
 }
