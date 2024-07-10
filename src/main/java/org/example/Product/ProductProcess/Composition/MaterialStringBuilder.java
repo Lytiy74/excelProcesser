@@ -1,4 +1,4 @@
-package org.example.ProductProcess.Composition;
+package org.example.Product.ProductProcess.Composition;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
