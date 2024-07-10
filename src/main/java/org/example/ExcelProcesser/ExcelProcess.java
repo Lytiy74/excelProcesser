@@ -3,7 +3,7 @@ package org.example.ExcelProcesser;
 import org.apache.poi.ss.usermodel.*;
 import org.example.Product.Gender;
 import org.example.Product.ProductPosition;
-import org.example.ProductProcess.ProductProcess;
+import org.example.Product.ProductProcess.ProductProcess;
 
 import java.util.HashMap;
 import java.util.List;
