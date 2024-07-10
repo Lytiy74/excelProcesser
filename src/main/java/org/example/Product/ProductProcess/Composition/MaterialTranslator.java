@@ -1,5 +1,7 @@
-package org.example.ProductProcess.Composition;
+package org.example.Product.ProductProcess.Composition;
 
+
+import org.example.Util.JaccardCalculation;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -38,7 +40,8 @@ class MaterialTranslator {
         return translatedComposition;
     }
     String translateMaterial(String inputString){
-        String translated = materialTranslationMap.get(inputString);
+        String translated = JaccardCalculation.findBestMatch(inputString, materialTranslationMap);
+        System.out.println("Best match for " + inputString + " ---> " + translated);
         return translated == null ? inputString : translated;
     }
 }
