@@ -1,4 +1,4 @@
-package org.example.ProductProcess.Composition;
+package org.example.Product.ProductProcess.Composition;
 
 import org.example.Util.IO.JsonFileReader;
 import org.example.Util.MapConverter;
