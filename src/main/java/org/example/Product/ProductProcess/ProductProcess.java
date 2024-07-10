@@ -1,4 +1,4 @@
-package org.example.ProductProcess;
+package org.example.Product.ProductProcess;
 
 import org.example.Product.ProductPosition;
 
