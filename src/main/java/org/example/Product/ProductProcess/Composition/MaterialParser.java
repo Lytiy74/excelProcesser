@@ -1,4 +1,4 @@
-package org.example.ProductProcess.Composition;
+package org.example.Product.ProductProcess.Composition;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -31,7 +31,7 @@ class MaterialParser {
         // Iterate over the matches
         while (matcher.find()) {
             // Extract the material name and percentage from the match
-            String material = matcher.group(2).toLowerCase();
+            String material = matcher.group(2).toLowerCase().trim();
             int percentage = Integer.parseInt(matcher.group(1));
 
             // If the material is not already in the composition map, add it with its percentage
