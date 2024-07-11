@@ -1,4 +1,5 @@
 import org.example.Product.ProductProcess.Composition.MaterialProcess;
+import org.example.Product.ProductProcess.Composition.MaterialProcessImpl;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -7,7 +8,7 @@ public class MaterialProcessTest {
     static MaterialProcess materialProcess;
     @BeforeAll
     static void setup() throws IOException {
-        materialProcess = new MaterialProcess();
+        materialProcess = new MaterialProcessImpl();
     }
     @DisplayName("Test with normal string")
     @Test
