@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.ExcelProcesser.ExcelProcess;
+import org.example.ExcelProcesser.ExcelProcesserImpl;
 import org.example.Product.ProductPosition;
 import org.example.Product.ProductProcess.Composition.MaterialProcess;
 import org.example.Product.ProductProcess.Composition.MaterialProcessImpl;
@@ -23,7 +24,7 @@ public class Main {
         MaterialProcess materialProcess = new MaterialProcessImpl();
         HashMap<String, List<String>> stringStringHashMap = reader.readJsonObjectArrayToMap("src/main/resources/columnNames.json");
         Workbook workbook = new XSSFWorkbook("src/main/resources/опис.xlsx");
-        ExcelProcess excelProcess = new ExcelProcess(workbook, 0, stringStringHashMap);
+        ExcelProcess excelProcess = new ExcelProcesserImpl(workbook, 0, stringStringHashMap);
         HashMap<String, ProductPosition> productPositionHashMap = excelProcess.collectProducts();
         for (String article : productPositionHashMap.keySet()) {
             ProductPosition productPosition = productPositionHashMap.get(article);
