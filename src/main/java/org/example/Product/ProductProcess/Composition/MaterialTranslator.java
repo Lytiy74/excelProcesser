@@ -40,7 +40,8 @@ class MaterialTranslator {
         return translatedComposition;
     }
     String translateMaterial(String inputString){
-        String translated = JaccardCalculation.findBestMatch(inputString, materialTranslationMap);
+        String translated = materialTranslationMap.get(inputString);
+        if(translated == null) translated = JaccardCalculation.findBestMatch(inputString, materialTranslationMap);
         System.out.println("Best match for " + inputString + " ---> " + translated);
         return translated == null ? inputString : translated;
     }

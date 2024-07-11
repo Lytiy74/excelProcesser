@@ -13,7 +13,8 @@ public class ProductProcess {
      * @return The merged ProductPosition object. If the HS codes are different, it returns the second object with "-duplicate" appended to the article.
      */
     public ProductPosition mergeDuplications(ProductPosition product1, ProductPosition product2) {
-        if (product1.getHsCode().equals(product2.getHsCode())) {
+        if (product1.getHsCode().equals(product2.getHsCode())
+                && product1.getCountryOrigin().equals(product2.getCountryOrigin())) {
             product1.setQuantity(product1.getQuantity() + product2.getQuantity());
             product1.setBruttoWeight(product1.getBruttoWeight() + product2.getBruttoWeight());
             product1.setPrice(product1.getPrice() + product2.getPrice());

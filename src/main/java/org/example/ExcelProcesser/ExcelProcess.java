@@ -9,7 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * This class processes an Excel workbook to retrieve column indexes based on predefined categories.
+ * This class processes an Excel workbook to retrieve
+ * column indexes based on predefined categories.
  */
 public class ExcelProcess {
     private final Workbook workbook;

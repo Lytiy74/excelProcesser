@@ -29,6 +29,7 @@ public class JaccardCalculation {
      * @return The best match category for the given column name.
      */
     public static String findBestMatch(String var1, HashMap<String, String> keyMap){
+        if(var1 == null) return "UNKNOWN";
         // Convert the column name to a set of characters
         Set<Character> set = stringToCharSet(var1);
 
@@ -49,7 +50,7 @@ public class JaccardCalculation {
             double score = JaccardCalculation.jaccardSimilarity(set, possibleSet);
 
             // If the score is higher than the current best score, update the best match category and score
-            if (score > bestScore){
+            if (score > 0.5 && score > bestScore){
                 bestScore = score;
                 bestMatch = category;
             }
