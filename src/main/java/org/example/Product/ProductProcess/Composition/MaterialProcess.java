@@ -53,7 +53,7 @@ public class MaterialProcess {
      * @return the formatted composition string.
      */
     public String generateCompositionString(String composition) {
-        LinkedHashMap<String, Integer> compositionMap = parser.parseStringCompositionToMap(composition);
+        LinkedHashMap<String, Integer> compositionMap = parser.parseStringCompositionToMap(composition.toLowerCase());
         LinkedHashMap<String, Integer> translatedMap = new LinkedHashMap<>();
         for (String key : compositionMap.keySet()) {
             String translated = translator.translateMaterial(key);
@@ -64,5 +64,8 @@ public class MaterialProcess {
             }
         }
         return materialStringBuilder.buildCompositionString(translatedMap);
+    }
+    public String translateComposition(String compositon){
+        return translator.translateMaterial(compositon.toLowerCase());
     }
 }
