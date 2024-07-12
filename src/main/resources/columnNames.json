@@ -10,7 +10,8 @@
     "назва",
     "наименование",
     "найменування (UA)",
-    "перевод назви"
+    "перевод назви",
+    "description"
   ],
   "sizes": [
     "розмір",
@@ -26,13 +27,16 @@
     "країна",
     "origin",
     "производитель",
-    "назва країни"
+    "назва країни",
+    "country",
+    "country of origin"
   ],
   "quantity": [
     "сумарна кількість одиниць",
     "кількість",
     "quantity",
     "stück",
+    "total",
     "menge"
   ],
   "composition": [
@@ -51,7 +55,8 @@
     "warennummer",
     "zolltarifnummer",
     "уктзед",
-    "код"
+    "код",
+    "tariff no."
   ],
   "bruttoWeight": [
     "брутто",
@@ -62,6 +67,7 @@
     "cума",
     "ціна",
     "price",
-    "preis o. rabatt"
+    "preis o. rabatt",
+    "euro"
   ]
 }
