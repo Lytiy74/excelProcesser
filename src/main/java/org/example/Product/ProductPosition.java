@@ -1,5 +1,7 @@
 package org.example.Product;
 
+import java.util.Objects;
+
 /**
  * This class represents a product position in an inventory or order.
  * It contains various attributes such as article, product name, sizes, trademark, country of origin,
@@ -26,8 +28,6 @@ public class ProductPosition {
      */
     public ProductPosition() {
     }
-
-    ;
 
     /**
      * Constructor for ProductPosition.
@@ -238,5 +238,27 @@ public class ProductPosition {
                 ", bruttoWeight=" + bruttoWeight +
                 ", price=" + price +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductPosition that = (ProductPosition) o;
+        return quantity == that.quantity && Double.compare(bruttoWeight, that.bruttoWeight) == 0
+                && Double.compare(price, that.price) == 0
+                && Objects.equals(article, that.article)
+                && Objects.equals(productName, that.productName)
+                && Objects.equals(sizes, that.sizes)
+                && Objects.equals(tradeMark, that.tradeMark)
+                && Objects.equals(countryOrigin, that.countryOrigin)
+                && Objects.equals(composition, that.composition)
+                && gender == that.gender
+                && Objects.equals(hsCode, that.hsCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(article, productName, sizes, tradeMark, countryOrigin, quantity, composition, gender, hsCode, bruttoWeight, price);
     }
 }

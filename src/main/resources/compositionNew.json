@@ -26,11 +26,14 @@
   ],
   "віскоза": [
     "cv",
+    "viscose",
     "viskose"
   ],
   "вовна": [
+    "lambswool",
     "alpaca",
     "cashmere",
+    "sheep",
     "kaschmir",
     "wolle",
     "wool",
@@ -48,13 +51,17 @@
     "wy",
     "ws"
   ],
+  "гума": [
+    "rubber"
+  ],
   "джут": [
     "ju"
   ],
   "еластан": [
     "ea",
     "el",
-    "elastan"
+    "elastan",
+    "elastane"
   ],
   "еластодієн": [
     "elastodien"
@@ -64,7 +71,8 @@
     "em"
   ],
   "еластерел": [
-    "elasterell"
+    "elasterell",
+    "elasterelle"
   ],
   "жакард": [
     "jaquard"
@@ -131,6 +139,9 @@
     "polyamid",
     "polyamide"
   ],
+  "пух": [
+    "duck"
+  ],
   "поліестер": [
     "pes",
     "pe2",
@@ -179,6 +190,7 @@
     "calfskin",
     "leader",
     "le",
+    "calfleather",
     "leather",
     "GOAT SKIN - CAPRA HIRCUS",
     "lamb"

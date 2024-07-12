@@ -2,6 +2,8 @@ package org.example.Util.IO;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class JsonFileReader implements Reader {
+    private static final Logger logger = LoggerFactory.getLogger(JsonFileReader.class);
     @Override
     public String read(String filePath) throws IOException {
             return new String(Files.readAllBytes(Paths.get(filePath)));
@@ -27,6 +30,7 @@ public class JsonFileReader implements Reader {
 
     // Метод для читання JSON-файлу і перетворення його на мапу
     public HashMap<String, List<String>> readJsonObjectArrayToMap(String filePath) throws IOException {
+        logger.debug("Reading file from '{}'", filePath);
         LinkedHashMap<String, List<String>> map;
         String jsonContent = new String(Files.readAllBytes(Paths.get(filePath)));
         ObjectMapper objectMapper = new ObjectMapper();
