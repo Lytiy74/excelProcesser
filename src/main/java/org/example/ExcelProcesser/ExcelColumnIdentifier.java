@@ -37,9 +37,6 @@ class ExcelColumnIdentifier {
 
             // Add the identified category and its column index to the map
             identifiedColumns.put(bestMatchCategory, sourceColumns.indexOf(column));
-
-            // Print the column and its identified category
-            System.out.println(column + " -> " +bestMatchCategory);
         }
 
         // Return the map of identified columns

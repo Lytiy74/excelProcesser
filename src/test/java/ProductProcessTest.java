@@ -87,12 +87,12 @@ public class ProductProcessTest {
                 .setSizes(null)
                 .setTradeMark("test-trademark")
                 .setCountryOrigin("test-different-country")
-                .setQuantity(20)
+                .setQuantity(5)
                 .setComposition("test-composition")
                 .setGender(Gender.UNISEX)
                 .setHsCode("test-HSCODE")
-                .setBruttoWeight(15)
-                .setPrice(150)
+                .setBruttoWeight(5)
+                .setPrice(50)
                 .build();
 
         ProductPosition merged = productProcess.mergeDuplications(productPosition1, differentProductPosition);

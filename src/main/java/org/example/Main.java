@@ -16,14 +16,11 @@ import org.example.Util.IO.JsonFileReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException {
-        logger.debug("Start processing");
+        logger.info("Start processing");
         long startedAt = System.currentTimeMillis();
         JsonFileReader reader = new JsonFileReader();
         MaterialProcess materialProcess = new MaterialProcessImpl();
@@ -39,6 +36,6 @@ public class Main {
         excelProcess.addProductsToSheet(productPositionHashMap, stringStringHashMap.keySet().stream().toList());
         ExcelFileWriter writer = new ExcelFileWriter();
         writer.write(workbook, "src/main/resources/result.xlsx");
-        logger.debug("Finished processing. Wasted time = " + (System.currentTimeMillis()-startedAt)/1000 + "s");
+        logger.info("Finished processing. Wasted time = {}s", (System.currentTimeMillis() - startedAt)/1000);
     }
 }

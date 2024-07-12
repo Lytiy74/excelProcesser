@@ -4,6 +4,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.example.Product.Gender;
 import org.example.Product.ProductPosition;
 import org.example.Product.ProductProcess.ProductProcess;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
  * column indexes based on predefined categories.
  */
 public class ExcelProcesserImpl implements ExcelProcess {
+    private static final Logger logger = LoggerFactory.getLogger(ExcelProcesserImpl.class);
     private final Workbook workbook;
     private final Sheet sheet;
     private final ProductProcess productProcess;
@@ -28,12 +31,14 @@ public class ExcelProcesserImpl implements ExcelProcess {
      * @param targetColumns A HashMap containing the predefined categories and their corresponding column names.
      */
     public ExcelProcesserImpl(Workbook workbook, int sheetIndex, HashMap<String, List<String>> targetColumns) {
+        logger.info("Initializing ExcelProcesserImpl...");
         this.workbook = workbook;
         this.sheet = workbook.getSheetAt(sheetIndex);
         columnIdentifier = new ExcelColumnIdentifier();
         identifiedColumns = columnIdentifier.identifyColumns(workbook.getSheetAt(sheetIndex).getRow(0),targetColumns);
         this.productProcess = new ProductProcess();
         this.cellValueExtractor = new CellValueExtractor(identifiedColumns);
+        logger.info("ExcelProcesserImpl initialized successfully.");
     }
     /**
      * Adds the processed products to a new sheet in the workbook.
@@ -43,6 +48,7 @@ public class ExcelProcesserImpl implements ExcelProcess {
      */
     @Override
     public void addProductsToSheet(HashMap<String, ProductPosition> products, List<String> headers) {
+        logger.info("Adding products to sheet...");
         Sheet sheet1 = this.workbook.createSheet("Processed");
         int rowIndex = 0;
 
@@ -55,6 +61,7 @@ public class ExcelProcesserImpl implements ExcelProcess {
 
         // Populate product data
         for (String key : products.keySet()) {
+            logger.info("Adding product with article: {}, to row {}", key, rowIndex);
             Row row = sheet1.createRow(rowIndex);
             row.createCell(headers.indexOf("article")).setCellValue(products.get(key).getArticle());
             row.createCell(headers.indexOf("productName")).setCellValue(products.get(key).getProductName());
@@ -68,7 +75,9 @@ public class ExcelProcesserImpl implements ExcelProcess {
             row.createCell(headers.indexOf("bruttoWeight")).setCellValue(products.get(key).getBruttoWeight());
             row.createCell(headers.indexOf("price")).setCellValue(products.get(key).getPrice());
             rowIndex++;
+            logger.info("Product processed successfully.");
         }
+        logger.info("Products added to sheet successfully.");
     }
     /**
      * Collects the products from the Excel sheet and returns them as a HashMap.
@@ -77,17 +86,22 @@ public class ExcelProcesserImpl implements ExcelProcess {
      */
     @Override
     public HashMap<String, ProductPosition> collectProducts() {
+        logger.info("Collecting products...");
         HashMap<String, ProductPosition> products = new HashMap<>();
         for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+            logger.info("Processing row {}...", rowIndex);
             Row row = sheet.getRow(rowIndex);
             ProductPosition product = buildProductPosition(row);
             if (!products.containsKey(product.getArticle())) {
+                logger.info("Adding product with article number: {}", product.getArticle());
                 products.put(product.getArticle(), product);
             } else {
+                logger.info("Founded duplicate of article {}, try to merge", product.getArticle());
                 ProductPosition product2 = products.get(product.getArticle());
                 products.put(product2.getArticle(), productProcess.mergeDuplications(product, product2));
             }
         }
+        logger.info("Products collected successfully.");
         return products;
     }
 
@@ -98,7 +112,8 @@ public class ExcelProcesserImpl implements ExcelProcess {
      * @return A ProductPosition object representing the data in the row.
      */
     private ProductPosition buildProductPosition(Row row) {
-        return ProductPosition.newBuilder()
+        logger.info("Building ProductPosition object...");
+        ProductPosition product = ProductPosition.newBuilder()
                 .setArticle(cellValueExtractor.getCellValue(row, "article"))
                 .setProductName(cellValueExtractor.getCellValue(row, "productName").toLowerCase())
                 .setSizes(cellValueExtractor.getCellValue(row, "sizes"))
@@ -111,6 +126,8 @@ public class ExcelProcesserImpl implements ExcelProcess {
                 .setBruttoWeight(cellValueExtractor.getIntegerCellValue(row, "bruttoWeight"))
                 .setPrice(cellValueExtractor.getDoubleCellValue(row, "price"))
                 .build();
+        logger.info("ProductPosition object built successfully.");
+        return product;
     }
     @Override
     public Workbook getWorkbook() {

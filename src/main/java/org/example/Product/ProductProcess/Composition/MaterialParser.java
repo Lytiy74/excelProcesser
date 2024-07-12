@@ -1,5 +1,8 @@
 package org.example.Product.ProductProcess.Composition;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,6 +11,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class MaterialParser {
+    private static final Logger logger = LoggerFactory.getLogger(MaterialParser.class);
     private static final Pattern COMPOSITION_PATTERN = Pattern.compile("(\\d+)%\\s*([A-Za-z]+\\s*[A-Za-z]*)");
 
     /**
@@ -22,6 +26,7 @@ class MaterialParser {
      * @return A LinkedHashMap where the keys are the unique material names (converted to lowercase) and the values are their corresponding percentages.
      */
     LinkedHashMap<String, Integer> parseStringCompositionToMap(String string) {
+        logger.debug("Parsing composition string: {}", string);
         // Initialize a HashMap to store the composition data
         HashMap<String, Integer> compositionMap = new HashMap<String, Integer>();
 
@@ -44,6 +49,7 @@ class MaterialParser {
         }
 
         // Return the sorted LinkedHashMap of composition data
+        logger.debug("Parsed composition data: {}", compositionMap);
         return getSortedLinkedHashMap(compositionMap);
     }
 
@@ -58,7 +64,9 @@ class MaterialParser {
      * The LinkedHashMap is sorted in descending order based on the percentages.
      */
     LinkedHashMap<String, Integer> getSortedLinkedHashMap(HashMap<String, Integer> compositionMap) {
-        return new LinkedHashMap<>(
+        logger.debug("Sorting composition data by percentage: {}", compositionMap);
+        return
+                new LinkedHashMap<>(
                 compositionMap.entrySet().stream()
                         .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,

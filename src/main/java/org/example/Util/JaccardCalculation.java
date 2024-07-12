@@ -1,19 +1,26 @@
 package org.example.Util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class JaccardCalculation {
+    private static final Logger logger = LoggerFactory.getLogger(JaccardCalculation.class);
+
     /**
      * This method calculates a Jaccard coefficient.
      * The Jaccard coefficient gives a value that represents the similarity of the neighborhoods of two vertices
-     * @param set1  first vertices
-     * @param set2  vertices
+     *
+     * @param set1 first vertices
+     * @param set2 vertices
      * @return - the more similar the closer to 1
      */
-    private static double jaccardSimilarity(Set<Character> set1, Set<Character> set2){
+    private static double jaccardSimilarity(Set<Character> set1, Set<Character> set2) {
+
         Set<Character> intersection = new HashSet<>(set1);
         intersection.retainAll(set2);
         Set<Character> union = new HashSet<>(set1);
@@ -21,15 +28,17 @@ public class JaccardCalculation {
         return (double) intersection.size() / union.size();
 
     }
+
     /**
      * Finds the best match category for a given column name based on the Jaccard similarity score.
      *
-     * @param var1 The name of the first variable to find a match for.
+     * @param var1   The name of the first variable to find a match for.
      * @param keyMap The inverted target map.
      * @return The best match category for the given column name.
      */
-    public static String findBestMatch(String var1, HashMap<String, String> keyMap){
-        if(var1 == null) return "UNKNOWN";
+    public static String findBestMatch(String var1, HashMap<String, String> keyMap) {
+        logger.debug("Looking for best match for '{}'", var1);
+        if (var1 == null) return "UNKNOWN";
         // Convert the column name to a set of characters
         Set<Character> set = stringToCharSet(var1);
 
@@ -38,7 +47,7 @@ public class JaccardCalculation {
         double bestScore = Double.MIN_VALUE;
 
         // Iterate through the entries in the inverted column map
-        for(Map.Entry<String, String> entry : keyMap.entrySet()){
+        for (Map.Entry<String, String> entry : keyMap.entrySet()) {
             // Get the possible column name and its category
             String possibleName = entry.getKey();
             String category = entry.getValue();
@@ -50,15 +59,18 @@ public class JaccardCalculation {
             double score = JaccardCalculation.jaccardSimilarity(set, possibleSet);
 
             // If the score is higher than the current best score, update the best match category and score
-            if (score > 0.5 && score > bestScore){
+            logger.trace("Possible match: '{}' , Category: '{}', Score: {}", possibleName, category, score);
+            if (score > 0.4 && score > bestScore) {
                 bestScore = score;
                 bestMatch = category;
             }
         }
 
         // Return the best match category
+        logger.debug("Best match for '{}' is '{}', Score: {}", var1, bestMatch, bestScore);
         return bestMatch;
     }
+
     /**
      * Converts a string to a set of characters.
      *

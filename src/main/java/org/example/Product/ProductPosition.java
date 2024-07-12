@@ -29,8 +29,6 @@ public class ProductPosition {
     public ProductPosition() {
     }
 
-    ;
-
     /**
      * Constructor for ProductPosition.
      * Initializes all attributes with the provided values.
