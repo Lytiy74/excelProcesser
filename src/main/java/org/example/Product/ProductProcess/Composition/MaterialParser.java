@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 
 class MaterialParser {
     private static final Logger logger = LoggerFactory.getLogger(MaterialParser.class);
-    private static final Pattern COMPOSITION_PATTERN = Pattern.compile("(\\d+)%\\s*([A-Za-z]+\\s*[A-Za-z]*)");
+    private static final Pattern COMPOSITION_PATTERN_WITH_MULTIPLE = Pattern.compile("(((?<percentage>\\d+)%?\\s*(?<material>[A-Za-z]+\\s*[A-Za-z]+))(?=.*lining:?))");
+    private static final Pattern COMPOSITION_PATTERN_SIMPLE = Pattern.compile("(((?<percentage>\\d+)%?\\s*(?<material>[A-Za-z]+\\s*[A-Za-z]+)))");
 
     /**
      * This method processes a string representing a composition of materials and their percentages.
@@ -31,26 +32,36 @@ class MaterialParser {
         HashMap<String, Integer> compositionMap = new HashMap<String, Integer>();
 
         // Use a Matcher to find all occurrences of the composition pattern in the input string
-        Matcher matcher = COMPOSITION_PATTERN.matcher(string);
-
+        Matcher matcher = COMPOSITION_PATTERN_WITH_MULTIPLE.matcher(string);
+        matcher = getMatcher(string, matcher);
         // Iterate over the matches
         while (matcher.find()) {
-            // Extract the material name and percentage from the match
-            String material = matcher.group(2).toLowerCase().trim();
-            int percentage = Integer.parseInt(matcher.group(1));
+            try {
+                // Extract the material name and percentage from the match
+                String material = matcher.group("material").toLowerCase().trim();
+                int percentage = Integer.parseInt(matcher.group("percentage"));
 
-            // If the material is not already in the composition map, add it with its percentage
-            if (!compositionMap.containsKey(material)) {
-                compositionMap.put(material, percentage);
-            } else {
-                // If the material is already in the composition map, add the percentage to its existing value
-                compositionMap.put(material, compositionMap.get(material) + percentage);
+                // If the material is not already in the composition map, add it with its percentage
+                compositionMap.merge(material, percentage, Integer::sum);
+            } catch (NumberFormatException e) {
+                logger.error("Error parsing percentage: {}", matcher.group("percentage"), e);
+            } catch (Exception e) {
+                logger.error("Unexpected error while parsing material: {}", matcher.group("material"), e);
             }
         }
 
         // Return the sorted LinkedHashMap of composition data
         logger.debug("Parsed composition data: {}", compositionMap);
         return getSortedLinkedHashMap(compositionMap);
+    }
+
+    private static Matcher getMatcher(String string, Matcher matcher) {
+        if (!matcher.find()) {
+            matcher = COMPOSITION_PATTERN_SIMPLE.matcher(string);
+        }else {
+            matcher.reset();
+        }
+        return matcher;
     }
 
     /**
@@ -67,10 +78,10 @@ class MaterialParser {
         logger.debug("Sorting composition data by percentage: {}", compositionMap);
         return
                 new LinkedHashMap<>(
-                compositionMap.entrySet().stream()
-                        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                                (e1, e2) -> e1, LinkedHashMap::new))
-        );
+                        compositionMap.entrySet().stream()
+                                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                                        (e1, e2) -> e1, LinkedHashMap::new))
+                );
     }
 }

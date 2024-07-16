@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This class is responsible for processing material compositions.
@@ -63,6 +65,7 @@ public class MaterialProcessImpl implements MaterialProcess {
     public String generateCompositionString(String composition) {
         logger.debug("Generating composition string for input: {}", composition);
         LinkedHashMap<String, Integer> compositionMap = parser.parseStringCompositionToMap(composition.toLowerCase());
+        if (compositionMap.isEmpty()) return composition;
 
         LinkedHashMap<String, Integer> translatedMap = new LinkedHashMap<>();
         for (String key : compositionMap.keySet()) {
@@ -74,7 +77,7 @@ public class MaterialProcessImpl implements MaterialProcess {
             }
         }
 
-        String result = materialStringBuilder.buildCompositionString(translatedMap);
+        String result = materialStringBuilder.buildCompositionString(getSortedLinkedHashMap(translatedMap));
         return result;
     }
 
@@ -82,5 +85,25 @@ public class MaterialProcessImpl implements MaterialProcess {
     public String translateComposition(String composition) {
         String translated = translator.translateMaterial(composition.toLowerCase());
         return translated;
+    }
+    /**
+     * This method takes a HashMap of composition data and returns a sorted LinkedHashMap.
+     * The LinkedHashMap is sorted in descending order based on the percentages.
+     * If the same material appears multiple times in the input HashMap, their percentages are summed up.
+     *
+     * @param compositionMap A HashMap containing the composition data. The keys are the unique material names (converted to lowercase)
+     *                       and the values are their corresponding percentages.
+     * @return A LinkedHashMap where the keys are the unique material names (converted to lowercase) and the values are their corresponding percentages.
+     * The LinkedHashMap is sorted in descending order based on the percentages.
+     */
+    LinkedHashMap<String, Integer> getSortedLinkedHashMap(HashMap<String, Integer> compositionMap) {
+        logger.debug("Sorting composition data by percentage: {}", compositionMap);
+        return
+                new LinkedHashMap<>(
+                        compositionMap.entrySet().stream()
+                                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                                        (e1, e2) -> e1, LinkedHashMap::new))
+                );
     }
 }

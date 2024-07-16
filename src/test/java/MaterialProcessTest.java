@@ -32,6 +32,30 @@ public class MaterialProcessTest {
         String translated = materialProcess.generateCompositionString("10% WO 50% CO 40% PA");
         Assertions.assertEquals("50% бавовна 40% поліамід 10% вовна", translated);
     }
+    @DisplayName("Test with multiple Composition with lining")
+    @Test
+    void multipleCompostionWithLiningsTest() {
+        String translated = materialProcess.generateCompositionString("Fabric: 51% CO 49% VI Lining 51% WO 49% CO");
+        Assertions.assertEquals("51% бавовна 49% віскоза", translated);
+    }
+    @DisplayName("Test with multiple Composition with lining:")
+    @Test
+    void multipleCompostionWithLiningsDoubleDotsTest() {
+        String translated = materialProcess.generateCompositionString("Fabric: 51% CO 49% VI Lining: 51% WO 49% CO");
+        Assertions.assertEquals("51% бавовна 49% віскоза", translated);
+    }
+    @DisplayName("Test Compositions without percentage")
+    @Test
+    void compositionTestWithoutPercentage() {
+        String translated = materialProcess.generateCompositionString("Fabric: 51 CO 49 VI Lining: 51 WO 49 CO");
+        Assertions.assertEquals("51% бавовна 49% віскоза", translated);
+    }
+
+    @Test
+    void test(){
+        String translated = materialProcess.generateCompositionString("Knitted fabric: 35% Polyamide, 30% Viscose, 30% Wool Ovis aries aries, 05% Cashmere Capra hircus hircus CINA\n");
+        Assertions.assertEquals("35% поліамід 35% вовна 30% віскоза", translated);
+    }
 
     @Nested
     class TranslateMaterial {

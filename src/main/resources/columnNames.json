@@ -29,11 +29,14 @@
     "производитель",
     "назва країни",
     "country",
+    "made in",
     "country of origin"
   ],
   "quantity": [
     "сумарна кількість одиниць",
     "кількість",
+    "qty",
+    "qta",
     "quantity",
     "stück",
     "total",
@@ -42,6 +45,7 @@
   "composition": [
     "склад",
     "composition",
+    "composition details",
     "состав",
     "zusammensetzung"
   ],
@@ -54,13 +58,15 @@
     "hscode",
     "warennummer",
     "zolltarifnummer",
+    "custom code",
     "уктзед",
     "код",
     "tariff no."
   ],
   "bruttoWeight": [
     "брутто",
-    "brutto"
+    "brutto",
+    "weight"
   ],
   "price": [
     "загальна сума",
@@ -68,6 +74,8 @@
     "ціна",
     "price",
     "preis o. rabatt",
+    "cost",
+    "unit cost price",
     "euro"
   ]
 }
