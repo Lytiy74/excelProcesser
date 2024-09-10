@@ -53,4 +53,11 @@ public enum Gender {
     public String getTitle() {
         return title;
     }
+
+    @Override
+    public String toString() {
+        return "Gender{" +
+                "title='" + title + '\'' +
+                '}';
+    }
 }
