@@ -5,20 +5,18 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.example.Product.ProductPosition;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * This interface provides methods for processing Excel files.
  */
 public interface ExcelProcess {
-
+    void addProductToSheet(ProductPosition productPosition, Sheet sheet);
     /**
      * Adds a list of products to the specified sheet in the Excel file.
      *
      * @param products A HashMap containing product names as keys and their corresponding positions as values.
-     * @param headers A List of column headers for the products.
      */
-    void addProductsToSheet(HashMap<String, ProductPosition> products, List<String> headers);
+    void addMapOfProductsToSheet(HashMap<String, ProductPosition> products, Sheet sheet);
 
     /**
      * Collects products from the Excel file and returns them as a HashMap.
