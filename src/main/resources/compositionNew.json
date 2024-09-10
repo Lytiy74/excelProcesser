@@ -19,6 +19,7 @@
     "cor",
     "cot",
     "cotton",
+    "camelwool",
     "PIMA COTTON"
   ],
   "волокно рами": [
@@ -192,11 +193,12 @@
   ],
   "шкіра": [
     "calfskin",
+    "skin",
+    "goat skin",
     "leader",
     "le",
     "calfleather",
     "leather",
-    "GOAT SKIN - CAPRA HIRCUS",
     "lamb"
   ]
 }
