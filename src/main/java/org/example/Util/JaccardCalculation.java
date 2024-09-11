@@ -101,7 +101,7 @@ public class JaccardCalculation {
             double score = calculateRowSimilarity(rowValues, targetColumnNames);
 
             // Update the best score and row index
-            if (score > bestScore) {
+            if (score > JACCARD_PASSABLE_VALUE && score > bestScore) {
                 bestScore = score;
                 bestRowIndex = i;
             }

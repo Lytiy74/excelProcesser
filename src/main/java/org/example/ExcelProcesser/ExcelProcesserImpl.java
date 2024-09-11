@@ -116,7 +116,7 @@ public class ExcelProcesserImpl implements ExcelProcess {
         for (int rowIndex = headerRowIndex+1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
             logger.info("Processing row {}...", rowIndex);
             Row row = sheet.getRow(rowIndex);
-            ProductPosition product = buildProductPosition(row);
+            ProductPosition product = buildProductPositionFromRow(row);
             if (!products.containsKey(product.getArticle())) {
                 logger.info("Adding product with article number: {}", product.getArticle());
                 products.put(product.getArticle(), product);
@@ -129,6 +129,16 @@ public class ExcelProcesserImpl implements ExcelProcess {
         logger.info("Products collected successfully.");
         return products;
     }
+    /**
+     * Builds a ProductPosition object from the data in a given row.
+     *
+     * @param rowNumber The Apache POI Row number containing the data.
+     * @return A ProductPosition object representing the data in the row.
+     */
+    public ProductPosition buildProductPositionFromRow(int rowNumber){
+        logger.info("Collecting product from row {}...", rowNumber);
+        return buildProductPositionFromRow(sheet.getRow(rowNumber));
+    }
 
     /**
      * Builds a ProductPosition object from the data in a given row.
@@ -136,7 +146,7 @@ public class ExcelProcesserImpl implements ExcelProcess {
      * @param row The Apache POI Row object containing the data.
      * @return A ProductPosition object representing the data in the row.
      */
-    private ProductPosition buildProductPosition(Row row) {
+    private ProductPosition buildProductPositionFromRow(Row row) {
         logger.info("Building ProductPosition object...");
         ProductPosition product = ProductPosition.newBuilder()
                 .setArticle(cellValueExtractor.getCellValue(row, ARTICLE.getColumnName()))
