@@ -10,6 +10,7 @@ import java.util.Set;
 
 public class JaccardCalculation {
     private static final Logger logger = LoggerFactory.getLogger(JaccardCalculation.class);
+    public static final double JACCARD_PASSABLE_VALUE = 0.55;
 
     /**
      * This method calculates a Jaccard coefficient.
@@ -40,7 +41,7 @@ public class JaccardCalculation {
         logger.debug("Looking for best match for '{}'", var1);
         if (var1 == null) return "UNKNOWN";
         // Convert the column name to a set of characters
-        Set<Character> set = stringToCharSet(var1);
+        Set<Character> set = stringToLowerCaseCharSet(var1);
 
         // Initialize variables to store the best match category and score
         String bestMatch = "UNKNOWN";
@@ -53,14 +54,14 @@ public class JaccardCalculation {
             String category = entry.getValue();
 
             // Convert the possible column name to a set of characters
-            Set<Character> possibleSet = stringToCharSet(possibleName);
+            Set<Character> possibleSet = stringToLowerCaseCharSet(possibleName);
 
             // Calculate the Jaccard similarity score between the column name and the possible column name
             double score = JaccardCalculation.jaccardSimilarity(set, possibleSet);
 
             // If the score is higher than the current best score, update the best match category and score
             logger.trace("Possible match: '{}' , Category: '{}', Score: {}", possibleName, category, score);
-            if (score > 0.4 && score > bestScore) {
+            if (score > JACCARD_PASSABLE_VALUE && score > bestScore) {
                 bestScore = score;
                 bestMatch = category;
             }
@@ -77,11 +78,11 @@ public class JaccardCalculation {
      * @param str The string to convert.
      * @return A set of characters.
      */
-    private static Set<Character> stringToCharSet(String str) {
+    private static Set<Character> stringToLowerCaseCharSet(String str) {
         Set<Character> charSet = new HashSet<>();
 
         // Iterate through the characters in the string
-        for (char c : str.toCharArray()) {
+        for (char c : str.toLowerCase().toCharArray()) {
             // Add the character to the set
             charSet.add(c);
         }
