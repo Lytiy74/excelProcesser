@@ -1,6 +1,7 @@
 package org.example.Product.ProductProcess.Composition;
 
 import org.example.Main;
+import org.example.ResourceFiles;
 import org.example.Util.IO.JsonFileReader;
 import org.example.Util.MapConverter;
 import org.slf4j.Logger;
@@ -28,8 +29,6 @@ public class MaterialProcessImpl implements MaterialProcess {
     /**
      * The path to the JSON file containing material compositions.
      */
-    private static final String COMPOSITION_JSON_FILE_PATH = "compositionNew.json";
-
     /**
      * The parser for parsing the composition strings.
      */
@@ -54,7 +53,7 @@ public class MaterialProcessImpl implements MaterialProcess {
         logger.info("Initializing MaterialProcessImpl");
         HashMap<String, List<String>> stringStringHashMap;
         Path jarDir = Paths.get(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent());
-        Path inputFilePath = jarDir.resolve(COMPOSITION_JSON_FILE_PATH);
+        Path inputFilePath = jarDir.resolve(ResourceFiles.COMPOSITION_JSON_FILE.getFileName());
         stringStringHashMap = new JsonFileReader().readJsonObjectArrayToMap(String.valueOf(inputFilePath));
         parser = new MaterialParser();
         translator = new MaterialTranslator(MapConverter.invertColumnMap(stringStringHashMap));
