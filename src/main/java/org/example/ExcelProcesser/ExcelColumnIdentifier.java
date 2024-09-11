@@ -3,6 +3,7 @@ package org.example.ExcelProcesser;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.example.Util.JaccardCalculation;
 import org.example.Util.MapConverter;
 
@@ -41,6 +42,9 @@ class ExcelColumnIdentifier {
 
         // Return the map of identified columns
         return identifiedColumns;
+    }
+    public int findAndGetNumberOfHeaderRow(Sheet sheet, HashMap<String,List<String>> targetColumns){
+        return JaccardCalculation.findBestMatchRow(sheet,targetColumns);
     }
 
     /**

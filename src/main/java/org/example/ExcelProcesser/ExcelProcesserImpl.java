@@ -24,6 +24,7 @@ public class ExcelProcesserImpl implements ExcelProcess {
     private final CellValueExtractor cellValueExtractor;
     private final HashMap<String, Integer> identifiedColumns;
     private final List<String> targetColumns;
+    private final int headerRowIndex;
 
     /**
      * Constructor for ExcelProcess class.
@@ -37,7 +38,8 @@ public class ExcelProcesserImpl implements ExcelProcess {
         this.workbook = workbook;
         this.sheet = workbook.getSheetAt(sheetIndex);
         ExcelColumnIdentifier columnIdentifier = new ExcelColumnIdentifier();
-        this.identifiedColumns = columnIdentifier.identifyColumns(workbook.getSheetAt(sheetIndex).getRow(0),targetColumns);
+        this.headerRowIndex = columnIdentifier.findAndGetNumberOfHeaderRow(sheet,targetColumns);
+        this.identifiedColumns = columnIdentifier.identifyColumns(workbook.getSheetAt(sheetIndex).getRow(headerRowIndex),targetColumns);
         this.productProcess = new ProductProcess();
         this.cellValueExtractor = new CellValueExtractor(identifiedColumns);
         this.targetColumns = targetColumns.keySet().stream().toList();
@@ -111,7 +113,7 @@ public class ExcelProcesserImpl implements ExcelProcess {
     public HashMap<String, ProductPosition> collectProducts() {
         logger.info("Collecting products...");
         HashMap<String, ProductPosition> products = new HashMap<>();
-        for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+        for (int rowIndex = headerRowIndex+1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
             logger.info("Processing row {}...", rowIndex);
             Row row = sheet.getRow(rowIndex);
             ProductPosition product = buildProductPosition(row);

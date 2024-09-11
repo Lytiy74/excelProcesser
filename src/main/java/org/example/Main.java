@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -59,12 +60,13 @@ public class Main {
                 String comp = materialProcess.generateCompositionString(productPosition.getComposition());
                 productPosition.setComposition(comp);
             }
-
+            if (workbook.getSheet("Processed") != null) {
+                workbook.removeSheetAt(workbook.getSheetIndex("Processed"));
+            }
             Sheet sheet = workbook.createSheet("Processed");
             for (String article : productPositionHashMap.keySet()) {
                 excelProcess.addProductToSheet(productPositionHashMap.get(article), sheet);
             }
-
             ExcelFileWriter writer = new ExcelFileWriter();
             writer.write(workbook, OUTPUT_FILE_PATH);
         }
