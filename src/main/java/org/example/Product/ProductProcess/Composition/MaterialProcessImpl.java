@@ -1,11 +1,16 @@
 package org.example.Product.ProductProcess.Composition;
 
+import org.example.Main;
 import org.example.Util.IO.JsonFileReader;
 import org.example.Util.MapConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,7 +28,7 @@ public class MaterialProcessImpl implements MaterialProcess {
     /**
      * The path to the JSON file containing material compositions.
      */
-    private static final String COMPOSITION_JSON_FILE_PATH = "src/main/resources/compositionNew.json";
+    private static final String COMPOSITION_JSON_FILE_PATH = "compositionNew.json";
 
     /**
      * The parser for parsing the composition strings.
@@ -45,10 +50,12 @@ public class MaterialProcessImpl implements MaterialProcess {
      *
      * @throws IOException if an error occurs while reading the JSON file.
      */
-    public MaterialProcessImpl() throws IOException {
+    public MaterialProcessImpl() throws IOException, URISyntaxException {
         logger.info("Initializing MaterialProcessImpl");
         HashMap<String, List<String>> stringStringHashMap;
-        stringStringHashMap = new JsonFileReader().readJsonObjectArrayToMap(COMPOSITION_JSON_FILE_PATH);
+        Path jarDir = Paths.get(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent());
+        Path inputFilePath = jarDir.resolve(COMPOSITION_JSON_FILE_PATH);
+        stringStringHashMap = new JsonFileReader().readJsonObjectArrayToMap(String.valueOf(inputFilePath));
         parser = new MaterialParser();
         translator = new MaterialTranslator(MapConverter.invertColumnMap(stringStringHashMap));
         materialStringBuilder = new MaterialStringBuilder();
