@@ -11,6 +11,7 @@ import java.util.*;
 public class JaccardCalculation {
     private static final Logger logger = LoggerFactory.getLogger(JaccardCalculation.class);
     public static final double JACCARD_PASSABLE_VALUE = 0.55;
+    public static final double EDGE_SIMILARITY = 0.8;
 
     /**
      * This method calculates a Jaccard coefficient.
@@ -99,12 +100,12 @@ public class JaccardCalculation {
             logger.debug("Looking for best match for row # '{}'", row.getRowNum());
             // Calculate similarity score
             double score = calculateRowSimilarity(rowValues, targetColumnNames);
-
             // Update the best score and row index
             if (score > JACCARD_PASSABLE_VALUE && score > bestScore) {
                 bestScore = score;
                 bestRowIndex = i;
             }
+            if (score >= EDGE_SIMILARITY) break;
         }
         logger.debug("Best match for headerRow is row # '{}', Score: {}", bestRowIndex, bestScore);
         return bestRowIndex;
