@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.example.ExcelProcessor.TargetColumns.*;
 
@@ -41,7 +42,7 @@ public class ExcelProcessorImpl implements ExcelProcess {
         this.headerRowIndex = columnIdentifier.findAndGetNumberOfHeaderRow(sheet,targetColumns);
         this.identifiedColumns = columnIdentifier.identifyColumns(workbook.getSheetAt(sheetIndex).getRow(headerRowIndex),targetColumns);
         this.productProcess = new ProductProcess();
-        this.cellValueExtractor = new CellValueExtractor(identifiedColumns);
+        this.cellValueExtractor = new CellValueExtractor();
         this.targetColumns = targetColumns.keySet().stream().toList();
         logger.info("ExcelProcesserImpl initialized successfully.");
     }
@@ -142,22 +143,59 @@ public class ExcelProcessorImpl implements ExcelProcess {
      */
     private ProductPosition buildProductPositionFromRow(Row row) {
         logger.info("Building ProductPosition object...");
-        ProductPosition product = ProductPosition.newBuilder()
-                .setArticle(cellValueExtractor.getStringCellValue(row, ARTICLE.getColumnName()))
-                .setProductName(cellValueExtractor.getStringCellValue(row, PRODUCT_NAME.getColumnName()).toLowerCase())
-                .setSizes(cellValueExtractor.getStringCellValue(row, SIZES.getColumnName()))
-                .setTradeMark(cellValueExtractor.getStringCellValue(row, TRADE_MARK.getColumnName()))
-                .setCountryOrigin(cellValueExtractor.getStringCellValue(row, COUNTRY_ORIGIN.getColumnName()))
-                .setQuantity(cellValueExtractor.getIntegerCellValue(row, QUANTITY.getColumnName()))
-                .setComposition(cellValueExtractor.getStringCellValue(row, COMPOSITION.getColumnName()))
-                .setGender(Gender.fromString(cellValueExtractor.getStringCellValue(row, GENDER.getColumnName())))
-                .setHsCode(cellValueExtractor.getStringCellValue(row, HS_CODE.getColumnName()))
-                .setBruttoWeight(cellValueExtractor.getIntegerCellValue(row, BRUTTO_WEIGHT.getColumnName()))
-                .setPrice(cellValueExtractor.getDoubleCellValue(row, PRICE.getColumnName()))
-                .build();
+
+        ProductPosition.Builder productBuilder = ProductPosition.newBuilder();
+
+        setCellValue(row, productBuilder, ARTICLE.getColumnName(), productBuilder::setArticle);
+        setCellValue(row, productBuilder, PRODUCT_NAME.getColumnName(), name -> productBuilder.setProductName(name.toLowerCase()));
+        setCellValue(row, productBuilder, SIZES.getColumnName(), productBuilder::setSizes);
+        setCellValue(row, productBuilder, TRADE_MARK.getColumnName(), productBuilder::setTradeMark);
+        setCellValue(row, productBuilder, COUNTRY_ORIGIN.getColumnName(), productBuilder::setCountryOrigin);
+        setIntegerCellValue(row, productBuilder, QUANTITY.getColumnName(), productBuilder::setQuantity);
+        setCellValue(row, productBuilder, COMPOSITION.getColumnName(), productBuilder::setComposition);
+        setCellValue(row, productBuilder, GENDER.getColumnName(), gender -> productBuilder.setGender(Gender.fromString(gender)));
+        setCellValue(row, productBuilder, HS_CODE.getColumnName(), productBuilder::setHsCode);
+        setIntegerCellValue(row, productBuilder, BRUTTO_WEIGHT.getColumnName(), productBuilder::setBruttoWeight);
+        setDoubleCellValue(row, productBuilder, PRICE.getColumnName(), productBuilder::setPrice);
+
+        ProductPosition product = productBuilder.build();
         logger.info("ProductPosition object built successfully.");
         return product;
     }
+
+    private void setCellValue(Row row, ProductPosition.Builder productBuilder, String columnName, Consumer<String> setter) {
+        if (identifiedColumns.containsKey(columnName)) {
+            int columnIndex = identifiedColumns.get(columnName);
+            String value = cellValueExtractor.getStringCellValue(row.getCell(columnIndex));
+            setter.accept(value);
+        } else {
+            logger.warn("Column '{}' not found in identifiedColumns.", columnName);
+            setter.accept("N/A"); // or any default value you prefer
+        }
+    }
+
+    private void setIntegerCellValue(Row row, ProductPosition.Builder productBuilder, String columnName, Consumer<Integer> setter) {
+        if (identifiedColumns.containsKey(columnName)) {
+            int columnIndex = identifiedColumns.get(columnName);
+            Integer value = cellValueExtractor.getIntegerCellValue(row.getCell(columnIndex));
+            setter.accept(value);
+        } else {
+            logger.warn("Column '{}' not found in identifiedColumns.", columnName);
+            setter.accept(-1); // or any default value for Integer
+        }
+    }
+
+    private void setDoubleCellValue(Row row, ProductPosition.Builder productBuilder, String columnName, Consumer<Double> setter) {
+        if (identifiedColumns.containsKey(columnName)) {
+            int columnIndex = identifiedColumns.get(columnName);
+            Double value = cellValueExtractor.getDoubleCellValue(row.getCell(columnIndex));
+            setter.accept(value);
+        } else {
+            logger.warn("Column '{}' not found in identifiedColumns.", columnName);
+            setter.accept(-1.0); // or any default value for Double
+        }
+    }
+
     @Override
     public Workbook getWorkbook() {
         return workbook;
