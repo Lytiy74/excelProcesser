@@ -1,4 +1,4 @@
-package org.example.ExcelProcesser;
+package org.example.ExcelProcessor;
 
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -44,7 +44,7 @@ class CellValueExtractor {
      * @param columnName The name of the column from which to extract the cell value.
      * @return The cell value as a String, or "N/A" if the column name is not found in the identifiedColumns map.
      */
-    String getCellValue(Row row, String columnName) {
+    String getStringCellValue(Row row, String columnName) {
         logger.debug("Retrieving cell value for column '{}' in row {}.", columnName, row.getRowNum());
         int columnIndex = identifiedColumns.getOrDefault(columnName, -1);
         return columnIndex != -1 ? formatter.formatCellValue(row.getCell(columnIndex)) : "N/A";

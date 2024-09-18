@@ -1,4 +1,4 @@
-package org.example.ExcelProcesser;
+package org.example.ExcelProcessor;
 
 import org.apache.poi.ss.usermodel.*;
 import org.example.Product.Gender;
@@ -10,14 +10,14 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.example.ExcelProcesser.TargetColumns.*;
+import static org.example.ExcelProcessor.TargetColumns.*;
 
 /**
  * This class processes an Excel workbook to retrieve
  * column indexes based on predefined categories.
  */
-public class ExcelProcesserImpl implements ExcelProcess {
-    private static final Logger logger = LoggerFactory.getLogger(ExcelProcesserImpl.class);
+public class ExcelProcessorImpl implements ExcelProcess {
+    private static final Logger logger = LoggerFactory.getLogger(ExcelProcessorImpl.class);
     private final Workbook workbook;
     private final Sheet sheet;
     private final ProductProcess productProcess;
@@ -33,7 +33,7 @@ public class ExcelProcesserImpl implements ExcelProcess {
      * @param sheetIndex The index of the sheet within the workbook to process.
      * @param targetColumns A HashMap containing the predefined categories and their corresponding column names.
      */
-    public ExcelProcesserImpl(Workbook workbook, int sheetIndex, HashMap<String, List<String>> targetColumns) {
+    public ExcelProcessorImpl(Workbook workbook, int sheetIndex, HashMap<String, List<String>> targetColumns) {
         logger.info("Initializing ExcelProcesserImpl...");
         this.workbook = workbook;
         this.sheet = workbook.getSheetAt(sheetIndex);
@@ -143,15 +143,15 @@ public class ExcelProcesserImpl implements ExcelProcess {
     private ProductPosition buildProductPositionFromRow(Row row) {
         logger.info("Building ProductPosition object...");
         ProductPosition product = ProductPosition.newBuilder()
-                .setArticle(cellValueExtractor.getCellValue(row, ARTICLE.getColumnName()))
-                .setProductName(cellValueExtractor.getCellValue(row, PRODUCT_NAME.getColumnName()).toLowerCase())
-                .setSizes(cellValueExtractor.getCellValue(row, SIZES.getColumnName()))
-                .setTradeMark(cellValueExtractor.getCellValue(row, TRADE_MARK.getColumnName()))
-                .setCountryOrigin(cellValueExtractor.getCellValue(row, COUNTRY_ORIGIN.getColumnName()))
+                .setArticle(cellValueExtractor.getStringCellValue(row, ARTICLE.getColumnName()))
+                .setProductName(cellValueExtractor.getStringCellValue(row, PRODUCT_NAME.getColumnName()).toLowerCase())
+                .setSizes(cellValueExtractor.getStringCellValue(row, SIZES.getColumnName()))
+                .setTradeMark(cellValueExtractor.getStringCellValue(row, TRADE_MARK.getColumnName()))
+                .setCountryOrigin(cellValueExtractor.getStringCellValue(row, COUNTRY_ORIGIN.getColumnName()))
                 .setQuantity(cellValueExtractor.getIntegerCellValue(row, QUANTITY.getColumnName()))
-                .setComposition(cellValueExtractor.getCellValue(row, COMPOSITION.getColumnName()))
-                .setGender(Gender.fromString(cellValueExtractor.getCellValue(row, GENDER.getColumnName())))
-                .setHsCode(cellValueExtractor.getCellValue(row, HS_CODE.getColumnName()))
+                .setComposition(cellValueExtractor.getStringCellValue(row, COMPOSITION.getColumnName()))
+                .setGender(Gender.fromString(cellValueExtractor.getStringCellValue(row, GENDER.getColumnName())))
+                .setHsCode(cellValueExtractor.getStringCellValue(row, HS_CODE.getColumnName()))
                 .setBruttoWeight(cellValueExtractor.getIntegerCellValue(row, BRUTTO_WEIGHT.getColumnName()))
                 .setPrice(cellValueExtractor.getDoubleCellValue(row, PRICE.getColumnName()))
                 .build();
