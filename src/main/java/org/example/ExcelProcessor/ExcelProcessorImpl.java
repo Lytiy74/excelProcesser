@@ -181,7 +181,7 @@ public class ExcelProcessorImpl implements ExcelProcess {
             setter.accept(value);
         } else {
             logger.warn("Column '{}' not found in identifiedColumns.", columnName);
-            setter.accept(-1); // or any default value for Integer
+            setter.accept(0); // or any default value for Integer
         }
     }
 
@@ -192,7 +192,7 @@ public class ExcelProcessorImpl implements ExcelProcess {
             setter.accept(value);
         } else {
             logger.warn("Column '{}' not found in identifiedColumns.", columnName);
-            setter.accept(-1.0); // or any default value for Double
+            setter.accept(0.0); // or any default value for Double
         }
     }
 
