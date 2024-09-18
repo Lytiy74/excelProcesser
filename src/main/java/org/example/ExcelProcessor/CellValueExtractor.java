@@ -1,5 +1,6 @@
 package org.example.ExcelProcessor;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
@@ -13,12 +14,6 @@ import java.util.HashMap;
  */
 class CellValueExtractor {
     private static final Logger logger = LoggerFactory.getLogger(CellValueExtractor.class);
-    //TODO 16:00 26.06.2024 REFACTOR A LOGIC OF METHODS, Change signature -> methods must receive a certain cell to extract value
-    //TODO NO identifiedColumns map
-    /**
-     * A HashMap that maps column names to their respective indices.
-     */
-    private final HashMap<String, Integer> identifiedColumns;
 
     /**
      * An instance of DataFormatter used for formatting cell values.
@@ -28,11 +23,9 @@ class CellValueExtractor {
     /**
      * Constructs a new CellValueExtractor object.
      *
-     * @param identifiedColumns A HashMap that maps column names to their respective indices.
      */
-    CellValueExtractor(HashMap<String, Integer> identifiedColumns) {
+    CellValueExtractor() {
         logger.info("Initializing CellValueExtractor...");
-        this.identifiedColumns = identifiedColumns;
         this.formatter = new DataFormatter();
         logger.info("CellValueExtractor initialized successfully.");
     }
@@ -40,39 +33,40 @@ class CellValueExtractor {
     /**
      * Retrieves the cell value as a String.
      *
-     * @param row The Apache POI Row object from which to extract the cell value.
-     * @param columnName The name of the column from which to extract the cell value.
      * @return The cell value as a String, or "N/A" if the column name is not found in the identifiedColumns map.
      */
-    String getStringCellValue(Row row, String columnName) {
-        logger.debug("Retrieving cell value for column '{}' in row {}.", columnName, row.getRowNum());
-        int columnIndex = identifiedColumns.getOrDefault(columnName, -1);
-        return columnIndex != -1 ? formatter.formatCellValue(row.getCell(columnIndex)) : "N/A";
+    String getStringCellValue(Cell cell) {
+        throwIfCellIsNull(cell);
+        logger.debug("Retrieving cell value, cell address {}",cell.getAddress());
+        return formatter.formatCellValue(cell);
     }
 
     /**
      * Retrieves the cell value as an Integer.
      *
-     * @param row The Apache POI Row object from which to extract the cell value.
-     * @param columnName The name of the column from which to extract the cell value.
      * @return The cell value as an Integer, or -1 if the column name is not found in the identifiedColumns map.
      */
-    Integer getIntegerCellValue(Row row, String columnName) {
-        logger.debug("Retrieving cell value for column '{}' in row {}.", columnName, row.getRowNum());
-        int columnIndex = identifiedColumns.getOrDefault(columnName, -1);
-        return columnIndex != -1 ? ((int) row.getCell(columnIndex).getNumericCellValue()) : -1;
+    Integer getIntegerCellValue(Cell cell) {
+        throwIfCellIsNull(cell);
+        logger.debug("Retrieving cell value, cell address {}",cell.getAddress());
+        return (int)cell.getNumericCellValue();
     }
 
     /**
      * Retrieves the cell value as a Double.
      *
-     * @param row The Apache POI Row object from which to extract the cell value.
-     * @param columnName The name of the column from which to extract the cell value.
      * @return The cell value as a Double, or -1.0 if the column name is not found in the identifiedColumns map.
      */
-    Double getDoubleCellValue(Row row, String columnName) {
-        logger.debug("Retrieving cell value for column '{}' in row {}.", columnName, row.getRowNum());
-        int columnIndex = identifiedColumns.getOrDefault(columnName, -1);
-        return columnIndex != -1 ? row.getCell(columnIndex).getNumericCellValue() : -1.0;
+    Double getDoubleCellValue(Cell cell) {
+        throwIfCellIsNull(cell);
+        logger.debug("Retrieving cell value, cell address {}",cell.getAddress());
+        return cell.getNumericCellValue();
+    }
+
+    private static void throwIfCellIsNull(Cell cell) {
+        if (cell == null) {
+            logger.warn("Cell is null, throwing exception");
+            throw new IllegalArgumentException("Cell can`t be null");
+        }
     }
 }
