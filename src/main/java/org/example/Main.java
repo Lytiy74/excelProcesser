@@ -1,7 +1,6 @@
 package org.example;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -14,8 +13,7 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.example.ExcelProcesser.ExcelProcess;
-import org.example.ExcelProcesser.ExcelProcesserImpl;
+import org.example.ExcelProcessor.ExcelProcessorImpl;
 import org.example.Product.ProductPosition;
 import org.example.Product.ProductProcess.Composition.MaterialProcess;
 import org.example.Product.ProductProcess.Composition.MaterialProcessImpl;
@@ -52,7 +50,7 @@ public class Main {
         HashMap<String, List<String>> stringStringHashMap = reader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
 
         try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString())) {
-            ExcelProcess excelProcess = new ExcelProcesserImpl(workbook, SHEET_INDEX, stringStringHashMap);
+            ExcelProcessorImpl excelProcess = new ExcelProcessorImpl(workbook, SHEET_INDEX, stringStringHashMap);
             HashMap<String, ProductPosition> productPositionHashMap = excelProcess.collectProducts();
 
             for (String article : productPositionHashMap.keySet()) {
