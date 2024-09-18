@@ -50,6 +50,10 @@ public class ExcelProcesserImpl implements ExcelProcess {
         logger.info("Adding product to sheet...");
         if (sheet.getLastRowNum() == -1) addHeaderRow(sheet.createRow(0));
         Row row = sheet.createRow(sheet.getLastRowNum()+1);
+        addProductPositionToRow(product, row);
+    }
+
+    public void addProductPositionToRow(ProductPosition product, Row row) {
         row.createCell(targetColumns.indexOf(ARTICLE.getColumnName())).setCellValue(product.getArticle());
         row.createCell(targetColumns.indexOf(PRODUCT_NAME.getColumnName())).setCellValue(product.getProductName());
         row.createCell(targetColumns.indexOf(SIZES.getColumnName())).setCellValue(product.getSizes());
@@ -88,17 +92,7 @@ public class ExcelProcesserImpl implements ExcelProcess {
         for (String key : products.keySet()) {
             logger.info("Adding product with article: {}, to row {}", key, rowIndex);
             Row row = sheet.createRow(rowIndex);
-            row.createCell(targetColumns.indexOf(ARTICLE.getColumnName())).setCellValue(products.get(key).getArticle());
-            row.createCell(targetColumns.indexOf(PRODUCT_NAME.getColumnName())).setCellValue(products.get(key).getProductName());
-            row.createCell(targetColumns.indexOf(SIZES.getColumnName())).setCellValue(products.get(key).getSizes());
-            row.createCell(targetColumns.indexOf(TRADE_MARK.getColumnName())).setCellValue(products.get(key).getTradeMark());
-            row.createCell(targetColumns.indexOf(COUNTRY_ORIGIN.getColumnName())).setCellValue(products.get(key).getCountryOrigin());
-            row.createCell(targetColumns.indexOf(QUANTITY.getColumnName())).setCellValue(products.get(key).getQuantity());
-            row.createCell(targetColumns.indexOf(COMPOSITION.getColumnName())).setCellValue(products.get(key).getComposition());
-            row.createCell(targetColumns.indexOf(GENDER.getColumnName())).setCellValue(products.get(key).getGender().getTitle());
-            row.createCell(targetColumns.indexOf(HS_CODE.getColumnName())).setCellValue(products.get(key).getHsCode());
-            row.createCell(targetColumns.indexOf(BRUTTO_WEIGHT.getColumnName())).setCellValue(products.get(key).getBruttoWeight());
-            row.createCell(targetColumns.indexOf(PRICE.getColumnName())).setCellValue(products.get(key).getPrice());
+            addProductPositionToRow(products.get(key), row);
             rowIndex++;
             logger.info("Product processed successfully.");
         }
