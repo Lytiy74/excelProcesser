@@ -99,6 +99,16 @@ public class ExcelProcessorImpl implements ExcelProcess {
         }
         logger.info("Products added to sheet successfully.");
     }
+
+    @Override
+    public void addMapOfProductsToSheet(HashMap<String, ProductPosition> products) {
+        if (workbook.getSheet("Processed") != null) {
+            workbook.removeSheetAt(workbook.getSheetIndex("Processed"));
+        }
+        Sheet sheet = workbook.createSheet("Processed");
+        addMapOfProductsToSheet(products, sheet);
+    }
+
     /**
      * Collects the products from the Excel sheet and returns them as a HashMap.
      *

@@ -17,6 +17,7 @@ public interface ExcelProcess {
      * @param products A HashMap containing product names as keys and their corresponding positions as values.
      */
     void addMapOfProductsToSheet(HashMap<String, ProductPosition> products, Sheet sheet);
+    void addMapOfProductsToSheet(HashMap<String, ProductPosition> products);
 
     /**
      * Collects products from the Excel file and returns them as a HashMap.

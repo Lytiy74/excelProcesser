@@ -1,7 +1,6 @@
 package org.example;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -11,16 +10,13 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.example.ExcelProcesser.ExcelProcess;
-import org.example.ExcelProcesser.ExcelProcesserImpl;
-import org.example.Product.ProductPosition;
-import org.example.Product.ProductProcess.Composition.MaterialProcess;
-import org.example.Product.ProductProcess.Composition.MaterialProcessImpl;
+import org.example.ExcelProcessor.ExcelProcess;
+import org.example.ExcelProcessor.ExcelProcessorImpl;
 import org.example.Util.IO.ExcelFileWriter;
 import org.example.Util.IO.JsonFileReader;
+import org.example.strategy.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,41 +28,45 @@ public class Main {
     private static final String INPUT_FILE_PATH = "опис.xlsx";
     private static final String OUTPUT_FILE_PATH = "result.xlsx";
 
+    /**
+     *
+     * @param args [0] - File name, [1] - Sheet index or name, [2] - Operations to do
+     */
     public static void main(String[] args) {
         logger.info("Start processing");
         try {
             createResourceFiles();
-            processExcelFiles();
+            processExcelFiles(args);
         } catch (IOException | URISyntaxException e) {
             logger.error("An error occurred during processing", e);
         }
     }
 
-    private static void processExcelFiles() throws IOException, URISyntaxException {
+    private static void processExcelFiles(String[] args) throws IOException, URISyntaxException {
         Path jarDir = Paths.get(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent());
-        Path inputFilePath = jarDir.resolve(INPUT_FILE_PATH);
+        Path inputFilePath = Path.of(args.length > 0 && args[0] != null ? args[0] : INPUT_FILE_PATH);
         long startedAt = System.currentTimeMillis();
 
         JsonFileReader reader = new JsonFileReader();
-        MaterialProcess materialProcess = new MaterialProcessImpl();
         HashMap<String, List<String>> stringStringHashMap = reader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
 
         try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString())) {
-            ExcelProcess excelProcess = new ExcelProcesserImpl(workbook, SHEET_INDEX, stringStringHashMap);
-            HashMap<String, ProductPosition> productPositionHashMap = excelProcess.collectProducts();
+            ExcelProcess excelProcess = new ExcelProcessorImpl(workbook, SHEET_INDEX, stringStringHashMap);
+            ExcelProcessorContext context = new ExcelProcessorContext(excelProcess);
+            ExcelProcessorStrategy strategy;
 
-            for (String article : productPositionHashMap.keySet()) {
-                ProductPosition productPosition = productPositionHashMap.get(article);
-                String comp = materialProcess.generateCompositionString(productPosition.getComposition());
-                productPosition.setComposition(comp);
+            for (String arg : args){
+                switch(arg) {
+                    case "collectProducts" -> strategy = new CollectProductStrategy(context);
+                    case "processComposition" -> strategy = new ProcessCompositionStrategy(context);
+                    case "write" -> strategy = new WriteToSheetProductPositionsStrategy(context);
+                    default -> {
+                        continue;
+                    }
+                }
+                strategy.execute(excelProcess);
             }
-            if (workbook.getSheet("Processed") != null) {
-                workbook.removeSheetAt(workbook.getSheetIndex("Processed"));
-            }
-            Sheet sheet = workbook.createSheet("Processed");
-            for (String article : productPositionHashMap.keySet()) {
-                excelProcess.addProductToSheet(productPositionHashMap.get(article), sheet);
-            }
+
             ExcelFileWriter writer = new ExcelFileWriter();
             writer.write(workbook, OUTPUT_FILE_PATH);
         }
