@@ -1,9 +1,9 @@
 package org.example.strategy;
 
-import org.example.ExcelProcessor.ExcelProcess;
-import org.example.Product.ProductPosition;
-import org.example.Product.ProductProcess.Composition.MaterialProcess;
-import org.example.Product.ProductProcess.Composition.MaterialProcessImpl;
+import org.example.excelprocessor.ExcelProcess;
+import org.example.product.ProductPosition;
+import org.example.product.productprocess.composition.MaterialProcess;
+import org.example.product.productprocess.composition.MaterialProcessImpl;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

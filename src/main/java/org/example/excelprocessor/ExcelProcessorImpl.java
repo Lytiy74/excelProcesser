@@ -1,9 +1,9 @@
-package org.example.ExcelProcessor;
+package org.example.excelprocessor;
 
 import org.apache.poi.ss.usermodel.*;
-import org.example.Product.Gender;
-import org.example.Product.ProductPosition;
-import org.example.Product.ProductProcess.ProductProcess;
+import org.example.product.Gender;
+import org.example.product.ProductPosition;
+import org.example.product.productprocess.ProductProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static org.example.ExcelProcessor.TargetColumns.*;
+import static org.example.excelprocessor.TargetColumns.*;
 
 /**
  * This class processes an Excel workbook to retrieve

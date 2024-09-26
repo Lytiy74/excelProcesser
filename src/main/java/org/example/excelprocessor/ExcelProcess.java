@@ -1,8 +1,8 @@
-package org.example.ExcelProcessor;
+package org.example.excelprocessor;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.example.Product.ProductPosition;
+import org.example.product.ProductPosition;
 
 import java.util.HashMap;
 

@@ -1,6 +1,6 @@
 package org.example.strategy;
 
-import org.example.ExcelProcessor.ExcelProcess;
+import org.example.excelprocessor.ExcelProcess;
 
 public interface ExcelProcessorStrategy {
     ExcelProcessorContext context = null;

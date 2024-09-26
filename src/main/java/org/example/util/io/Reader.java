@@ -1,4 +1,4 @@
-package org.example.Util.IO;
+package org.example.util.io;
 
 import java.io.IOException;
 

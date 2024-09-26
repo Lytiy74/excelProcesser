@@ -12,10 +12,10 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.example.ExcelProcessor.ExcelProcess;
-import org.example.ExcelProcessor.ExcelProcessorImpl;
-import org.example.Util.IO.ExcelFileWriter;
-import org.example.Util.IO.JsonFileReader;
+import org.example.excelprocessor.ExcelProcess;
+import org.example.excelprocessor.ExcelProcessorImpl;
+import org.example.util.io.ExcelFileWriter;
+import org.example.util.io.JsonFileReader;
 import org.example.strategy.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

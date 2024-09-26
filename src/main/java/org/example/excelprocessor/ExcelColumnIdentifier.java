@@ -1,11 +1,11 @@
-package org.example.ExcelProcessor;
+package org.example.excelprocessor;
 
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.example.Util.JaccardCalculation;
-import org.example.Util.MapConverter;
+import org.example.util.JaccardCalculation;
+import org.example.util.MapConverter;
 
 import java.util.*;
 

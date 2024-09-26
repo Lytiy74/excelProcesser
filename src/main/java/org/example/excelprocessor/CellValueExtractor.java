@@ -1,12 +1,9 @@
-package org.example.ExcelProcessor;
+package org.example.excelprocessor;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
 
 /**
  * This class is responsible for extracting cell values from an Apache POI Row object.

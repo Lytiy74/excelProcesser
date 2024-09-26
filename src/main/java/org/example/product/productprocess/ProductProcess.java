@@ -1,6 +1,6 @@
-package org.example.Product.ProductProcess;
+package org.example.product.productprocess;
 
-import org.example.Product.ProductPosition;
+import org.example.product.ProductPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

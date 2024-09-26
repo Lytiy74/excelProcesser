@@ -1,9 +1,9 @@
-package org.example.Product.ProductProcess.Composition;
+package org.example.product.productprocess.composition;
 
 import org.example.Main;
 import org.example.ResourceFiles;
-import org.example.Util.IO.JsonFileReader;
-import org.example.Util.MapConverter;
+import org.example.util.io.JsonFileReader;
+import org.example.util.MapConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package org.example.Util.IO;
+package org.example.util.io;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

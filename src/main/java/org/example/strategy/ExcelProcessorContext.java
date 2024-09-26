@@ -1,7 +1,7 @@
 package org.example.strategy;
 
-import org.example.ExcelProcessor.ExcelProcess;
-import org.example.Product.ProductPosition;
+import org.example.excelprocessor.ExcelProcess;
+import org.example.product.ProductPosition;
 
 import java.util.HashMap;
 

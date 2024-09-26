@@ -1,0 +1,9 @@
+package org.example;
+
+public enum Operation {
+    TRANSLATE_COMPOSITION,
+    SORT_COMPOSITION_BY_PERCENTAGE,
+    COLLECT_PRODUCTS,
+    PROCESS_PRODUCTS,
+    SAVE_RESULTS
+}
