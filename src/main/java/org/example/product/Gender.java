@@ -1,4 +1,4 @@
-package org.example.Product;
+package org.example.product;
 
 /**
  * Enum representing different gender types.
@@ -35,11 +35,11 @@ public enum Gender {
     public static Gender fromString(String genderValue) {
         if (genderValue != null) {
             switch (genderValue.toLowerCase()) {
-                case "male","чоловіче":
+                case "male","чоловіче","чол":
                     return MALE;
-                case "female","жіноче":
+                case "female","жіноче","жін":
                     return FEMALE;
-                case "unisex","унісекс":
+                case "unisex","унісекс","уні":
                     return UNISEX;
                 case "boys","хлопчаче":
                     return BOYS;

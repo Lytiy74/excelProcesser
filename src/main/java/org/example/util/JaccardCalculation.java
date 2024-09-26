@@ -1,4 +1,4 @@
-package org.example.Util;
+package org.example.util;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -11,6 +11,7 @@ import java.util.*;
 public class JaccardCalculation {
     private static final Logger logger = LoggerFactory.getLogger(JaccardCalculation.class);
     public static final double JACCARD_PASSABLE_VALUE = 0.55;
+    public static final double EDGE_SIMILARITY = 0.8;
 
     /**
      * This method calculates a Jaccard coefficient.
@@ -21,13 +22,11 @@ public class JaccardCalculation {
      * @return - the more similar the closer to 1
      */
     public static double jaccardSimilarity(Set<Character> set1, Set<Character> set2) {
-
         Set<Character> intersection = new HashSet<>(set1);
         intersection.retainAll(set2);
         Set<Character> union = new HashSet<>(set1);
         union.addAll(set2);
         return (double) intersection.size() / union.size();
-
     }
 
     /**
@@ -39,17 +38,16 @@ public class JaccardCalculation {
      */
     public static String findBestMatch(String var1, HashMap<String, String> keyMap) {
         logger.debug("Looking for best match for '{}'", var1);
-        if (var1 == null) return "UNKNOWN";
+        if (var1 == null || var1.isEmpty()) return "UNKNOWN";
         // Convert the column name to a set of characters
         Set<Character> set = stringToLowerCaseCharSet(var1);
 
         // Initialize variables to store the best match category and score
         String bestMatch = "UNKNOWN";
-        double bestScore = Double.MIN_VALUE;
+        double bestScore = 0;  // Use 0 as initial score to directly compare against JACCARD_PASSABLE_VALUE
 
         // Iterate through the entries in the inverted column map
         for (Map.Entry<String, String> entry : keyMap.entrySet()) {
-            // Get the possible column name and its category
             String possibleName = entry.getKey();
             String category = entry.getValue();
 
@@ -57,11 +55,11 @@ public class JaccardCalculation {
             Set<Character> possibleSet = stringToLowerCaseCharSet(possibleName);
 
             // Calculate the Jaccard similarity score between the column name and the possible column name
-            double score = JaccardCalculation.jaccardSimilarity(set, possibleSet);
+            double score = jaccardSimilarity(set, possibleSet);
 
             // If the score is higher than the current best score, update the best match category and score
             logger.trace("Possible match: '{}' , Category: '{}', Score: {}", possibleName, category, score);
-            if (score > JACCARD_PASSABLE_VALUE && score > bestScore) {
+            if (score > bestScore && score > JACCARD_PASSABLE_VALUE) {
                 bestScore = score;
                 bestMatch = category;
             }
@@ -99,12 +97,12 @@ public class JaccardCalculation {
             logger.debug("Looking for best match for row # '{}'", row.getRowNum());
             // Calculate similarity score
             double score = calculateRowSimilarity(rowValues, targetColumnNames);
-
             // Update the best score and row index
-            if (score > JACCARD_PASSABLE_VALUE && score > bestScore) {
+            if (score > bestScore && score > JACCARD_PASSABLE_VALUE) {
                 bestScore = score;
                 bestRowIndex = i;
             }
+            if (score >= EDGE_SIMILARITY) break;
         }
         logger.debug("Best match for headerRow is row # '{}', Score: {}", bestRowIndex, bestScore);
         return bestRowIndex;
@@ -122,8 +120,9 @@ public class JaccardCalculation {
         int matchCount = 0;
 
         for (String rowValue : rowValues) {
+            Set<Character> rowValueSet = stringToLowerCaseCharSet(rowValue);
             for (String targetColumn : targetColumnNames) {
-                double score = jaccardSimilarity(stringToLowerCaseCharSet(rowValue), stringToLowerCaseCharSet(targetColumn));
+                double score = jaccardSimilarity(rowValueSet, stringToLowerCaseCharSet(targetColumn));
                 if (score > JACCARD_PASSABLE_VALUE) {
                     totalScore += score;
                     matchCount++;
@@ -134,7 +133,6 @@ public class JaccardCalculation {
         return matchCount == 0 ? 0 : totalScore / matchCount;
     }
 
-
     /**
      * Converts a string to a set of characters.
      *
@@ -144,10 +142,10 @@ public class JaccardCalculation {
     private static Set<Character> stringToLowerCaseCharSet(String str) {
         Set<Character> charSet = new HashSet<>();
 
-        // Iterate through the characters in the string
-        for (char c : str.toLowerCase().toCharArray()) {
-            // Add the character to the set
-            charSet.add(c);
+        if (str != null) {
+            for (char c : str.toLowerCase().toCharArray()) {
+                charSet.add(c);
+            }
         }
 
         // Return the set of characters

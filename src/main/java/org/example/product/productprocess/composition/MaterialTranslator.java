@@ -1,7 +1,7 @@
-package org.example.Product.ProductProcess.Composition;
+package org.example.product.productprocess.composition;
 
 
-import org.example.Util.JaccardCalculation;
+import org.example.util.JaccardCalculation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

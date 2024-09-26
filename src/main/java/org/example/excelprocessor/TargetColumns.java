@@ -1,4 +1,4 @@
-package org.example.ExcelProcesser;
+package org.example.excelprocessor;
 
 public enum TargetColumns {
     ARTICLE("article"),

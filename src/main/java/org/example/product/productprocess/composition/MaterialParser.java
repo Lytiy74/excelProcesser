@@ -1,4 +1,4 @@
-package org.example.Product.ProductProcess.Composition;
+package org.example.product.productprocess.composition;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
