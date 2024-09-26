@@ -8,11 +8,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class ExcelFileWriter {
+public class ExcelFileWriter implements Writer<Workbook> {
     private static final Logger logger = LoggerFactory.getLogger(ExcelFileWriter.class);
+
+    @Override
     public void write(Workbook workbook, String path) throws IOException {
-        logger.debug("Write workbook to '{}'", path);
-        OutputStream fileOut = new FileOutputStream(path);
-        workbook.write(fileOut);
+        logger.debug("Writing workbook to '{}'", path);
+        try (OutputStream fileOut = new FileOutputStream(path)) {
+            workbook.write(fileOut);
+            logger.debug("Successfully wrote workbook to '{}'", path);
+        } catch (IOException e) {
+            logger.error("Failed to write workbook to '{}'", path, e);
+            throw e;
+        }
     }
 }

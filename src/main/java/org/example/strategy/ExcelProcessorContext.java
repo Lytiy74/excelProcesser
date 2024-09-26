@@ -1,15 +1,15 @@
 package org.example.strategy;
 
-import org.example.excelprocessor.ExcelProcess;
+import org.example.excelprocessor.IExcelProcessor;
 import org.example.product.ProductPosition;
 
 import java.util.HashMap;
 
 public class ExcelProcessorContext {
-    private ExcelProcessorStrategy excelProcessorStrategy;
+    private IExcelProcessorStrategy excelProcessorStrategy;
     private HashMap<String, ProductPosition> productPositionHashMap;
-    private final ExcelProcess excelProcess;
-    public ExcelProcessorContext(ExcelProcess excelProcess) {
+    private final IExcelProcessor excelProcess;
+    public ExcelProcessorContext(IExcelProcessor excelProcess) {
         this.excelProcess = excelProcess;
 
     }
@@ -17,11 +17,11 @@ public class ExcelProcessorContext {
         excelProcessorStrategy.execute(excelProcess);
     }
 
-    public ExcelProcessorStrategy getExcelProcessorStrategy() {
+    public IExcelProcessorStrategy getExcelProcessorStrategy() {
         return excelProcessorStrategy;
     }
 
-    public void setExcelProcessorStrategy(ExcelProcessorStrategy excelProcessorStrategy) {
+    public void setExcelProcessorStrategy(IExcelProcessorStrategy excelProcessorStrategy) {
         this.excelProcessorStrategy = excelProcessorStrategy;
     }
 
@@ -33,7 +33,7 @@ public class ExcelProcessorContext {
         this.productPositionHashMap = productPositionHashMap;
     }
 
-    public ExcelProcess getExcelProcess() {
+    public IExcelProcessor getExcelProcess() {
         return excelProcess;
     }
 }

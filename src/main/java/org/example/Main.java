@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.example.excelprocessor.ExcelProcess;
+import org.example.excelprocessor.IExcelProcessor;
 import org.example.excelprocessor.ExcelProcessorImpl;
 import org.example.util.io.ExcelFileWriter;
 import org.example.util.io.JsonFileReader;
@@ -51,9 +51,9 @@ public class Main {
         HashMap<String, List<String>> stringStringHashMap = reader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
 
         try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString())) {
-            ExcelProcess excelProcess = new ExcelProcessorImpl(workbook, SHEET_INDEX, stringStringHashMap);
+            IExcelProcessor excelProcess = new ExcelProcessorImpl(workbook, SHEET_INDEX, stringStringHashMap);
             ExcelProcessorContext context = new ExcelProcessorContext(excelProcess);
-            ExcelProcessorStrategy strategy;
+            IExcelProcessorStrategy strategy;
 
             for (String arg : args){
                 switch(arg) {
