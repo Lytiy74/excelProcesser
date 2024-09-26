@@ -24,16 +24,16 @@ import static org.example.ResourceFiles.*;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    private static final int SHEET_INDEX = 0;
-    private static final String INPUT_FILE_PATH = "опис.xlsx";
-    private static final String OUTPUT_FILE_PATH = "result.xlsx";
+    private static final int DEFAULT_SHEET_INDEX = 0;
+    private static final String DEFAULT_INPUT_FILE_PATH = "опис.xlsx";
+    private static final String DEFAULT_OUTPUT_FILE_PATH = "result.xlsx";
 
     /**
-     *
      * @param args [0] - File name, [1] - Sheet index or name, [2] - Operations to do
      */
     public static void main(String[] args) {
         logger.info("Start processing");
+
         try {
             createResourceFiles();
             processExcelFiles(args);
@@ -43,60 +43,87 @@ public class Main {
     }
 
     private static void processExcelFiles(String[] args) throws IOException, URISyntaxException {
-        Path jarDir = Paths.get(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent());
-        Path inputFilePath = Path.of(args.length > 0 && args[0] != null ? args[0] : INPUT_FILE_PATH);
+        Path inputFilePath = getInputFilePath(args);
         long startedAt = System.currentTimeMillis();
 
-        JsonFileReader reader = new JsonFileReader();
-        HashMap<String, List<String>> stringStringHashMap = reader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
+        HashMap<String, List<String>> stringStringHashMap = loadJsonMapping();
 
         try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString())) {
-            IExcelProcessor excelProcess = new ExcelProcessorImpl(workbook, SHEET_INDEX, stringStringHashMap);
-            ExcelProcessorContext context = new ExcelProcessorContext(excelProcess);
-            IExcelProcessorStrategy strategy;
-
-            for (String arg : args){
-                switch(arg) {
-                    case "collectProducts" -> strategy = new CollectProductStrategy(context);
-                    case "processComposition" -> strategy = new ProcessCompositionStrategy(context);
-                    case "write" -> strategy = new WriteToSheetProductPositionsStrategy(context);
-                    default -> {
-                        continue;
-                    }
-                }
-                strategy.execute(excelProcess);
-            }
-
-            ExcelFileWriter writer = new ExcelFileWriter();
-            writer.write(workbook, OUTPUT_FILE_PATH);
+            IExcelProcessor excelProcessor = setupExcelProcessor(workbook, stringStringHashMap);
+            executeStrategies(args, excelProcessor);
+            writeOutput(workbook);
         }
 
         logger.info("Finished processing. Wasted time = {}s", (System.currentTimeMillis() - startedAt) / 1000);
     }
 
-    private static void createResourceFiles() throws URISyntaxException {
-        Path jarDir = Paths.get(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent());
+    private static void executeStrategies(String[] args, IExcelProcessor excelProcessor) throws IOException, URISyntaxException {
+        ExcelProcessorContext context = new ExcelProcessorContext(excelProcessor);
 
-        for (ResourceFiles resource : ResourceFiles.values()) {
-            try (InputStream resourceStream = Main.class.getResourceAsStream("/" + resource.getFileName())) {
-                if (resourceStream == null) {
-                    logger.info("No resource found: " + resource.getFileName());
-                    continue;
-                }
-
-                Path outputPath = jarDir.resolve(resource.getFileName());
-
-                if (Files.exists(outputPath)) {
-                    logger.info("File already exists: " + outputPath + ". Skipping copy.");
-                    continue;
-                }
-
-                Files.copy(resourceStream, outputPath);
-                logger.info("File added to: " + outputPath);
-            } catch (IOException e) {
-                logger.error("Failed to copy resource: " + resource.getFileName(), e);
+        for (String arg : args) {
+            IExcelProcessorStrategy strategy = getStrategy(arg, context);
+            if (strategy != null) {
+                strategy.execute(excelProcessor);
             }
         }
     }
-}
 
+    private static IExcelProcessorStrategy getStrategy(String arg, ExcelProcessorContext context) throws IOException, URISyntaxException {
+        return switch (arg) {
+            case "collectProducts" -> new CollectProductStrategy(context);
+            case "processComposition" -> new ProcessCompositionStrategy(context);
+            case "write" -> new WriteToSheetProductPositionsStrategy(context);
+            default -> null;
+        };
+    }
+
+    private static Path getInputFilePath(String[] args) {
+        return args.length > 0 && args[0] != null ? Path.of(args[0]) : Path.of(DEFAULT_INPUT_FILE_PATH);
+    }
+
+    private static HashMap<String, List<String>> loadJsonMapping() throws URISyntaxException, IOException {
+        Path jarDir = getJarDirectory();
+        JsonFileReader reader = new JsonFileReader();
+        return reader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
+    }
+
+    private static IExcelProcessor setupExcelProcessor(Workbook workbook, HashMap<String, List<String>> stringStringHashMap) {
+        return new ExcelProcessorImpl(workbook, DEFAULT_SHEET_INDEX, stringStringHashMap);
+    }
+
+    private static void writeOutput(Workbook workbook) throws IOException {
+        ExcelFileWriter writer = new ExcelFileWriter();
+        writer.write(workbook, DEFAULT_OUTPUT_FILE_PATH);
+    }
+
+    private static Path getJarDirectory() throws URISyntaxException {
+        return Paths.get(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent());
+    }
+
+    private static void createResourceFiles() throws URISyntaxException {
+        Path jarDir = getJarDirectory();
+        for (ResourceFiles resource : ResourceFiles.values()) {
+            copyResourceIfNotExists(jarDir, resource);
+        }
+    }
+
+    private static void copyResourceIfNotExists(Path jarDir, ResourceFiles resource) {
+        try (InputStream resourceStream = Main.class.getResourceAsStream("/" + resource.getFileName())) {
+            if (resourceStream == null) {
+                logger.info("No resource found: " + resource.getFileName());
+                return;
+            }
+
+            Path outputPath = jarDir.resolve(resource.getFileName());
+            if (Files.exists(outputPath)) {
+                logger.info("File already exists: " + outputPath + ". Skipping copy.");
+                return;
+            }
+
+            Files.copy(resourceStream, outputPath);
+            logger.info("File added to: " + outputPath);
+        } catch (IOException e) {
+            logger.error("Failed to copy resource: " + resource.getFileName(), e);
+        }
+    }
+}
