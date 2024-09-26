@@ -37,6 +37,7 @@
     "alpaca",
     "cashmere",
     "sheep",
+    "yak",
     "kaschmir",
     "wolle",
     "wool",
@@ -115,6 +116,7 @@
     "metal",
     "metall",
     "metallised fiber",
+    "mpf",
     "mtf",
     "mz"
   ],
@@ -162,6 +164,7 @@
     "pp"
   ],
   "поліуретан": [
+    "ne",
     "polyurethane",
     "pu"
   ],
@@ -193,6 +196,8 @@
   ],
   "шкіра": [
     "calfskin",
+    "suede",
+    "calf suede",
     "skin",
     "goat skin",
     "leader",
@@ -200,5 +205,9 @@
     "calfleather",
     "leather",
     "lamb"
+  ],
+  "синтетика": [
+    "synthetic",
+    "synthetics"
   ]
 }
