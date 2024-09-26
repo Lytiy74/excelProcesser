@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 /**
  * This class is responsible for extracting cell values from an Apache POI Row object.
  */
-public class ExcelCellValueExtractor implements ICellValueExtractor {
-    private static final Logger logger = LoggerFactory.getLogger(ExcelCellValueExtractor.class);
+public class ExcelCellValueExtractorImpl implements ICellValueExtractor {
+    private static final Logger logger = LoggerFactory.getLogger(ExcelCellValueExtractorImpl.class);
 
     /**
      * An instance of DataFormatter used for formatting cell values.
@@ -19,7 +19,7 @@ public class ExcelCellValueExtractor implements ICellValueExtractor {
     /**
      * Constructs a new PoiCellValueExtractor object.
      */
-    public ExcelCellValueExtractor() {
+    public ExcelCellValueExtractorImpl() {
         logger.info("Initializing PoiCellValueExtractor...");
         this.formatter = new DataFormatter();
         logger.info("PoiCellValueExtractor initialized successfully.");

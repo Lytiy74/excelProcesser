@@ -38,7 +38,7 @@ public class ExcelProcessorImpl implements IExcelProcessor {
         this.headerRowIndex = columnIdentifier.findAndGetNumberOfHeaderRow(sheet, targetColumns);
         this.identifiedColumns = columnIdentifier.identifyColumns(sheet.getRow(headerRowIndex), targetColumns);
         this.productProcess = new ProductProcess();
-        this.cellValueExtractor = new ExcelCellValueExtractor();
+        this.cellValueExtractor = new ExcelCellValueExtractorImpl();
         this.targetColumns = targetColumns.keySet().stream().toList();
         logger.info("ExcelProcessorImpl initialized successfully.");
     }
