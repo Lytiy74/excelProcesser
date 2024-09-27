@@ -34,20 +34,14 @@ public enum Gender {
      */
     public static Gender fromString(String genderValue) {
         if (genderValue != null) {
-            switch (genderValue.toLowerCase()) {
-                case "male","чоловіче","чол":
-                    return MALE;
-                case "female","жіноче","жін":
-                    return FEMALE;
-                case "unisex","унісекс","уні":
-                    return UNISEX;
-                case "boys","хлопчаче":
-                    return BOYS;
-                case "girls","дівчаче":
-                    return GIRLS;
-                default:
-                    return UNSPECIFIED;
-            }
+            return switch (genderValue.toLowerCase()) {
+                case "male", "чоловіче", "чол" -> MALE;
+                case "female", "жіноче", "жін" -> FEMALE;
+                case "unisex", "унісекс", "уні" -> UNISEX;
+                case "boys", "хлопчаче" -> BOYS;
+                case "girls", "дівчаче" -> GIRLS;
+                default -> UNSPECIFIED;
+            };
         }
         return UNSPECIFIED;
     }
