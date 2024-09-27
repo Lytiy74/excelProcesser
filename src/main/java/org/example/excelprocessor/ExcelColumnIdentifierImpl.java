@@ -14,13 +14,12 @@ class ExcelColumnIdentifierImpl implements IExcelColumnIdentifier {
 
     @Override
     public HashMap<String, Integer> identifyColumns(Row source, HashMap<String, List<String>> targetColumns) {
-        if (!(source instanceof Row)) {
+        if (source == null) {
             throw new IllegalArgumentException("Source must be of type Row");
         }
-        Row sourceRow = (Row) source;
 
         HashMap<String, String> columnKeyMap = MapConverter.invertColumnMap(targetColumns);
-        List<String> sourceColumns = extractColumnNames(sourceRow);
+        List<String> sourceColumns = extractColumnNames(source);
 
         HashMap<String, Integer> identifiedColumns = new HashMap<>();
         for (String column : sourceColumns) {

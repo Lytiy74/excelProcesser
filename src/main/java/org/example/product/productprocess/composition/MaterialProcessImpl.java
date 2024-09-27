@@ -27,9 +27,6 @@ public class MaterialProcessImpl implements MaterialProcess {
     private static final Logger logger = LoggerFactory.getLogger(MaterialProcessImpl.class);
 
     /**
-     * The path to the JSON file containing material compositions.
-     */
-    /**
      * The parser for parsing the composition strings.
      */
     private final MaterialParser parser;
@@ -83,14 +80,12 @@ public class MaterialProcessImpl implements MaterialProcess {
             }
         }
 
-        String result = materialStringBuilder.buildCompositionString(getSortedLinkedHashMap(translatedMap));
-        return result;
+        return materialStringBuilder.buildCompositionString(getSortedLinkedHashMap(translatedMap));
     }
 
     @Override
     public String translateComposition(String composition) {
-        String translated = translator.translateMaterial(composition.toLowerCase());
-        return translated;
+        return translator.translateMaterial(composition.toLowerCase());
     }
     /**
      * This method takes a HashMap of composition data and returns a sorted LinkedHashMap.

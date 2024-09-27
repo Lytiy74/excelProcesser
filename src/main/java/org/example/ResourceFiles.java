@@ -5,7 +5,7 @@ public enum ResourceFiles {
     COMPOSITION_JSON_FILE("compositionNew.json"),
     CLOTHES_NAMES_JSON_FILE("clothesNames.json"),
     CLOTHES_SIZE_JSON_FILE("clothesSize.json");
-    private String fileName;
+    private final String fileName;
 
     ResourceFiles(String fileName) {
         this.fileName = fileName;
