@@ -17,7 +17,7 @@ public enum Gender {
 
     UNSPECIFIED("N/A");
 
-    private String title;
+    private final String title;
 
     /**
      * Constructor for Gender enum.
