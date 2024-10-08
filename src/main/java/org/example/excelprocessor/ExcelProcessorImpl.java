@@ -20,6 +20,7 @@ import static org.example.excelprocessor.TargetColumns.*;
  * It supports adding individual products or a collection of products to specific sheets,
  * collecting product data from sheets, and retrieving workbook and sheet details.
  */
+@Deprecated(since = "08.10.2024")
 public class ExcelProcessorImpl implements IExcelProcessor {
     private static final Logger logger = LoggerFactory.getLogger(ExcelProcessorImpl.class);
     private final Workbook workbook;
@@ -42,7 +43,7 @@ public class ExcelProcessorImpl implements IExcelProcessor {
         this.targetColumns = targetColumns.keySet().stream().toList();
         logger.info("ExcelProcessorImpl initialized successfully.");
     }
-
+    @Deprecated(since = "08.10.2024")
     @Override
     public void addProductToSheet(ProductPosition product, Sheet sheet) {
         logger.info("Adding product to sheet...");
@@ -50,7 +51,7 @@ public class ExcelProcessorImpl implements IExcelProcessor {
         Row row = sheet.createRow(sheet.getLastRowNum() + 1);
         addProductPositionToRow(product, row);
     }
-
+    @Deprecated(since = "08.10.2024")
     public void addProductPositionToRow(ProductPosition product, Row row) {
         row.createCell(targetColumns.indexOf(ARTICLE.getColumnName())).setCellValue(product.getArticle());
         row.createCell(targetColumns.indexOf(PRODUCT_NAME.getColumnName())).setCellValue(product.getProductName());
@@ -70,7 +71,7 @@ public class ExcelProcessorImpl implements IExcelProcessor {
             row.createCell(i).setCellValue(targetColumns.get(i));
         }
     }
-
+    @Deprecated(since = "08.10.2024")
     @Override
     public void addMapOfProductsToSheet(HashMap<String, ProductPosition> products, Sheet sheet) {
         logger.info("Adding products to sheet...");
@@ -87,7 +88,7 @@ public class ExcelProcessorImpl implements IExcelProcessor {
         }
         logger.info("Products added to sheet successfully.");
     }
-
+    @Deprecated(since = "08.10.2024")
     @Override
     public void addMapOfProductsToSheet(HashMap<String, ProductPosition> products) {
         if (workbook.getSheet("Processed") != null) {
@@ -97,6 +98,7 @@ public class ExcelProcessorImpl implements IExcelProcessor {
         addMapOfProductsToSheet(products, sheet);
     }
 
+    @Deprecated(since = "08.10.2024")
     @Override
     public HashMap<String, ProductPosition> collectProducts() {
         logger.info("Collecting products...");
@@ -117,7 +119,7 @@ public class ExcelProcessorImpl implements IExcelProcessor {
         logger.info("Products collected successfully.");
         return products;
     }
-
+    @Deprecated(since = "08.10.2024")
     private ProductPosition buildProductPositionFromRow(Row row) {
         logger.info("Building ProductPosition object...");
         ICellValueSetter cellValueSetter = new ExcelCellValueSetterImpl(row, cellValueExtractor, identifiedColumns);
