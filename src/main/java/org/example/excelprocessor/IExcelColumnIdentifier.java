@@ -1,6 +1,8 @@
 package org.example.excelprocessor;
 
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.example.util.JaccardCalculation;
 
 import java.util.*;
 
@@ -13,4 +15,5 @@ public interface IExcelColumnIdentifier {
      * @return A map of identified categories and their respective column indices.
      */
     HashMap<String, Integer> identifyColumns(Row source, HashMap<String, List<String>> targetColumns);
+    int findAndGetNumberOfHeaderRow(Sheet sheet, HashMap<String, List<String>> targetColumns);
 }

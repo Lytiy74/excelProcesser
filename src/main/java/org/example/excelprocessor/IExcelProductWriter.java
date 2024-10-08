@@ -7,14 +7,13 @@ import org.example.product.ProductPosition;
 import java.util.HashMap;
 
 public interface IExcelProductWriter {
+    // Записує один продукт у вказаний лист
     void writeProductToSheet(ProductPosition productPosition, Sheet sheet);
 
-    void writeProductToSheet(ProductPosition productPosition);
+    // Записує колекцію продуктів у вказаний лист
+    void writeProductsToSheet(HashMap<String, ProductPosition> productPositionHashMap, Sheet sheet);
 
-    void writeProductToSheet(HashMap<String, ProductPosition> productPositionHashMap, Sheet sheet);
-
-    void writeProductToSheet(HashMap<String, ProductPosition> productPositionHashMap);
-
+    // Записує один продукт у вказаний рядок
     void writeProductToRow(ProductPosition productPosition, Row row);
-
 }
+

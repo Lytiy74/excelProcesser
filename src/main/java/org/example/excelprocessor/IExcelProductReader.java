@@ -8,7 +8,5 @@ import java.util.HashMap;
 
 public interface IExcelProductReader {
     HashMap<String, ProductPosition> getProductsMapFromSheet(Sheet sheet);
-    HashMap<String, ProductPosition> getProductsMapFromSheet();
-    ProductPosition getProduct(Row row);
-    ProductPosition getProduct();
+    ProductPosition buildProductFromRow(Row row);
 }
