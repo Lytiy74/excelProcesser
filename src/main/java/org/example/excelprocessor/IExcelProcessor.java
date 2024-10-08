@@ -11,6 +11,7 @@ import java.util.HashMap;
  * It provides methods to add individual products as well as collections of products to specific sheets,
  * collect product data from sheets, and retrieve workbook and sheet details.
  */
+@Deprecated(since = "08.10.2024")
 public interface IExcelProcessor {
     void addProductToSheet(ProductPosition product, Sheet sheet);
 
