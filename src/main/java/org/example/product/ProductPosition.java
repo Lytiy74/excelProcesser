@@ -1,5 +1,6 @@
 package org.example.product;
 
+import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Objects;
  * <p>
  * The class also provides a builder pattern for creating instances of ProductPosition.
  */
-public class ProductPosition {
+public class ProductPosition implements Cloneable {
     private String article;
     private String productName;
     private String sizes;
@@ -260,5 +261,25 @@ public class ProductPosition {
     @Override
     public int hashCode() {
         return Objects.hash(article, productName, sizes, tradeMark, countryOrigin, quantity, composition, gender, hsCode, bruttoWeight, price);
+    }
+
+    @Override
+    public ProductPosition clone() {
+        try {
+            ProductPosition productPosition = (ProductPosition) super.clone();
+            productPosition.setArticle(this.getArticle());
+            productPosition.setSizes(this.getSizes());
+            productPosition.setTradeMark(this.getTradeMark());
+            productPosition.setCountryOrigin(this.getCountryOrigin());
+            productPosition.setQuantity(this.getQuantity());
+            productPosition.setComposition(this.getComposition());
+            productPosition.setGender(this.getGender());
+            productPosition.setHsCode(this.getHsCode());
+            productPosition.setBruttoWeight(this.getBruttoWeight());
+            productPosition.setPrice(this.getPrice());
+            return productPosition;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
