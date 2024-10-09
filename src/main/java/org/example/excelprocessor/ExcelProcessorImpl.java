@@ -113,7 +113,8 @@ public class ExcelProcessorImpl implements IExcelProcessor {
             } else {
                 logger.info("Found duplicate of article {}, attempting to merge", product.getArticle());
                 ProductPosition existingProduct = products.get(product.getArticle());
-                products.put(existingProduct.getArticle(), productProcess.mergeDuplications(product, existingProduct));
+                ProductPosition mergedProduct = productProcess.mergeDuplications(existingProduct, product);
+                products.put(mergedProduct.getArticle(), mergedProduct);
             }
         }
         logger.info("Products collected successfully.");
