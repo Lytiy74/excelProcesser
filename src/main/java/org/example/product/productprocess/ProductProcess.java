@@ -14,7 +14,7 @@ public class ProductProcess {
      * @param newProduct The second ProductPosition object to be merged.
      * @return The merged ProductPosition object. If the HS codes are different, it returns the second object with "-duplicate" appended to the article.
      */
-    public ProductPosition mergeDuplications(ProductPosition existedProduct, ProductPosition newProduct) {
+    public static ProductPosition mergeDuplications(ProductPosition existedProduct, ProductPosition newProduct) {
 
         logger.info("Merging products: {} and {}", existedProduct, newProduct);
         if (existedProduct.getHsCode().equals(newProduct.getHsCode())
