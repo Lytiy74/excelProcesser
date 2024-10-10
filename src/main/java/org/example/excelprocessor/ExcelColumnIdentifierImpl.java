@@ -10,22 +10,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-class ExcelColumnIdentifierImpl implements IExcelColumnIdentifier {
+public class ExcelColumnIdentifierImpl implements IExcelColumnIdentifier {
 
     @Override
     public HashMap<String, Integer> identifyColumns(Row source, HashMap<String, List<String>> targetColumns) {
-        if (!(source instanceof Row)) {
-            throw new IllegalArgumentException("Source must be of type Row");
-        }
-        Row sourceRow = (Row) source;
-
         HashMap<String, String> columnKeyMap = MapConverter.invertColumnMap(targetColumns);
-        List<String> sourceColumns = extractColumnNames(sourceRow);
+        List<String> sourceColumns = extractColumnNames(source);
 
         HashMap<String, Integer> identifiedColumns = new HashMap<>();
-        for (String column : sourceColumns) {
+        for (int i = 0; i < sourceColumns.size(); i++) {
+            String column = sourceColumns.get(i);
             String bestMatchCategory = JaccardCalculation.findBestMatch(column, columnKeyMap);
-            identifiedColumns.put(bestMatchCategory, sourceColumns.indexOf(column));
+            identifiedColumns.put(bestMatchCategory, i);  // Додаємо індекс стовпця
         }
 
         return identifiedColumns;
