@@ -10,13 +10,15 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.example.excelprocessor.IExcelProcessor;
-import org.example.excelprocessor.ExcelProcessorImpl;
+import org.example.excelprocessor.*;
+import org.example.product.productprocess.composition.MaterialProcess;
+import org.example.product.productprocess.composition.MaterialProcessImpl;
+import org.example.strategy.*;
 import org.example.util.io.ExcelFileWriter;
 import org.example.util.io.JsonFileReader;
-import org.example.strategy.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,36 +48,55 @@ public class Main {
         Path inputFilePath = getInputFilePath(args);
         long startedAt = System.currentTimeMillis();
 
-        HashMap<String, List<String>> stringStringHashMap = loadJsonMapping();
+        HashMap<String, List<String>> targetColumnsMap = loadJsonMapping();
 
         try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString())) {
-            IExcelProcessor excelProcessor = setupExcelProcessor(workbook, stringStringHashMap);
-            executeStrategies(args, excelProcessor);
+            IExcelColumnIdentifier columnIdentifier = new ExcelColumnIdentifierImpl();
+            Sheet sheet = workbook.getSheetAt(DEFAULT_SHEET_INDEX);
+            int headRowIndex = columnIdentifier.findAndGetNumberOfHeaderRow(sheet, targetColumnsMap);
+            HashMap<String, Integer> identifiedColumns = columnIdentifier.identifyColumns(sheet.getRow(headRowIndex), targetColumnsMap);
+            IExcelProductBuilder productBuilder = new ExcelProductBuilder(new ExcelCellValueExtractorImpl(), identifiedColumns);
+            IExcelProductReader productReader = new ExcelProductReader(productBuilder, headRowIndex);
+            IExcelProductWriter productWriter = new ExcelProductWriter(identifiedColumns.keySet().stream().toList());
+            MaterialProcess materialProcess = new MaterialProcessImpl();
+            ExcelProcessingContext context = new ExcelProcessingContext.Builder()
+                    .workbook(workbook)
+                    .sheet(sheet)
+                    .targetColumns(targetColumnsMap)
+                    .identifiedColumns(identifiedColumns)
+                    .productBuilder(productBuilder)
+                    .productReader(productReader)
+                    .productWriter(productWriter)
+                    .materialProcess(materialProcess)
+                    .build();
+            for (String arg : args) {
+                try {
+                    // Перетворюємо аргумент у відповідну операцію з enum
+                    Operation operation = Operation.valueOf(arg.toUpperCase());
+                    IExcelProcessingStrategy strategy = getStrategy(operation, context);
+                    // Виконання стратегії
+                    if (strategy == null) continue;
+                    strategy.execute(context);  // Передаємо контекст, якщо потрібно
+                } catch (IllegalArgumentException e) {
+                    logger.error("Invalid operation: " + arg);
+                }
+            }
+            // Write output file
             writeOutput(workbook);
         }
 
         logger.info("Finished processing. Wasted time = {}s", (System.currentTimeMillis() - startedAt) / 1000);
     }
 
-    private static void executeStrategies(String[] args, IExcelProcessor excelProcessor) throws IOException, URISyntaxException {
-        ExcelProcessorContext context = new ExcelProcessorContext(excelProcessor);
-
-        for (String arg : args) {
-            IExcelProcessorStrategy strategy = getStrategy(arg, context);
-            if (strategy != null) {
-                strategy.execute(excelProcessor);
-            }
+    private static IExcelProcessingStrategy getStrategy(Operation arg, ExcelProcessingContext context) {
+        switch (arg) {
+            case COLLECT_PRODUCTS -> new ExcelProductReadingStrategy(context.getProductReader());
+            case PROCESS_PRODUCTS -> new ExcelProductProcessStrategy(context.getMaterialProcess());
+            case SAVE_RESULTS -> new ExcelProductWriteStrategy(context.getProductWriter());
         }
+        return null;
     }
 
-    private static IExcelProcessorStrategy getStrategy(String arg, ExcelProcessorContext context) throws IOException, URISyntaxException {
-        return switch (arg) {
-            case "collectProducts" -> new CollectProductStrategy(context);
-            case "processComposition" -> new ProcessCompositionStrategy(context);
-            case "write" -> new WriteToSheetProductPositionsStrategy(context);
-            default -> null;
-        };
-    }
 
     private static Path getInputFilePath(String[] args) {
         return args.length > 0 && args[0] != null ? Path.of(args[0]) : Path.of(DEFAULT_INPUT_FILE_PATH);
@@ -85,10 +106,6 @@ public class Main {
         Path jarDir = getJarDirectory();
         JsonFileReader reader = new JsonFileReader();
         return reader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
-    }
-
-    private static IExcelProcessor setupExcelProcessor(Workbook workbook, HashMap<String, List<String>> stringStringHashMap) {
-        return new ExcelProcessorImpl(workbook, DEFAULT_SHEET_INDEX, stringStringHashMap);
     }
 
     private static void writeOutput(Workbook workbook) throws IOException {
