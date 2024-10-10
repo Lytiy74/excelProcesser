@@ -1,13 +1,16 @@
 {
   "article": [
+    "арт",
     "артикул",
     "article",
+    "art.nr.",
     "modell",
     "artikelnr"
   ],
   "productName": [
     "найменування",
     "назва",
+    "переклад",
     "наименование",
     "найменування (ua)",
     "перевод назви",
@@ -17,6 +20,7 @@
   "sizes": [
     "розмір",
     "размер",
+    "größe",
     "grösse"
   ],
   "tradeMark": [
@@ -52,9 +56,11 @@
   ],
   "composition": [
     "склад",
+    "material",
     "composition",
     "composition details",
     "состав",
+    "100% co",
     "zusammensetzung"
   ],
   "gender": [
@@ -70,12 +76,14 @@
     "warennummer",
     "zolltarifnummer",
     "custom code",
+    "zollnummer",
     "уктзед",
     "код",
     "tariff no."
   ],
   "bruttoWeight": [
     "брутто",
+    "ges.gew.",
     "brutto",
     "weight"
   ],
@@ -88,6 +96,7 @@
     "preis o. rabatt",
     "cost",
     "unit cost price",
+    "gesamt",
     "euro"
   ]
 }
