@@ -2,7 +2,6 @@ package org.example.excelprocessor;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.example.util.JaccardCalculation;
 
 import java.util.*;
 
