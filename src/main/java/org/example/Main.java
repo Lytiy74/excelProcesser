@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.excelprocessor.*;
-import org.example.product.productprocess.composition.MaterialProcess;
+import org.example.product.productprocess.composition.IMaterialProcess;
 import org.example.product.productprocess.composition.MaterialProcessImpl;
 import org.example.strategy.*;
 import org.example.util.io.ExcelFileWriter;
@@ -58,7 +58,7 @@ public class Main {
             IExcelProductBuilder productBuilder = new ExcelProductBuilder(new ExcelCellValueExtractorImpl(), identifiedColumns);
             IExcelProductReader productReader = new ExcelProductReader(productBuilder, headRowIndex);
             IExcelProductWriter productWriter = new ExcelProductWriter(identifiedColumns.keySet().stream().toList());
-            MaterialProcess materialProcess = new MaterialProcessImpl();
+            IMaterialProcess IMaterialProcess = new MaterialProcessImpl();
             ExcelProcessingContext context = new ExcelProcessingContext.Builder()
                     .workbook(workbook)
                     .sheet(sheet)
@@ -67,7 +67,7 @@ public class Main {
                     .productBuilder(productBuilder)
                     .productReader(productReader)
                     .productWriter(productWriter)
-                    .materialProcess(materialProcess)
+                    .materialProcess(IMaterialProcess)
                     .build();
             for (String arg : args) {
                 try {

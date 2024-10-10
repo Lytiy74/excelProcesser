@@ -1,6 +1,6 @@
 package org.example.product.productprocess.composition;
 
-public interface MaterialProcess {
+public interface IMaterialProcess {
     String generateCompositionString(String composition);
     String translateComposition(String composition);
 }

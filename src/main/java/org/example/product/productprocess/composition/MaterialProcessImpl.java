@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * It reads a JSON file containing material compositions, parses the composition strings,
  * translates them into a standard format, and builds a formatted composition string.
  */
-public class MaterialProcessImpl implements MaterialProcess {
+public class MaterialProcessImpl implements IMaterialProcess {
     private static final Logger logger = LoggerFactory.getLogger(MaterialProcessImpl.class);
 
     /**

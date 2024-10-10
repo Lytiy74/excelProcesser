@@ -1,16 +1,16 @@
 package org.example.strategy;
 
 import org.example.product.ProductPosition;
-import org.example.product.productprocess.composition.MaterialProcess;
+import org.example.product.productprocess.composition.IMaterialProcess;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ExcelProductProcessStrategy implements IExcelProcessingStrategy{
-    private MaterialProcess materialProcess;
+    private IMaterialProcess IMaterialProcess;
 
-    public ExcelProductProcessStrategy(MaterialProcess materialProcess) {
-        this.materialProcess = materialProcess;
+    public ExcelProductProcessStrategy(IMaterialProcess IMaterialProcess) {
+        this.IMaterialProcess = IMaterialProcess;
     }
 
     @Override
@@ -18,7 +18,7 @@ public class ExcelProductProcessStrategy implements IExcelProcessingStrategy{
         HashMap<String, ProductPosition> productPositionHashMap = context.getProductPositionHashMap();
         for (Map.Entry<String, ProductPosition> stringProductPositionEntry : productPositionHashMap.entrySet()) {
             ProductPosition value = stringProductPositionEntry.getValue();
-            value.setComposition(materialProcess.generateCompositionString(value.getComposition()));
+            value.setComposition(IMaterialProcess.generateCompositionString(value.getComposition()));
         }
     }
 }

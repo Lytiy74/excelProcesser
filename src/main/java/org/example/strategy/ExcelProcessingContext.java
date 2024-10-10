@@ -6,7 +6,7 @@ import org.example.excelprocessor.IExcelProductBuilder;
 import org.example.excelprocessor.IExcelProductReader;
 import org.example.excelprocessor.IExcelProductWriter;
 import org.example.product.ProductPosition;
-import org.example.product.productprocess.composition.MaterialProcess;
+import org.example.product.productprocess.composition.IMaterialProcess;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +19,7 @@ public class ExcelProcessingContext {
     private final IExcelProductReader productReader;
     private final IExcelProductBuilder productBuilder;
     private final IExcelProductWriter productWriter;
-    private final MaterialProcess materialProcess;
+    private final IMaterialProcess IMaterialProcess;
     private HashMap<String, ProductPosition> productPositionHashMap;
 
     private ExcelProcessingContext(Builder builder) {
@@ -30,7 +30,7 @@ public class ExcelProcessingContext {
         this.productReader = builder.productReader;
         this.productBuilder = builder.productBuilder;
         this.productWriter = builder.productWriter;
-        this.materialProcess = builder.materialProcess;
+        this.IMaterialProcess = builder.IMaterialProcess;
         this.productPositionHashMap = builder.productPositionHashMap;
     }
 
@@ -42,7 +42,7 @@ public class ExcelProcessingContext {
         private IExcelProductReader productReader;
         private IExcelProductBuilder productBuilder;
         private IExcelProductWriter productWriter;
-        private MaterialProcess materialProcess;
+        private IMaterialProcess IMaterialProcess;
         private HashMap<String, ProductPosition> productPositionHashMap;
 
         public Builder workbook(Workbook workbook) {
@@ -80,8 +80,8 @@ public class ExcelProcessingContext {
             return this;
         }
 
-        public Builder materialProcess(MaterialProcess materialProcess){
-            this.materialProcess = materialProcess;
+        public Builder materialProcess(IMaterialProcess IMaterialProcess){
+            this.IMaterialProcess = IMaterialProcess;
             return this;
         }
 
@@ -123,8 +123,8 @@ public class ExcelProcessingContext {
         return productWriter;
     }
 
-    public MaterialProcess getMaterialProcess() {
-        return materialProcess;
+    public IMaterialProcess getMaterialProcess() {
+        return IMaterialProcess;
     }
 
     public HashMap<String, ProductPosition> getProductPositionHashMap() {
