@@ -8,27 +8,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.List;
 
 public abstract class AbstractExcelProductReader implements IExcelProductReader {
     private static final Logger logger = LoggerFactory.getLogger(AbstractExcelProductReader.class);
     private final IExcelProductBuilder productBuilder;
-    private final ProductProcess productProcess;
-    private final HashMap<String, List<String>> targetColumns;
-    private final IExcelColumnIdentifier columnIdentifier;
+    private final int headerRowIndex;
 
-    protected AbstractExcelProductReader(IExcelProductBuilder productBuilder, ProductProcess productProcess, HashMap<String, List<String>> targetColumns) {
+    protected AbstractExcelProductReader(IExcelProductBuilder productBuilder, int headerRowIndex) {
         this.productBuilder = productBuilder;
-        this.productProcess = productProcess;
-        this.targetColumns = targetColumns;
-        this.columnIdentifier = new ExcelColumnIdentifierImpl();
+        this.headerRowIndex = headerRowIndex;
     }
 
 
     @Override
     public HashMap<String, ProductPosition> getProductsMapFromSheet(Sheet sheet) {
         logger.info("Collecting Products");
-        int headerRowIndex = findHeaderRowIndex(sheet);
         HashMap<String, ProductPosition> products = new HashMap<>();
         for (int rowIndex = headerRowIndex + 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
             //todo Reduce quantity of logs in loop
@@ -41,7 +35,7 @@ public abstract class AbstractExcelProductReader implements IExcelProductReader 
             } else {
                 logger.info("Found duplicate of article {}, attempting to merge", product.getArticle());
                 ProductPosition existingProduct = products.get(product.getArticle());
-                products.put(existingProduct.getArticle(), productProcess.mergeDuplications(product, existingProduct));
+                products.put(existingProduct.getArticle(), ProductProcess.mergeDuplications(product, existingProduct));
             }
         }
         logger.info("Products collected successfully.");
@@ -56,9 +50,6 @@ public abstract class AbstractExcelProductReader implements IExcelProductReader 
         return product;
     }
 
-    private int findHeaderRowIndex(Sheet sheet) {
-        return columnIdentifier.findAndGetNumberOfHeaderRow(sheet, targetColumns);
-    }
 
 
 }
