@@ -6,7 +6,7 @@ import org.example.product.ProductPosition;
 import java.util.HashMap;
 
 public class ExcelProductBuilder extends AbstractExcelProductBuilder implements IExcelProductBuilder{
-    protected ExcelProductBuilder(ICellValueExtractor cellValueExtractor, HashMap<String, Integer> identifiedColumns) {
+    public ExcelProductBuilder(ICellValueExtractor cellValueExtractor, HashMap<String, Integer> identifiedColumns) {
         super(cellValueExtractor, identifiedColumns);
     }
 
