@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-class MaterialStringBuilder {
+class MaterialStringBuilder implements IMaterialStringBuilder{
     private static final Logger logger = LoggerFactory.getLogger(MaterialStringBuilder.class);
 
     /**
@@ -20,7 +20,8 @@ class MaterialStringBuilder {
      * The string is formatted as "percentage% materialName percentage% materialName ..."
      * The materials are ordered by their insertion order in the LinkedHashMap.
      */
-    String buildCompositionString(LinkedHashMap<String, Integer> linkedHashMap) {
+    @Override
+    public String buildCompositionString(LinkedHashMap<String, Integer> linkedHashMap) {
         logger.debug("Building material composition string");
         StringBuilder result = new StringBuilder();
         for (Iterator<Map.Entry<String, Integer>> iterator = linkedHashMap.entrySet().iterator(); iterator.hasNext(); ) {

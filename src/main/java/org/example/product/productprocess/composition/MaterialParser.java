@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-class MaterialParser {
+class MaterialParser implements IMaterialParser {
     private static final Logger logger = LoggerFactory.getLogger(MaterialParser.class);
     private static final Pattern COMPOSITION_PATTERN_WITH_MULTIPLE = Pattern.compile("(((?<percentage>\\d+)%?\\s*(?<material>[A-Za-z]+\\s*[A-Za-z]+))(?=.*lining:?))");
     private static final Pattern COMPOSITION_PATTERN_SIMPLE = Pattern.compile("(((?<percentage>\\d+)%?\\s*(?<material>[A-Za-z]+\\s*[A-Za-z]+)))");
@@ -26,7 +26,8 @@ class MaterialParser {
      * @param string The input string representing the composition of materials and their percentages.
      * @return A LinkedHashMap where the keys are the unique material names (converted to lowercase) and the values are their corresponding percentages.
      */
-    LinkedHashMap<String, Integer> parseStringCompositionToMap(String string) {
+    @Override
+    public LinkedHashMap<String, Integer> parseStringCompositionToMap(String string) {
         logger.debug("Parsing composition string: {}", string);
         // Initialize a HashMap to store the composition data
         HashMap<String, Integer> compositionMap = new HashMap<String, Integer>();
@@ -52,7 +53,7 @@ class MaterialParser {
 
         // Return the sorted LinkedHashMap of composition data
         logger.debug("Parsed composition data: {}", compositionMap);
-        return getSortedLinkedHashMap(compositionMap);
+        return getSortedCompositionLinkedHashMap(compositionMap);
     }
 
     private static Matcher getMatcher(String string, Matcher matcher) {
@@ -74,7 +75,7 @@ class MaterialParser {
      * @return A LinkedHashMap where the keys are the unique material names (converted to lowercase) and the values are their corresponding percentages.
      * The LinkedHashMap is sorted in descending order based on the percentages.
      */
-    LinkedHashMap<String, Integer> getSortedLinkedHashMap(HashMap<String, Integer> compositionMap) {
+    public LinkedHashMap<String, Integer> getSortedCompositionLinkedHashMap(Map<String, Integer> compositionMap) {
         logger.debug("Sorting composition data by percentage: {}", compositionMap);
         return
                 new LinkedHashMap<>(
@@ -84,4 +85,5 @@ class MaterialParser {
                                         (e1, e2) -> e1, LinkedHashMap::new))
                 );
     }
+
 }

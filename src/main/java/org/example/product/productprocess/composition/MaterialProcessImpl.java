@@ -87,6 +87,12 @@ public class MaterialProcessImpl implements IMaterialProcess {
         return result;
     }
 
+    public String generateSortedCompositionString(String composition){
+        LinkedHashMap<String, Integer> compositionMap = parser.parseStringCompositionToMap(composition.toLowerCase());
+        if (compositionMap.isEmpty()) return composition;
+        return materialStringBuilder.buildCompositionString(getSortedLinkedHashMap(compositionMap));
+    }
+
     @Override
     public String translateComposition(String composition) {
         String translated = translator.translateMaterial(composition.toLowerCase());

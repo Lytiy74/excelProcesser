@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
  * This class is responsible for translating material codes to their corresponding names.
  * It uses a dictionary provided in a JSON file and a Jaccard calculation algorithm to find the best match for unknown material codes.
  */
-class MaterialTranslator {
+class MaterialTranslator implements IMaterialTranslator {
     private static final Logger logger = LoggerFactory.getLogger(MaterialTranslator.class);
     private static HashMap<String, String> materialTranslationMap;
 
@@ -30,7 +30,7 @@ class MaterialTranslator {
      * The LinkedHashMap is sorted in descending order based on the percentages.
      * If the same material appears multiple times in the input HashMap, their percentages are summed up.
      */
-    LinkedHashMap<String, Integer> translateMaterial(LinkedHashMap<String, Integer> stringIntegerLinkedHashMap) {
+    public LinkedHashMap<String, Integer> translateMaterial(LinkedHashMap<String, Integer> stringIntegerLinkedHashMap) {
         // Initialize a LinkedHashMap to store the translated composition data
         LinkedHashMap<String, Integer> translatedComposition = new LinkedHashMap<>();
 
@@ -55,12 +55,13 @@ class MaterialTranslator {
      * @param inputString The material code to be translated.
      * @return The corresponding name of the material code. If no match is found, the input material code is returned.
      */
-    String translateMaterial(String inputString) {
+    @Override
+    public String translateMaterial(String inputString) {
         String translated = materialTranslationMap.get(inputString);
         if (translated == null) {
             logger.debug("Cant find translations in map for '{}', going to jaccardCalculation", inputString);
             translated = JaccardCalculation.findBestMatch(inputString, materialTranslationMap);
-            materialTranslationMap.put(inputString,translated);
+            materialTranslationMap.put(inputString, translated);
         }
         logger.debug("'{}' translated to '{}'", inputString, translated);
         return translated == null ? inputString : translated;
