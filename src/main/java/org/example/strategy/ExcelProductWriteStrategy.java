@@ -1,8 +1,9 @@
 package org.example.strategy;
 
+import org.apache.poi.ss.usermodel.Sheet;
 import org.example.excelprocessor.IExcelProductWriter;
 
-public class ExcelProductWriteStrategy implements IExcelProcessingStrategy{
+public class ExcelProductWriteStrategy implements IExcelProcessingStrategy {
     private final IExcelProductWriter excelProductWriter;
 
     public ExcelProductWriteStrategy(IExcelProductWriter excelProductWriter) {
@@ -11,6 +12,7 @@ public class ExcelProductWriteStrategy implements IExcelProcessingStrategy{
 
     @Override
     public void execute(ExcelProcessingContext context) {
-        excelProductWriter.writeProductsToSheet(context.getProductPositionHashMap(), context.getSheet());
+        Sheet processedSheet = context.getOutWorkbook().createSheet("Processed");
+        excelProductWriter.writeProductsToSheet(context.getProductPositionHashMap(), processedSheet);
     }
 }

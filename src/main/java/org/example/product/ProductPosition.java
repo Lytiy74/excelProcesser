@@ -1,6 +1,5 @@
 package org.example.product;
 
-import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -260,7 +259,10 @@ public class ProductPosition implements Cloneable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(article, productName, sizes, tradeMark, countryOrigin, quantity, composition, gender, hsCode, bruttoWeight, price);
+        return Objects.hash(article, productName, sizes,
+                tradeMark, countryOrigin, quantity,
+                composition, gender, hsCode,
+                bruttoWeight, price);
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.util.List;
 
 public class ExcelProcessingContext {
     private final Workbook workbook;
+    private final Workbook outWorkbook;
     private final Sheet sheet;
     private final HashMap<String, List<String>> targetColumns;
     private final HashMap<String, Integer> identifiedColumns;
@@ -24,6 +25,7 @@ public class ExcelProcessingContext {
 
     private ExcelProcessingContext(Builder builder) {
         this.workbook = builder.workbook;
+        this.outWorkbook = builder.outWorkbook;
         this.sheet = builder.sheet;
         this.targetColumns = builder.targetColumns;
         this.identifiedColumns = builder.identifiedColumns;
@@ -36,6 +38,7 @@ public class ExcelProcessingContext {
 
     public static class Builder {
         private Workbook workbook;
+        private Workbook outWorkbook;
         private Sheet sheet;
         private HashMap<String, List<String>> targetColumns;
         private HashMap<String, Integer> identifiedColumns;
@@ -47,6 +50,10 @@ public class ExcelProcessingContext {
 
         public Builder workbook(Workbook workbook) {
             this.workbook = workbook;
+            return this;
+        }
+        public Builder outWorkbook(Workbook outWorkbook) {
+            this.outWorkbook = outWorkbook;
             return this;
         }
 
@@ -97,6 +104,10 @@ public class ExcelProcessingContext {
 
     public Workbook getWorkbook() {
         return workbook;
+    }
+
+    public Workbook getOutWorkbook() {
+        return outWorkbook;
     }
 
     public Sheet getSheet() {
