@@ -99,7 +99,7 @@ public class Main {
             case PROCESS_PRODUCTS -> {
                 return new ExcelProductProcessStrategy(context.getMaterialProcess());
             }
-            case SORT_COMPOSITION_BY_PERCENTAGE -> {
+            case SORT_PRODUCT_COMPOSITION -> {
                 return new ExcelSortCompositionStrategy(context.getMaterialProcess());
             }
             case SAVE_RESULTS -> {
