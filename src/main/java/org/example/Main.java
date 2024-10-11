@@ -50,17 +50,18 @@ public class Main {
 
         HashMap<String, List<String>> targetColumnsMap = loadJsonMapping();
 
-        try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString())) {
+        try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString()); Workbook outWorkbook = new XSSFWorkbook();) {
             IExcelColumnIdentifier columnIdentifier = new ExcelColumnIdentifierImpl();
             Sheet sheet = workbook.getSheetAt(DEFAULT_SHEET_INDEX);
             int headRowIndex = columnIdentifier.findAndGetNumberOfHeaderRow(sheet, targetColumnsMap);
             HashMap<String, Integer> identifiedColumns = columnIdentifier.identifyColumns(sheet.getRow(headRowIndex), targetColumnsMap);
             IExcelProductBuilder productBuilder = new ExcelProductBuilder(new ExcelCellValueExtractorImpl(), identifiedColumns);
             IExcelProductReader productReader = new ExcelProductReader(productBuilder, headRowIndex);
-            IExcelProductWriter productWriter = new ExcelProductWriter(identifiedColumns.keySet().stream().toList());
+            IExcelProductWriter productWriter = new ExcelProductWriter(targetColumnsMap.keySet().stream().toList());
             IMaterialProcess IMaterialProcess = new MaterialProcessImpl();
             ExcelProcessingContext context = new ExcelProcessingContext.Builder()
                     .workbook(workbook)
+                    .outWorkbook(outWorkbook)
                     .sheet(sheet)
                     .targetColumns(targetColumnsMap)
                     .identifiedColumns(identifiedColumns)
@@ -70,19 +71,21 @@ public class Main {
                     .materialProcess(IMaterialProcess)
                     .build();
             for (String arg : args) {
+                // Перетворюємо аргумент у відповідну операцію з enum
+                Operation operation;
                 try {
-                    // Перетворюємо аргумент у відповідну операцію з enum
-                    Operation operation = Operation.valueOf(arg.toUpperCase());
-                    IExcelProcessingStrategy strategy = getStrategy(operation, context);
-                    // Виконання стратегії
-                    if (strategy == null) continue;
-                    strategy.execute(context);  // Передаємо контекст, якщо потрібно
-                } catch (IllegalArgumentException e) {
+                   operation = Operation.valueOf(arg.toUpperCase());
+                }catch (IllegalArgumentException e){
                     logger.error("Invalid operation: " + arg);
+                    continue;
                 }
+                IExcelProcessingStrategy strategy = getStrategy(operation, context);
+                // Виконання стратегії
+                if (strategy == null) continue;
+                strategy.execute(context);  // Передаємо контекст, якщо потрібно
             }
             // Write output file
-            writeOutput(workbook);
+            writeOutput(outWorkbook);
         }
 
         logger.info("Finished processing. Wasted time = {}s", (System.currentTimeMillis() - startedAt) / 1000);
@@ -90,9 +93,18 @@ public class Main {
 
     private static IExcelProcessingStrategy getStrategy(Operation arg, ExcelProcessingContext context) {
         switch (arg) {
-            case COLLECT_PRODUCTS -> new ExcelProductReadingStrategy(context.getProductReader());
-            case PROCESS_PRODUCTS -> new ExcelProductProcessStrategy(context.getMaterialProcess());
-            case SAVE_RESULTS -> new ExcelProductWriteStrategy(context.getProductWriter());
+            case COLLECT_PRODUCTS -> {
+                return new ExcelProductReadingStrategy(context.getProductReader());
+            }
+            case PROCESS_PRODUCTS -> {
+                return new ExcelProductProcessStrategy(context.getMaterialProcess());
+            }
+            case SORT_COMPOSITION_BY_PERCENTAGE -> {
+                return new ExcelSortCompositionStrategy(context.getMaterialProcess());
+            }
+            case SAVE_RESULTS -> {
+                return new ExcelProductWriteStrategy(context.getProductWriter());
+            }
         }
         return null;
     }
