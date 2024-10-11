@@ -17,8 +17,7 @@ public class ProductProcess {
     public static ProductPosition mergeDuplications(ProductPosition existedProduct, ProductPosition newProduct) {
 
         logger.info("Merging products: {} and {}", existedProduct, newProduct);
-        if (existedProduct.getHsCode().equals(newProduct.getHsCode())
-                && existedProduct.getCountryOrigin().equals(newProduct.getCountryOrigin())) {
+        if (isValidToMerge(existedProduct, newProduct)) {
             existedProduct.setQuantity(existedProduct.getQuantity() + newProduct.getQuantity());
             existedProduct.setBruttoWeight(existedProduct.getBruttoWeight() + newProduct.getBruttoWeight());
             existedProduct.setPrice(existedProduct.getPrice() + newProduct.getPrice());
@@ -28,5 +27,10 @@ public class ProductProcess {
         logger.info("Duplications found,cant merge, appending '-duplicate' to article of product2: {}", newProduct);
         newProduct.setArticle(newProduct.getArticle() + "-duplicate");
         return newProduct;
+    }
+
+    private static boolean isValidToMerge(ProductPosition existedProduct, ProductPosition newProduct) {
+        return existedProduct.getHsCode().equals(newProduct.getHsCode())
+                && existedProduct.getCountryOrigin().equals(newProduct.getCountryOrigin());
     }
 }

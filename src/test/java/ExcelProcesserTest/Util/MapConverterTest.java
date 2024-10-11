@@ -1,6 +1,6 @@
 package ExcelProcesserTest.Util;
 
-import org.example.Util.MapConverter;
+import org.example.util.MapConverter;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;

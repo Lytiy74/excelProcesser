@@ -1,6 +1,6 @@
 package ExcelProcesserTest.Util;
 
-import org.example.Util.JaccardCalculation;
+import org.example.util.JaccardCalculation;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
