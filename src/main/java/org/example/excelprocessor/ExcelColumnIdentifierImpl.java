@@ -34,7 +34,27 @@ public class ExcelColumnIdentifierImpl implements IExcelColumnIdentifier {
     private List<String> extractColumnNames(Row sourceRow) {
         List<String> sourceColumns = new ArrayList<>();
         for (Cell cell : sourceRow) {
-            String cellValue = cell.getStringCellValue().toLowerCase();
+            String cellValue = "N/A";
+            switch (cell.getCellType()){
+                case _NONE -> {
+                }
+                case NUMERIC -> {
+                    cellValue = String.valueOf(cell.getNumericCellValue());
+                }
+                case STRING -> {
+                    cellValue = cell.getStringCellValue();
+                }
+                case FORMULA -> {
+                    cellValue = String.valueOf(cell.getCellFormula());
+                }
+                case BLANK -> {
+                }
+                case BOOLEAN -> {
+                }
+                case ERROR -> {
+                }
+            }
+
             sourceColumns.add(cellValue);
         }
         return sourceColumns;
