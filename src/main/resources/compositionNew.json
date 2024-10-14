@@ -18,6 +18,7 @@
     "co",
     "cor",
     "cot",
+    "cotton  lining",
     "cotton",
     "camelwool",
     "PIMA COTTON"
@@ -28,6 +29,7 @@
   "віскоза": [
     "cv",
     "viscose",
+    "recycled viscose",
     "vi",
     "viskose"
   ],
@@ -154,6 +156,7 @@
     "pes",
     "pe2",
     "pl",
+    "polyester  lining",
     "polyester"
   ],
   "поліетилен": [
@@ -198,6 +201,7 @@
   "шкіра": [
     "calfskin",
     "suede",
+    "bovine leather",
     "caprine suede",
     "calf suede",
     "skin",
