@@ -21,6 +21,7 @@ public class ProductPosition implements Cloneable {
     private String hsCode;
     private double bruttoWeight;
     private double price;
+    private ProductType productType;
 
     /**
      * Default constructor for ProductPosition.
@@ -49,7 +50,8 @@ public class ProductPosition implements Cloneable {
                            String sizes, String tradeMark,
                            String countryOrigin, int quantity,
                            String composition, Gender gender,
-                           String hsCode, double bruttoWeight, double price) {
+                           String hsCode, double bruttoWeight, double price,
+                           ProductType productType) {
         this.article = article;
         this.productName = productName;
         this.sizes = sizes;
@@ -61,6 +63,7 @@ public class ProductPosition implements Cloneable {
         this.hsCode = hsCode;
         this.bruttoWeight = bruttoWeight;
         this.price = price;
+        this.productType = productType;
     }
 
     // getters and setters for all attributes
@@ -152,6 +155,14 @@ public class ProductPosition implements Cloneable {
         this.price = price;
     }
 
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
     public static Builder newBuilder() {
         return new ProductPosition().new Builder();
     }
@@ -218,6 +229,11 @@ public class ProductPosition implements Cloneable {
             return this;
         }
 
+        public Builder setProductType(ProductType productType) {
+            ProductPosition.this.productType = productType;
+            return this;
+        }
+
         public ProductPosition build() {
             return ProductPosition.this;
         }
@@ -237,6 +253,7 @@ public class ProductPosition implements Cloneable {
                 ", hsCode='" + hsCode + '\'' +
                 ", bruttoWeight=" + bruttoWeight +
                 ", price=" + price +
+                ", productType=" + productType +
                 '}';
     }
 
@@ -254,7 +271,8 @@ public class ProductPosition implements Cloneable {
                 && Objects.equals(countryOrigin, that.countryOrigin)
                 && Objects.equals(composition, that.composition)
                 && gender == that.gender
-                && Objects.equals(hsCode, that.hsCode);
+                && Objects.equals(hsCode, that.hsCode)
+                && Objects.equals(productType, that.productType);
     }
 
     @Override
@@ -262,7 +280,7 @@ public class ProductPosition implements Cloneable {
         return Objects.hash(article, productName, sizes,
                 tradeMark, countryOrigin, quantity,
                 composition, gender, hsCode,
-                bruttoWeight, price);
+                bruttoWeight, price, productType);
     }
 
     @Override
@@ -279,6 +297,7 @@ public class ProductPosition implements Cloneable {
             productPosition.setHsCode(this.getHsCode());
             productPosition.setBruttoWeight(this.getBruttoWeight());
             productPosition.setPrice(this.getPrice());
+            productPosition.setProductType(this.productType);
             return productPosition;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);

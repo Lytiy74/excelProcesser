@@ -14,6 +14,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.excelprocessor.*;
+import org.example.product.ProductCategorizer;
+import org.example.product.ProductMeta;
 import org.example.product.productprocess.composition.IMaterialProcess;
 import org.example.product.productprocess.composition.MaterialProcessImpl;
 import org.example.strategy.*;
@@ -47,15 +49,19 @@ public class Main {
     private static void processExcelFiles(String[] args) throws IOException, URISyntaxException {
         Path inputFilePath = getInputFilePath(args);
         long startedAt = System.currentTimeMillis();
+        JsonFileReader jsonFileReader = new JsonFileReader();
+        Path jarDir = getJarDirectory();
 
-        HashMap<String, List<String>> targetColumnsMap = loadJsonMapping();
+        HashMap<String, List<String>> targetColumnsMap = jsonFileReader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
+        HashMap<String, ProductMeta> metas = jsonFileReader.readProductMetaJsonToHashMap(jarDir.resolve(CLOTHES_NAMES_JSON_FILE.getFileName()).toString());
 
-        try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString()); Workbook outWorkbook = new XSSFWorkbook();) {
+        try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString()); Workbook outWorkbook = new XSSFWorkbook()) {
             IExcelColumnIdentifier columnIdentifier = new ExcelColumnIdentifierImpl();
             Sheet sheet = workbook.getSheetAt(DEFAULT_SHEET_INDEX);
             int headRowIndex = columnIdentifier.findAndGetNumberOfHeaderRow(sheet, targetColumnsMap);
+            ProductCategorizer productCategorizer = new ProductCategorizer(metas);
             HashMap<String, Integer> identifiedColumns = columnIdentifier.identifyColumns(sheet.getRow(headRowIndex), targetColumnsMap);
-            IExcelProductBuilder productBuilder = new ExcelProductBuilder(new ExcelCellValueExtractorImpl(), identifiedColumns);
+            IExcelProductBuilder productBuilder = new ExcelProductBuilder(new ExcelCellValueExtractorImpl(), identifiedColumns, productCategorizer);
             IExcelProductReader productReader = new ExcelProductReader(productBuilder, headRowIndex);
             IExcelProductWriter productWriter = new ExcelProductWriter(targetColumnsMap.keySet().stream().toList());
             IMaterialProcess IMaterialProcess = new MaterialProcessImpl();
@@ -74,8 +80,8 @@ public class Main {
                 // Перетворюємо аргумент у відповідну операцію з enum
                 Operation operation;
                 try {
-                   operation = Operation.valueOf(arg.toUpperCase());
-                }catch (IllegalArgumentException e){
+                    operation = Operation.valueOf(arg.toUpperCase());
+                } catch (IllegalArgumentException e) {
                     logger.error("Invalid operation: " + arg);
                     continue;
                 }
@@ -114,11 +120,6 @@ public class Main {
         return args.length > 0 && args[0] != null ? Path.of(args[0]) : Path.of(DEFAULT_INPUT_FILE_PATH);
     }
 
-    private static HashMap<String, List<String>> loadJsonMapping() throws URISyntaxException, IOException {
-        Path jarDir = getJarDirectory();
-        JsonFileReader reader = new JsonFileReader();
-        return reader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
-    }
 
     private static void writeOutput(Workbook workbook) throws IOException {
         ExcelFileWriter writer = new ExcelFileWriter();

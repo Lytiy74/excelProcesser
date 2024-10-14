@@ -2,6 +2,7 @@ package org.example.excelprocessor;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.example.product.Gender;
+import org.example.product.ProductCategorizer;
 import org.example.product.ProductPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +16,12 @@ public abstract class AbstractExcelProductBuilder implements IExcelProductBuilde
     private static final Logger logger = LoggerFactory.getLogger(AbstractExcelProductBuilder.class);
     private final ICellValueExtractor cellValueExtractor;
     private final HashMap<String,Integer> identifiedColumns;
+    private final ProductCategorizer productCategorizer;
 
-    protected AbstractExcelProductBuilder(ICellValueExtractor cellValueExtractor, HashMap<String, Integer> identifiedColumns) {
+    protected AbstractExcelProductBuilder(ICellValueExtractor cellValueExtractor, HashMap<String, Integer> identifiedColumns, ProductCategorizer productCategorizer) {
         this.cellValueExtractor = cellValueExtractor;
         this.identifiedColumns = identifiedColumns;
+        this.productCategorizer = productCategorizer;
     }
 
 
@@ -41,6 +44,7 @@ public abstract class AbstractExcelProductBuilder implements IExcelProductBuilde
         cellValueSetter.setDoubleCellValue(PRICE.getColumnName(), productBuilder::setPrice);
 
         ProductPosition product = productBuilder.build();
+        product.setProductType(productCategorizer.categorizeProduct(product.getProductName()));
         logger.info("ProductPosition object built successfully.");
         return product;
     }

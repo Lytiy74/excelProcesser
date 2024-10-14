@@ -54,12 +54,18 @@ public class JsonFileReader implements Reader {
         return readJson(filePath, typeReference);
     }
 
-    public List<ProductMeta> readProductMetaList(String filePath) throws IOException {
-        logger.debug("Reading product list from JSON file '{}'", filePath);
-        TypeReference<HashMap<String, List<ProductMeta>>> typeReference = new TypeReference<>() {};
+    public HashMap<String, ProductMeta> readProductMetaJsonToHashMap(String filePath) throws IOException {
+        logger.debug("Reading JSON file into HashMap<ProductMeta> from '{}'", filePath);
+        HashMap<String, List<ProductMeta>> map = readJson(filePath, new TypeReference<HashMap<String,List<ProductMeta>>>() {});
+        List<ProductMeta> productList = map.get("products");
 
-        HashMap<String, List<ProductMeta>> productsMap = readJson(filePath, typeReference);
-        return productsMap.get("products");
+        HashMap<String, ProductMeta> productMap = new HashMap<>();
+        for (ProductMeta product : productList) {
+            productMap.put(product.getProductName(), product);
+        }
+
+        logger.debug("Successfully created HashMap from JSON data");
+        return productMap;
     }
 
     public HashMap<String, List<String>> readJsonObjectArrayToMap(String filePath) throws IOException {
