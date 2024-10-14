@@ -5,7 +5,8 @@
     "article",
     "art.nr.",
     "modell",
-    "artikelnr"
+    "artikelnr",
+    "artikel-nr"
   ],
   "productName": [
     "найменування",
@@ -21,6 +22,7 @@
     "розмір",
     "размер",
     "größe",
+    "goresse",
     "grösse"
   ],
   "tradeMark": [
@@ -77,6 +79,7 @@
     "zolltarifnummer",
     "custom code",
     "zollnummer",
+    "zolltarif",
     "уктзед",
     "код",
     "tariff no."
@@ -84,6 +87,7 @@
   "bruttoWeight": [
     "брутто",
     "ges.gew.",
+    "gewgr",
     "brutto",
     "weight"
   ],
@@ -97,6 +101,7 @@
     "cost",
     "unit cost price",
     "gesamt",
+    "liefarant ort",
     "euro"
   ]
 }
