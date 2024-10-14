@@ -1,11 +1,13 @@
 package org.example.util.io;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.product.ProductMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -50,8 +52,18 @@ public class JsonFileReader implements Reader {
 
     public HashMap<String, String> readJsonToHashMap(String filePath) throws IOException {
         logger.debug("Reading JSON file into HashMap from '{}'", filePath);
-        TypeReference<HashMap<String, String>> typeReference = new TypeReference<>() {};
-        return readJson(filePath, typeReference);
+        HashMap<String, String> resultMap = new HashMap<>();
+        JsonNode rootNode = objectMapper.readTree(new File(filePath));
+
+        if (rootNode.isArray()) {
+            for (JsonNode node : rootNode) {
+                String id = node.get("id").asText();
+                String text = node.get("text").asText();
+                resultMap.put(id, text);
+            }
+        }
+
+        return resultMap;
     }
 
     public HashMap<String, ProductMeta> readProductMetaJsonToHashMap(String filePath) throws IOException {

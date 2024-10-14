@@ -54,6 +54,7 @@ public class Main {
 
         HashMap<String, List<String>> targetColumnsMap = jsonFileReader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
         HashMap<String, ProductMeta> metas = jsonFileReader.readProductMetaJsonToHashMap(jarDir.resolve(CLOTHES_NAMES_JSON_FILE.getFileName()).toString());
+        HashMap<String,String> harmonizedCodes = jsonFileReader.readJsonToHashMap(jarDir.resolve(HARMONIZED_CODES_JSON_FILE.getFileName()).toString());
 
         try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString()); Workbook outWorkbook = new XSSFWorkbook()) {
             IExcelColumnIdentifier columnIdentifier = new ExcelColumnIdentifierImpl();
