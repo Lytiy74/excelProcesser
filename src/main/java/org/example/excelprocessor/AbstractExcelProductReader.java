@@ -28,7 +28,9 @@ public abstract class AbstractExcelProductReader implements IExcelProductReader 
             //todo Reduce quantity of logs in loop
             logger.info("Processing row {}...", rowIndex);
             Row row = sheet.getRow(rowIndex);
+            if (row == null) continue;
             ProductPosition product = buildProductFromRow(row);
+            if (product == null) continue;
             if (!products.containsKey(product.getArticle())) {
                 logger.info("Adding product with article number: {}", product.getArticle());
                 products.put(product.getArticle(), product);

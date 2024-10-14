@@ -30,22 +30,26 @@ public abstract class AbstractExcelProductBuilder implements IExcelProductBuilde
         logger.info("Building ProductPosition object...");
         ICellValueSetter cellValueSetter = new ExcelCellValueSetterImpl(row, cellValueExtractor, identifiedColumns);
         ProductPosition.Builder productBuilder = ProductPosition.newBuilder();
+        try {
+            cellValueSetter.setCellValue(ARTICLE.getColumnName(), productBuilder::setArticle);
+            cellValueSetter.setCellValue(PRODUCT_NAME.getColumnName(), name -> productBuilder.setProductName(name.toLowerCase()));
+            cellValueSetter.setCellValue(SIZES.getColumnName(), productBuilder::setSizes);
+            cellValueSetter.setCellValue(TRADE_MARK.getColumnName(), productBuilder::setTradeMark);
+            cellValueSetter.setCellValue(COUNTRY_ORIGIN.getColumnName(), productBuilder::setCountryOrigin);
+            cellValueSetter.setIntegerCellValue(QUANTITY.getColumnName(), productBuilder::setQuantity);
+            cellValueSetter.setCellValue(COMPOSITION.getColumnName(), productBuilder::setComposition);
+            cellValueSetter.setCellValue(GENDER.getColumnName(), gender -> productBuilder.setGender(Gender.fromString(gender)));
+            cellValueSetter.setCellValue(HS_CODE.getColumnName(), productBuilder::setHsCode);
+            cellValueSetter.setIntegerCellValue(BRUTTO_WEIGHT.getColumnName(), productBuilder::setBruttoWeight);
+            cellValueSetter.setDoubleCellValue(PRICE.getColumnName(), productBuilder::setPrice);
 
-        cellValueSetter.setCellValue(ARTICLE.getColumnName(), productBuilder::setArticle);
-        cellValueSetter.setCellValue(PRODUCT_NAME.getColumnName(), name -> productBuilder.setProductName(name.toLowerCase()));
-        cellValueSetter.setCellValue(SIZES.getColumnName(), productBuilder::setSizes);
-        cellValueSetter.setCellValue(TRADE_MARK.getColumnName(), productBuilder::setTradeMark);
-        cellValueSetter.setCellValue(COUNTRY_ORIGIN.getColumnName(), productBuilder::setCountryOrigin);
-        cellValueSetter.setIntegerCellValue(QUANTITY.getColumnName(), productBuilder::setQuantity);
-        cellValueSetter.setCellValue(COMPOSITION.getColumnName(), productBuilder::setComposition);
-        cellValueSetter.setCellValue(GENDER.getColumnName(), gender -> productBuilder.setGender(Gender.fromString(gender)));
-        cellValueSetter.setCellValue(HS_CODE.getColumnName(), productBuilder::setHsCode);
-        cellValueSetter.setIntegerCellValue(BRUTTO_WEIGHT.getColumnName(), productBuilder::setBruttoWeight);
-        cellValueSetter.setDoubleCellValue(PRICE.getColumnName(), productBuilder::setPrice);
-
-        ProductPosition product = productBuilder.build();
-        product.setProductType(productCategorizer.categorizeProduct(product.getProductName()));
-        logger.info("ProductPosition object built successfully.");
-        return product;
+            ProductPosition product = productBuilder.build();
+            product.setProductType(productCategorizer.categorizeProduct(product.getProductName()));
+            logger.info("ProductPosition object built successfully.");
+            return product;
+        }catch (IllegalArgumentException e){
+            logger.info("ProductPosition object failed to build.");
+            return null;
+        }
     }
 }
