@@ -6,6 +6,7 @@ import org.example.excelprocessor.IExcelProductBuilder;
 import org.example.excelprocessor.IExcelProductReader;
 import org.example.excelprocessor.IExcelProductWriter;
 import org.example.product.ProductPosition;
+import org.example.product.productprocess.ICommodityProcess;
 import org.example.product.productprocess.composition.IMaterialProcess;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class ExcelProcessingContext {
     private final IExcelProductBuilder productBuilder;
     private final IExcelProductWriter productWriter;
     private final IMaterialProcess IMaterialProcess;
+    private final ICommodityProcess commodityProcess;
     private HashMap<String, ProductPosition> productPositionHashMap;
 
     private ExcelProcessingContext(Builder builder) {
@@ -34,6 +36,7 @@ public class ExcelProcessingContext {
         this.productWriter = builder.productWriter;
         this.IMaterialProcess = builder.IMaterialProcess;
         this.productPositionHashMap = builder.productPositionHashMap;
+        this.commodityProcess = builder.commodityProcess;
     }
 
     public static class Builder {
@@ -46,12 +49,14 @@ public class ExcelProcessingContext {
         private IExcelProductBuilder productBuilder;
         private IExcelProductWriter productWriter;
         private IMaterialProcess IMaterialProcess;
+        private ICommodityProcess commodityProcess;
         private HashMap<String, ProductPosition> productPositionHashMap;
 
         public Builder workbook(Workbook workbook) {
             this.workbook = workbook;
             return this;
         }
+
         public Builder outWorkbook(Workbook outWorkbook) {
             this.outWorkbook = outWorkbook;
             return this;
@@ -87,13 +92,18 @@ public class ExcelProcessingContext {
             return this;
         }
 
-        public Builder materialProcess(IMaterialProcess IMaterialProcess){
+        public Builder materialProcess(IMaterialProcess IMaterialProcess) {
             this.IMaterialProcess = IMaterialProcess;
             return this;
         }
 
-        public Builder productPositionMap(HashMap<String, ProductPosition> productPositionHashMap){
+        public Builder productPositionMap(HashMap<String, ProductPosition> productPositionHashMap) {
             this.productPositionHashMap = productPositionHashMap;
+            return this;
+        }
+
+        public Builder commodityProcess(ICommodityProcess commodityProcess) {
+            this.commodityProcess = commodityProcess;
             return this;
         }
 
@@ -136,6 +146,10 @@ public class ExcelProcessingContext {
 
     public IMaterialProcess getMaterialProcess() {
         return IMaterialProcess;
+    }
+
+    public ICommodityProcess getCommodityProcess() {
+        return commodityProcess;
     }
 
     public HashMap<String, ProductPosition> getProductPositionHashMap() {

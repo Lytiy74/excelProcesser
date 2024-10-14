@@ -14,8 +14,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.excelprocessor.*;
+import org.example.product.productprocess.ICommodityProcess;
 import org.example.product.productprocess.ProductCategorizer;
 import org.example.product.ProductMeta;
+import org.example.product.productprocess.ProductCommodityProcess;
 import org.example.product.productprocess.composition.IMaterialProcess;
 import org.example.product.productprocess.composition.MaterialProcessImpl;
 import org.example.strategy.*;
@@ -66,6 +68,7 @@ public class Main {
             IExcelProductReader productReader = new ExcelProductReader(productBuilder, headRowIndex);
             IExcelProductWriter productWriter = new ExcelProductWriter(targetColumnsMap.keySet().stream().toList());
             IMaterialProcess IMaterialProcess = new MaterialProcessImpl();
+            ICommodityProcess commodityProcess = new ProductCommodityProcess(harmonizedCodes);
             ExcelProcessingContext context = new ExcelProcessingContext.Builder()
                     .workbook(workbook)
                     .outWorkbook(outWorkbook)
@@ -76,6 +79,7 @@ public class Main {
                     .productReader(productReader)
                     .productWriter(productWriter)
                     .materialProcess(IMaterialProcess)
+                    .commodityProcess(commodityProcess)
                     .build();
             for (String arg : args) {
                 // Перетворюємо аргумент у відповідну операцію з enum
@@ -111,6 +115,9 @@ public class Main {
             }
             case SAVE_RESULTS -> {
                 return new ExcelProductWriteStrategy(context.getProductWriter());
+            }
+            case PROCESS_PRODUCT_HS_CODE -> {
+                return new ExcelProductCommoditySpecifyGender(context.getCommodityProcess());
             }
         }
         return null;

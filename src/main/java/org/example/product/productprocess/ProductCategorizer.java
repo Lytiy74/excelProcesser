@@ -6,7 +6,7 @@ import org.example.product.ProductType;
 import java.util.HashMap;
 
 public class ProductCategorizer {
-    HashMap<String, ProductMeta> productMetaHashMap;
+    private HashMap<String, ProductMeta> productMetaHashMap;
 
     public ProductCategorizer(HashMap<String, ProductMeta> productMetaHashMap) {
         this.productMetaHashMap = productMetaHashMap;
