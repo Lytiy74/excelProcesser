@@ -120,17 +120,19 @@ public class JaccardCalculation {
         int matchCount = 0;
 
         for (String rowValue : rowValues) {
+            double rowValueBestScore = 0;
             Set<Character> rowValueSet = stringToLowerCaseCharSet(rowValue);
             for (String targetColumn : targetColumnNames) {
                 double score = jaccardSimilarity(rowValueSet, stringToLowerCaseCharSet(targetColumn));
-                if (score > JACCARD_PASSABLE_VALUE) {
-                    totalScore += score;
+                if (score > JACCARD_PASSABLE_VALUE && score > rowValueBestScore) {
+                    rowValueBestScore = score;
                     matchCount++;
                 }
             }
+            totalScore += rowValueBestScore;
         }
 
-        return matchCount == 0 ? 0 : totalScore / matchCount;
+        return matchCount == 0 ? 0 : totalScore / rowValues.size();
     }
 
     /**
