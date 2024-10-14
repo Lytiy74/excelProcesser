@@ -2,6 +2,7 @@ package org.example.util.io;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.product.ProductMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +52,14 @@ public class JsonFileReader implements Reader {
         logger.debug("Reading JSON file into HashMap from '{}'", filePath);
         TypeReference<HashMap<String, String>> typeReference = new TypeReference<>() {};
         return readJson(filePath, typeReference);
+    }
+
+    public List<ProductMeta> readProductMetaList(String filePath) throws IOException {
+        logger.debug("Reading product list from JSON file '{}'", filePath);
+        TypeReference<HashMap<String, List<ProductMeta>>> typeReference = new TypeReference<>() {};
+
+        HashMap<String, List<ProductMeta>> productsMap = readJson(filePath, typeReference);
+        return productsMap.get("products");
     }
 
     public HashMap<String, List<String>> readJsonObjectArrayToMap(String filePath) throws IOException {
