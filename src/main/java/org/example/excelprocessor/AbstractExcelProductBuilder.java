@@ -2,7 +2,7 @@ package org.example.excelprocessor;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.example.product.Gender;
-import org.example.product.ProductCategorizer;
+import org.example.product.productprocess.ProductCategorizer;
 import org.example.product.ProductPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

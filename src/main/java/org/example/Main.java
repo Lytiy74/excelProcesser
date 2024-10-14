@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.excelprocessor.*;
-import org.example.product.ProductCategorizer;
+import org.example.product.productprocess.ProductCategorizer;
 import org.example.product.ProductMeta;
 import org.example.product.productprocess.composition.IMaterialProcess;
 import org.example.product.productprocess.composition.MaterialProcessImpl;
