@@ -12,8 +12,9 @@ import java.util.stream.Collectors;
 
 class MaterialParser implements IMaterialParser {
     private static final Logger logger = LoggerFactory.getLogger(MaterialParser.class);
-    private static final Pattern COMPOSITION_PATTERN_WITH_MULTIPLE = Pattern.compile("(((?<percentage>\\d+)%?(\\p{Zs}|\\s)*(?<material>[A-Za-z]+\\s*[A-Za-z]+))((?=.*lining:)?))");
-    private static final Pattern COMPOSITION_PATTERN_SIMPLE = Pattern.compile("(((?<percentage>\\d+)%?(\\p{Zs}|\\s)*(?<material>[A-Za-z]+\\s*[A-Za-z]+)))");
+    private static final Pattern COMPOSITION_PATTERN_WITH_MULTIPLE = Pattern.compile("(((?<percentage>\\d+)%?(\\p{Zs}|\\s)*(?<material>\\pL\\s*\\pL+))((?=.*lining:)?))");
+    private static final Pattern COMPOSITION_PATTER_REVERSED = Pattern.compile("^(?<material>\\pL+(?:\\s+\\pL+)*)\\s+(?<percentage>\\d+)%?(\\s+(?<material2>\\pL+(?:\\s+\\pL+)*)\\s+(?<percentage2>\\d+)%?)*");
+    private static final Pattern COMPOSITION_PATTERN_SIMPLE = Pattern.compile("((?<percentage>\\d+)%?(\\p{Zs}|\\s)*(?<material>\\pL+\\s*\\pL+))");
 
     /**
      * This method processes a string representing a composition of materials and their percentages.
@@ -35,8 +36,8 @@ class MaterialParser implements IMaterialParser {
         int totalPercentage = 0;
 
         // Use a Matcher to find all occurrences of the composition pattern in the input string
-        Matcher matcher = COMPOSITION_PATTERN_WITH_MULTIPLE.matcher(string);
-        matcher = getMatcher(string, matcher);
+       Matcher matcher = getMatcher(string);
+       matcher.reset();
         // Iterate over the matches
         while (matcher.find()) {
             try {
@@ -61,13 +62,23 @@ class MaterialParser implements IMaterialParser {
     }
 
 
-    private static Matcher getMatcher(String string, Matcher matcher) {
-        if (!matcher.find()) {
-            matcher = COMPOSITION_PATTERN_SIMPLE.matcher(string);
-        }else {
-            matcher.reset();
+    private static Matcher getMatcher(String string) {
+        Matcher matcher = COMPOSITION_PATTER_REVERSED.matcher(string);
+        if (matcher.find()) {
+            return matcher; // Return if the first pattern matches
         }
-        return matcher;
+
+        matcher = COMPOSITION_PATTERN_WITH_MULTIPLE.matcher(string);
+        if (matcher.find()) {
+            return matcher; // Return if the second pattern matches
+        }
+
+        matcher = COMPOSITION_PATTERN_SIMPLE.matcher(string);
+        if (matcher.find()) {
+            return matcher; // Return if the third pattern matches
+        }
+
+        return matcher; // Return matcher (no match will have group data)
     }
 
     /**
