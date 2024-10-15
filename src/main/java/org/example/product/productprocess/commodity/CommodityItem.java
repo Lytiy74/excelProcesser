@@ -1,4 +1,4 @@
-package org.example.util;
+package org.example.product.productprocess.commodity;
 
 public class CommodityItem {
     private String parentId;

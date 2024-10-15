@@ -1,6 +1,7 @@
-package org.example.product;
+package org.example.product.productprocess;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.example.product.productprocess.category.ProductType;
 
 public class ProductMeta {
     private String productName;

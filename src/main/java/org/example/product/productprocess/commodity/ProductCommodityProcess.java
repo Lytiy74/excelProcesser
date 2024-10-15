@@ -1,7 +1,6 @@
-package org.example.product.productprocess;
+package org.example.product.productprocess.commodity;
 
 import org.example.product.Gender;
-import org.example.util.CommodityItem;
 
 import java.util.HashMap;
 

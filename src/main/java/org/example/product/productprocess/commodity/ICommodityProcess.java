@@ -1,4 +1,4 @@
-package org.example.product.productprocess;
+package org.example.product.productprocess.commodity;
 
 import org.example.product.Gender;
 

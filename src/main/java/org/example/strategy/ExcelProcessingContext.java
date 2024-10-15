@@ -6,7 +6,7 @@ import org.example.excelprocessor.IExcelProductBuilder;
 import org.example.excelprocessor.IExcelProductReader;
 import org.example.excelprocessor.IExcelProductWriter;
 import org.example.product.ProductPosition;
-import org.example.product.productprocess.ICommodityProcess;
+import org.example.product.productprocess.commodity.ICommodityProcess;
 import org.example.product.productprocess.composition.IMaterialProcess;
 
 import java.util.HashMap;

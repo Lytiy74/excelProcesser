@@ -1,5 +1,7 @@
 package org.example.product;
 
+import org.example.product.productprocess.category.ProductType;
+
 import java.util.Objects;
 
 /**

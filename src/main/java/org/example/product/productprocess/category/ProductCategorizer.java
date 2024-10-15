@@ -1,7 +1,6 @@
-package org.example.product.productprocess;
+package org.example.product.productprocess.category;
 
-import org.example.product.ProductMeta;
-import org.example.product.ProductType;
+import org.example.product.productprocess.ProductMeta;
 
 import java.util.HashMap;
 

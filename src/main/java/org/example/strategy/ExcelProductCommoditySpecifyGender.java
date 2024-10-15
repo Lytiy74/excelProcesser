@@ -2,7 +2,7 @@ package org.example.strategy;
 
 import org.example.product.Gender;
 import org.example.product.ProductPosition;
-import org.example.product.productprocess.ICommodityProcess;
+import org.example.product.productprocess.commodity.ICommodityProcess;
 
 import java.util.HashMap;
 import java.util.Map;
