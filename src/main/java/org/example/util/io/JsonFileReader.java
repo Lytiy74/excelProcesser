@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.product.ProductMeta;
+import org.example.util.CommodityItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,16 +51,18 @@ public class JsonFileReader implements Reader {
         }
     }
 
-    public HashMap<String, String> readJsonToHashMap(String filePath) throws IOException {
+    public HashMap<String, CommodityItem> readJsonToHashMap(String filePath) throws IOException {
         logger.debug("Reading JSON file into HashMap from '{}'", filePath);
-        HashMap<String, String> resultMap = new HashMap<>();
+        HashMap<String, CommodityItem> resultMap = new HashMap<>();
         JsonNode rootNode = objectMapper.readTree(new File(filePath));
 
         if (rootNode.isArray()) {
             for (JsonNode node : rootNode) {
                 String id = node.get("id").asText();
+                String parentId = node.get("parent_id") == null ? "N/A" : node.get("parent_id").asText();
                 String text = node.get("text").asText();
-                resultMap.put(id, text);
+                CommodityItem item = new CommodityItem(parentId,id,text);
+                resultMap.put(id, item);
             }
         }
 
@@ -68,7 +71,7 @@ public class JsonFileReader implements Reader {
 
     public HashMap<String, ProductMeta> readProductMetaJsonToHashMap(String filePath) throws IOException {
         logger.debug("Reading JSON file into HashMap<ProductMeta> from '{}'", filePath);
-        HashMap<String, List<ProductMeta>> map = readJson(filePath, new TypeReference<HashMap<String,List<ProductMeta>>>() {});
+        HashMap<String, List<ProductMeta>> map = readJson(filePath, new TypeReference<>() {});
         List<ProductMeta> productList = map.get("products");
 
         HashMap<String, ProductMeta> productMap = new HashMap<>();

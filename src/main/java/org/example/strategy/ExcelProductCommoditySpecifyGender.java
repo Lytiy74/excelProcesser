@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExcelProductCommoditySpecifyGender implements IExcelProcessingStrategy{
-    private ICommodityProcess commodityProcess;
+    private final ICommodityProcess commodityProcess;
 
     public ExcelProductCommoditySpecifyGender(ICommodityProcess commodityProcess) {
         this.commodityProcess = commodityProcess;
@@ -19,8 +19,7 @@ public class ExcelProductCommoditySpecifyGender implements IExcelProcessingStrat
         HashMap<String, ProductPosition> productPositionHashMap = context.getProductPositionHashMap();
         for (Map.Entry<String, ProductPosition> stringProductPositionEntry : productPositionHashMap.entrySet()) {
             ProductPosition productPosition = stringProductPositionEntry.getValue();
-            String commodity = commodityProcess.getCommoditiesDescription(productPosition.getHsCode());
-            Gender gender = commodityProcess.getGenderByCommodity(commodity);
+            Gender gender = commodityProcess.getGenderByCommodity(productPosition.getHsCode());
             productPosition.setGender(gender);
         }
     }
