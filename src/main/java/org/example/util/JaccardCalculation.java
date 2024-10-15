@@ -43,7 +43,7 @@ public class JaccardCalculation {
         Set<Character> set = stringToLowerCaseCharSet(var1);
 
         // Initialize variables to store the best match category and score
-        String bestMatch = "UNKNOWN";
+        String bestMatch = "N/A";
         double bestScore = 0;  // Use 0 as initial score to directly compare against JACCARD_PASSABLE_VALUE
 
         // Iterate through the entries in the inverted column map
