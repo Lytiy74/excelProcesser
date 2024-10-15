@@ -54,17 +54,16 @@ public abstract class AbstractExcelProductWriter implements IExcelProductWriter 
 
     @Override
     public void writeProductToRow(ProductPosition productPosition, Row row) {
-        logger.info("Adding product to row...");
-        row.createCell(targetColumns.indexOf(ARTICLE.getColumnName())).setCellValue(productPosition.getArticle());
-        row.createCell(targetColumns.indexOf(PRODUCT_NAME.getColumnName())).setCellValue(productPosition.getProductName());
-        row.createCell(targetColumns.indexOf(SIZES.getColumnName())).setCellValue(productPosition.getSizes());
-        row.createCell(targetColumns.indexOf(TRADE_MARK.getColumnName())).setCellValue(productPosition.getTradeMark());
-        row.createCell(targetColumns.indexOf(COUNTRY_ORIGIN.getColumnName())).setCellValue(productPosition.getCountryOrigin());
-        row.createCell(targetColumns.indexOf(QUANTITY.getColumnName())).setCellValue(productPosition.getQuantity());
-        row.createCell(targetColumns.indexOf(COMPOSITION.getColumnName())).setCellValue(productPosition.getComposition());
-        row.createCell(targetColumns.indexOf(GENDER.getColumnName())).setCellValue(productPosition.getGender().getTitle());
-        row.createCell(targetColumns.indexOf(HS_CODE.getColumnName())).setCellValue(productPosition.getHsCode());
-        row.createCell(targetColumns.indexOf(BRUTTO_WEIGHT.getColumnName())).setCellValue(productPosition.getBruttoWeight());
-        row.createCell(targetColumns.indexOf(PRICE.getColumnName())).setCellValue(productPosition.getPrice());
+        logger.info("Adding product {} to row {}", productPosition.getArticle(), row.getRowNum());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(ARTICLE.getColumnName())),productPosition.getArticle());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(PRODUCT_NAME.getColumnName())),productPosition.getProductName());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(SIZES.getColumnName())),productPosition.getSizes());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(TRADE_MARK.getColumnName())),productPosition.getTradeMark());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(COUNTRY_ORIGIN.getColumnName())),productPosition.getCountryOrigin());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(QUANTITY.getColumnName())),productPosition.getQuantity());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(COMPOSITION.getColumnName())),productPosition.getComposition());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(GENDER.getColumnName())),productPosition.getGender());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(HS_CODE.getColumnName())),productPosition.getHsCode());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(BRUTTO_WEIGHT.getColumnName())),productPosition.getBruttoWeight());
     }
 }
