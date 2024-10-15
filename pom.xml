@@ -63,7 +63,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>org.example.Main</mainClass>
+                            <mainClass>org.lytiy.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

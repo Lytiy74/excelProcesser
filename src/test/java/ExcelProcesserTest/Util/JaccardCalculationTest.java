@@ -1,6 +1,6 @@
 package ExcelProcesserTest.Util;
 
-import org.example.util.JaccardCalculation;
+import org.lytiy.util.JaccardCalculation;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ public class JaccardCalculationTest {
         // Arrange
         String var1 = null;
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("example", "Category1");
+        keyMap.put("lytiy", "Category1");
 
         // Act
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
@@ -31,7 +31,7 @@ public class JaccardCalculationTest {
         // Arrange
         String var1 = "";
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("example", "Category1");
+        keyMap.put("lytiy", "Category1");
 
         // Act
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
@@ -45,7 +45,7 @@ public class JaccardCalculationTest {
         // Arrange
         String var1 = "   ";
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("example", "Category1");
+        keyMap.put("lytiy", "Category1");
 
         // Act
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
@@ -59,7 +59,7 @@ public class JaccardCalculationTest {
         // Arrange
         String var1 = "!@#$%^&*()";
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("example", "Category1");
+        keyMap.put("lytiy", "Category1");
 
         // Act
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
@@ -73,7 +73,7 @@ public class JaccardCalculationTest {
         // Arrange
         String var1 = "123456";
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("example", "Category1");
+        keyMap.put("lytiy", "Category1");
 
         // Act
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
@@ -85,9 +85,9 @@ public class JaccardCalculationTest {
     @Test
     public void findBestMatch_matchingStrings_returnsCorrectCategory() {
         // Arrange
-        String var1 = "example";
+        String var1 = "lytiy";
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("example", "Category1");
+        keyMap.put("lytiy", "Category1");
 
         // Act
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
@@ -101,7 +101,7 @@ public class JaccardCalculationTest {
         // Arrange
         String var1 = "exampl";
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("example", "Category1");
+        keyMap.put("lytiy", "Category1");
         keyMap.put("examination", "Category2");
 
         // Act
@@ -116,7 +116,7 @@ public class JaccardCalculationTest {
         // Arrange
         String var1 = "nonmatching";
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("example", "Category1");
+        keyMap.put("lytiy", "Category1");
         keyMap.put("examination", "Category2");
 
         // Act
@@ -131,7 +131,7 @@ public class JaccardCalculationTest {
         // Arrange
         String var1 = "EXaMpLe";
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("example", "Category1");
+        keyMap.put("lytiy", "Category1");
 
         // Act
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
