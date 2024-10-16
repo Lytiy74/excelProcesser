@@ -65,5 +65,6 @@ public abstract class AbstractExcelProductWriter implements IExcelProductWriter 
         ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(GENDER.getColumnName())),productPosition.getGender());
         ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(HS_CODE.getColumnName())),productPosition.getHsCode());
         ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(BRUTTO_WEIGHT.getColumnName())),productPosition.getBruttoWeight());
+        ExcelCellWriteValidator.validateAndWrite(row.createCell(targetColumns.indexOf(PRICE.getColumnName())),productPosition.getPrice());
     }
 }
