@@ -23,7 +23,7 @@ public class JaccardCalculationTest {
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
-        assertEquals("UNKNOWN", result);
+        assertEquals("N/A", result);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class JaccardCalculationTest {
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
-        assertEquals("UNKNOWN", result);
+        assertEquals("N/A", result);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class JaccardCalculationTest {
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
-        assertEquals("UNKNOWN", result);
+        assertEquals("N/A", result);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class JaccardCalculationTest {
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
-        assertEquals("UNKNOWN", result);
+        assertEquals("N/A", result);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class JaccardCalculationTest {
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
-        assertEquals("UNKNOWN", result);
+        assertEquals("N/A", result);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class JaccardCalculationTest {
         // Arrange
         String var1 = "exampl";
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("lytiy", "Category1");
+        keyMap.put("example", "Category1");
         keyMap.put("examination", "Category2");
 
         // Act
@@ -123,7 +123,7 @@ public class JaccardCalculationTest {
         String result = JaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
-        assertEquals("UNKNOWN", result);
+        assertEquals("N/A", result);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class JaccardCalculationTest {
         // Arrange
         String var1 = "EXaMpLe";
         HashMap<String, String> keyMap = new HashMap<>();
-        keyMap.put("lytiy", "Category1");
+        keyMap.put("example", "Category1");
 
         // Act
         String result = JaccardCalculation.findBestMatch(var1, keyMap);

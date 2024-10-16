@@ -38,7 +38,7 @@ public class JaccardCalculation {
      */
     public static String findBestMatch(String var1, HashMap<String, String> keyMap) {
         logger.debug("Looking for best match for '{}'", var1);
-        if (var1 == null || var1.isEmpty()) return "UNKNOWN";
+        if (var1 == null || var1.isEmpty()) return "N/A";
         // Convert the column name to a set of characters
         Set<Character> set = stringToLowerCaseCharSet(var1);
 
