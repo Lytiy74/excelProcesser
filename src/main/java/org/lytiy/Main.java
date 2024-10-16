@@ -152,7 +152,10 @@ public class Main {
                 logger.info("No resource found: " + resource.getFileName());
                 return;
             }
-
+            Path dataDir = jarDir.resolve("data");
+            if (!Files.exists(dataDir)) {
+                Files.createDirectories(dataDir);
+            }
             Path outputPath = jarDir.resolve(resource.getFileName());
             if (Files.exists(outputPath)) {
                 logger.info("File already exists: " + outputPath + ". Skipping copy.");
