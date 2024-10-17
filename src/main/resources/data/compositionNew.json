@@ -1,4 +1,10 @@
 {
+  "пластик": [
+    "акрілонітрилбутадієнстирол",
+    "пластик",
+    "acrylonitrile butadiene styrene"
+  ],
+
   "ацетат": [
     "ацетат",
     "acetate",
@@ -41,6 +47,7 @@
   ],
   "вовна": [
     "вовна",
+    "merino",
     "virgin wool",
     "lambswool",
     "alpaca",
@@ -166,6 +173,10 @@
     "pvc",
     "pvcf"
   ],
+  "порцеляна": [
+    "порцеляна",
+    "porcelain"
+  ],
   "поліамід": [
     "поліамід",
     "pa",
@@ -197,6 +208,7 @@
   "поліуретан": [
     "поліуретан",
     "ne",
+    "thermoplastic polyurethane",
     "polyurethane",
     "pu"
   ],
@@ -248,9 +260,17 @@
     "leather",
     "lamb"
   ],
+  "смола": [
+    "смола",
+    "resin"
+  ],
   "синтетика": [
     "синтетика",
     "synthetic",
     "synthetics"
+  ],
+  "срібло":[
+    "silver",
+    "german silver"
   ]
 }
