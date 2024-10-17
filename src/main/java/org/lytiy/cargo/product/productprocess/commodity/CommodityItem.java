@@ -1,4 +1,4 @@
-package org.lytiy.product.productprocess.commodity;
+package org.lytiy.cargo.product.productprocess.commodity;
 
 public class CommodityItem {
     private String parentId;
