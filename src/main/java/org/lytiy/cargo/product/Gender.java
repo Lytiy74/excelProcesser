@@ -1,4 +1,4 @@
-package org.lytiy.product;
+package org.lytiy.cargo.product;
 
 /**
  * Enum representing different gender types.

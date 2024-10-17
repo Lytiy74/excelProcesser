@@ -1,7 +1,9 @@
-package org.lytiy.product.productprocess.composition;
+package org.lytiy.cargo.product.productprocess.composition;
 
 import org.lytiy.Main;
 import org.lytiy.ResourceFiles;
+import org.lytiy.util.ITranslator;
+import org.lytiy.util.Translator;
 import org.lytiy.util.io.JsonFileReader;
 import org.lytiy.util.MapConverter;
 import org.slf4j.Logger;
@@ -37,7 +39,7 @@ public class MaterialProcessImpl implements IMaterialProcess {
     /**
      * The translator for translating material names.
      */
-    private final MaterialTranslator translator;
+    private final ITranslator translator;
 
     /**
      * The builder for building the formatted composition string.
@@ -49,14 +51,10 @@ public class MaterialProcessImpl implements IMaterialProcess {
      *
      * @throws IOException if an error occurs while reading the JSON file.
      */
-    public MaterialProcessImpl() throws IOException, URISyntaxException {
+    public MaterialProcessImpl(ITranslator translator) throws IOException, URISyntaxException {
         logger.info("Initializing MaterialProcessImpl");
-        HashMap<String, List<String>> stringStringHashMap;
-        Path jarDir = Paths.get(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent());
-        Path inputFilePath = jarDir.resolve(ResourceFiles.COMPOSITION_JSON_FILE.getFileName());
-        stringStringHashMap = new JsonFileReader().readJsonObjectArrayToMap(String.valueOf(inputFilePath));
         parser = new MaterialParser();
-        translator = new MaterialTranslator(MapConverter.invertColumnMap(stringStringHashMap));
+        this.translator = translator;
         materialStringBuilder = new MaterialStringBuilder();
         logger.info("MaterialProcessImpl initialized successfully");
     }
@@ -75,7 +73,7 @@ public class MaterialProcessImpl implements IMaterialProcess {
 
         LinkedHashMap<String, Integer> translatedMap = new LinkedHashMap<>();
         for (String key : compositionMap.keySet()) {
-            String translated = translator.translateMaterial(key);
+            String translated = translator.translate(key);
             if (!translatedMap.containsKey(translated)) {
                 translatedMap.put(translated, compositionMap.get(key));
             } else {
@@ -94,7 +92,7 @@ public class MaterialProcessImpl implements IMaterialProcess {
 
     @Override
     public String translateComposition(String composition) {
-        return translator.translateMaterial(composition.toLowerCase());
+        return translator.translate(composition.toLowerCase());
     }
     /**
      * This method takes a HashMap of composition data and returns a sorted LinkedHashMap.

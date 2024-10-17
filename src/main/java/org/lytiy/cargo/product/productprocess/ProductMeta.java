@@ -1,7 +1,7 @@
-package org.lytiy.product.productprocess;
+package org.lytiy.cargo.product.productprocess;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.lytiy.product.productprocess.category.ProductType;
+import org.lytiy.cargo.product.productprocess.category.ProductType;
 
 public class ProductMeta {
     private String productName;

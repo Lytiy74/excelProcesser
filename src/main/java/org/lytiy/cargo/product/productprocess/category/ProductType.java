@@ -1,4 +1,4 @@
-package org.lytiy.product.productprocess.category;
+package org.lytiy.cargo.product.productprocess.category;
 
 public enum ProductType {
     CLOTHING,

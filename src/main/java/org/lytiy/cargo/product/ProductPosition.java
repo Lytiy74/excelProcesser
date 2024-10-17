@@ -1,6 +1,6 @@
-package org.lytiy.product;
+package org.lytiy.cargo.product;
 
-import org.lytiy.product.productprocess.category.ProductType;
+import org.lytiy.cargo.product.productprocess.category.ProductType;
 
 import java.util.Objects;
 

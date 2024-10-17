@@ -1,6 +1,6 @@
-package org.lytiy.product.productprocess.commodity;
+package org.lytiy.cargo.product.productprocess.commodity;
 
-import org.lytiy.product.Gender;
+import org.lytiy.cargo.product.Gender;
 
 import java.util.HashMap;
 
@@ -22,6 +22,8 @@ public class ProductCommodityProcess implements ICommodityProcess {
     @Override
     public String getCommoditiesDescription(String commodity) {
         //todo regex pattern to validate code
+        commodity = commodity.replace(" ", "");
+        commodity = commodity.replace(".","");
         commodity = maximizeCommodity(commodity);
 
         CommodityItem commodityItem = commodities.get(commodity);

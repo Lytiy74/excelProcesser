@@ -1,4 +1,4 @@
-package org.lytiy.product.productprocess.composition;
+package org.lytiy.cargo.product.productprocess.composition;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 class MaterialParser implements IMaterialParser {
     private static final Logger logger = LoggerFactory.getLogger(MaterialParser.class);
-    private static final Pattern COMPOSITION_PATTERN_WITH_MULTIPLE = Pattern.compile("(((?<percentage>\\d+)%?(\\p{Zs}|\\s)*(?<material>\\pL\\s*\\pL+))((?=.*lining:)?))");
+    private static final Pattern COMPOSITION_PATTERN_WITH_MULTIPLE = Pattern.compile("(((?<percentage>\\d+)%?(\\p{Zs}|\\s)*(?<material>\\pL+\\s*\\pL+))((?=.*lining:)?))");
     private static final Pattern COMPOSITION_PATTER_REVERSED = Pattern.compile("^(?<material>\\pL+(?:\\s+\\pL+)*)\\s+(?<percentage>\\d+)%?(\\s+(?<material2>\\pL+(?:\\s+\\pL+)*)\\s+(?<percentage2>\\d+)%?)*");
     private static final Pattern COMPOSITION_PATTERN_SIMPLE = Pattern.compile("((?<percentage>\\d+)%?(\\p{Zs}|\\s)*(?<material>\\pL+\\s*\\pL+))");
 

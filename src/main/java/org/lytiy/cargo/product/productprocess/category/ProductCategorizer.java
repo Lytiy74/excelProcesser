@@ -1,6 +1,6 @@
-package org.lytiy.product.productprocess.category;
+package org.lytiy.cargo.product.productprocess.category;
 
-import org.lytiy.product.productprocess.ProductMeta;
+import org.lytiy.cargo.product.productprocess.ProductMeta;
 
 import java.util.HashMap;
 

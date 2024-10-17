@@ -1,4 +1,4 @@
-package org.lytiy.product.productprocess.composition;
+package org.lytiy.cargo.product.productprocess.composition;
 
 import java.util.LinkedHashMap;
 

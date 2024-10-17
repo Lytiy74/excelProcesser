@@ -1,6 +1,6 @@
-package org.lytiy.product.productprocess;
+package org.lytiy.cargo.product.productprocess;
 
-import org.lytiy.product.ProductPosition;
+import org.lytiy.cargo.product.ProductPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
