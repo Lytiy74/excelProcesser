@@ -5,7 +5,8 @@ public enum ResourceFiles {
     COMPOSITION_JSON_FILE("data/compositionNew.json"),
     CLOTHES_NAMES_JSON_FILE("data/productMetas.json"),
     CLOTHES_SIZE_JSON_FILE("data/clothesSize.json"),
-    HARMONIZED_CODES_JSON_FILE("data/harmonizedCodes.json");
+    HARMONIZED_CODES_JSON_FILE("data/harmonizedCodes.json"),
+    COUNTRY_TRANSLATIONS_CSV_FILE("data/countryTranslations.csv");
     private final String fileName;
 
     ResourceFiles(String fileName) {
