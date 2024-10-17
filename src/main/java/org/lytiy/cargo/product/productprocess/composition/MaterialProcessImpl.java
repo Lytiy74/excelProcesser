@@ -1,22 +1,11 @@
 package org.lytiy.cargo.product.productprocess.composition;
 
-import org.lytiy.Main;
-import org.lytiy.ResourceFiles;
 import org.lytiy.util.ITranslator;
-import org.lytiy.util.Translator;
-import org.lytiy.util.io.JsonFileReader;
-import org.lytiy.util.MapConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -49,9 +38,8 @@ public class MaterialProcessImpl implements IMaterialProcess {
     /**
      * Constructs a new MaterialProcess object.
      *
-     * @throws IOException if an error occurs while reading the JSON file.
      */
-    public MaterialProcessImpl(ITranslator translator) throws IOException, URISyntaxException {
+    public MaterialProcessImpl(ITranslator translator) {
         logger.info("Initializing MaterialProcessImpl");
         parser = new MaterialParser();
         this.translator = translator;

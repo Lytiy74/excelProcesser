@@ -7,46 +7,24 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
 
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.lytiy.cargo.product.productprocess.countryOrigin.CountryProcessImpl;
-import org.lytiy.cargo.product.productprocess.countryOrigin.ICountryProcess;
-import org.lytiy.excelprocessor.*;
-import org.lytiy.cargo.product.productprocess.commodity.ICommodityProcess;
-import org.lytiy.cargo.product.productprocess.category.ProductCategorizer;
-import org.lytiy.cargo.product.productprocess.ProductMeta;
-import org.lytiy.cargo.product.productprocess.commodity.ProductCommodityProcess;
-import org.lytiy.cargo.product.productprocess.composition.IMaterialProcess;
-import org.lytiy.cargo.product.productprocess.composition.MaterialProcessImpl;
 import org.lytiy.strategy.*;
-import org.lytiy.cargo.product.productprocess.commodity.CommodityItem;
-import org.lytiy.util.ITranslator;
-import org.lytiy.util.MapConverter;
-import org.lytiy.util.Translator;
 import org.lytiy.util.io.CsvFileReader;
 import org.lytiy.util.io.ExcelFileWriter;
 import org.lytiy.util.io.JsonFileReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.lytiy.ResourceFiles.*;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    private static final int DEFAULT_SHEET_INDEX = 0;
-    private static final String DEFAULT_INPUT_FILE_PATH = "опис.xlsx";
-    private static final String DEFAULT_OUTPUT_FILE_PATH = "result.xlsx";
+    protected static final int DEFAULT_SHEET_INDEX = 0;
+    protected static final String DEFAULT_INPUT_FILE_PATH = "опис.xlsx";
+    protected static final String DEFAULT_OUTPUT_FILE_PATH = "result.xlsx";
 
-    /**
-     * @param args [0] - File name, [1] - Sheet index or name, [2] - Operations to do
-     */
     public static void main(String[] args) {
         logger.info("Start processing");
-
         try {
             createResourceFiles();
             processExcelFiles(args);
@@ -57,94 +35,33 @@ public class Main {
 
     private static void processExcelFiles(String[] args) throws IOException, URISyntaxException {
         Path inputFilePath = getInputFilePath(args);
-        long startedAt = System.currentTimeMillis();
-        JsonFileReader jsonFileReader = new JsonFileReader();
-        CsvFileReader csvFileReader = new CsvFileReader();
         Path jarDir = getJarDirectory();
 
-        HashMap<String, String> countryTranslationMap = csvFileReader.read(jarDir.resolve(COUNTRY_TRANSLATIONS_CSV_FILE.getFileName()).toString());
-        HashMap<String, String> materialCompositionMap = MapConverter.invertColumnMap(jsonFileReader.readJsonObjectArrayToMap(jarDir.resolve(COMPOSITION_JSON_FILE.getFileName()).toString()));
-        HashMap<String, List<String>> targetColumnsMap = jsonFileReader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
-        HashMap<String, ProductMeta> metas = jsonFileReader.readProductMetaJsonToHashMap(jarDir.resolve(CLOTHES_NAMES_JSON_FILE.getFileName()).toString());
-        HashMap<String, CommodityItem> harmonizedCodes = jsonFileReader.readJsonToHashMap(jarDir.resolve(HARMONIZED_CODES_JSON_FILE.getFileName()).toString());
+        JsonFileReader jsonFileReader = new JsonFileReader();
+        CsvFileReader csvFileReader = new CsvFileReader();
 
-        try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString()); Workbook outWorkbook = new XSSFWorkbook()) {
-            IExcelColumnIdentifier columnIdentifier = new ExcelColumnIdentifierImpl();
-            Sheet sheet = workbook.getSheetAt(DEFAULT_SHEET_INDEX);
-            int headRowIndex = columnIdentifier.findAndGetNumberOfHeaderRow(sheet, targetColumnsMap);
-            ProductCategorizer productCategorizer = new ProductCategorizer(metas);
-            HashMap<String, Integer> identifiedColumns = columnIdentifier.identifyColumns(sheet.getRow(headRowIndex), targetColumnsMap);
-            ITranslator translatorForCountries = new Translator(countryTranslationMap);
-            ITranslator translatorForMaterial = new Translator(materialCompositionMap);
-            IExcelProductBuilder productBuilder = new ExcelProductBuilder(new ExcelCellValueExtractorImpl(), identifiedColumns, productCategorizer);
-            IExcelProductReader productReader = new ExcelProductReader(productBuilder, headRowIndex);
-            IExcelProductWriter productWriter = new ExcelProductWriter(targetColumnsMap.keySet().stream().toList());
-            ICountryProcess countryProcess = new CountryProcessImpl(translatorForCountries);
-            IMaterialProcess IMaterialProcess = new MaterialProcessImpl(translatorForMaterial);
-            ICommodityProcess commodityProcess = new ProductCommodityProcess(harmonizedCodes);
-            ExcelProcessingContext context = new ExcelProcessingContext.Builder()
-                    .workbook(workbook)
-                    .outWorkbook(outWorkbook)
-                    .sheet(sheet)
-                    .targetColumns(targetColumnsMap)
-                    .identifiedColumns(identifiedColumns)
-                    .productBuilder(productBuilder)
-                    .productReader(productReader)
-                    .productWriter(productWriter)
-                    .materialProcess(IMaterialProcess)
-                    .commodityProcess(commodityProcess)
-                    .countyProcess(countryProcess)
-                    .build();
-            for (String arg : args) {
-                // Перетворюємо аргумент у відповідну операцію з enum
-                Operation operation;
-                try {
-                    operation = Operation.valueOf(arg.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    logger.error("Invalid operation: " + arg);
-                    continue;
-                }
-                IExcelProcessingStrategy strategy = getStrategy(operation, context);
-                // Виконання стратегії
-                if (strategy == null) continue;
-                strategy.execute(context);  // Передаємо контекст, якщо потрібно
+        ExcelProcessingContext context = ExcelContextInitializer.initialize(inputFilePath, jarDir, jsonFileReader, csvFileReader);
+        long startedAt = System.currentTimeMillis();
+
+        for (String arg : args) {
+            Operation operation;
+            try {
+                operation = Operation.valueOf(arg.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                logger.error("Invalid operation: " + arg);
+                continue;
             }
-            // Write output file
-            writeOutput(outWorkbook);
+            IExcelProcessingStrategy strategy = StrategyFactory.getStrategy(operation, context);
+            if (strategy != null) strategy.execute(context);
         }
 
+        writeOutput(context.getOutWorkbook());
         logger.info("Finished processing. Wasted time = {}s", (System.currentTimeMillis() - startedAt) / 1000);
     }
-
-    private static IExcelProcessingStrategy getStrategy(Operation arg, ExcelProcessingContext context) {
-        switch (arg) {
-            case COLLECT_PRODUCTS -> {
-                return new ExcelProductReadingStrategy(context.getProductReader());
-            }
-            case PROCESS_PRODUCTS -> {
-                return new ExcelProductProcessStrategy(context.getMaterialProcess());
-            }
-            case SORT_PRODUCT_COMPOSITION -> {
-                return new ExcelSortCompositionStrategy(context.getMaterialProcess());
-            }
-            case SAVE_RESULTS -> {
-                return new ExcelProductWriteStrategy(context.getProductWriter());
-            }
-            case PROCESS_PRODUCT_HS_CODE -> {
-                return new ExcelProductCommoditySpecifyGender(context.getCommodityProcess());
-            }
-            case TRANSLATE_PRODUCT_COUNTRY -> {
-                return new ExcelProductTranslateCountryOrigin(context.getCountryProcess());
-            }
-        }
-        return null;
-    }
-
 
     private static Path getInputFilePath(String[] args) {
         return args.length > 0 && args[0] != null ? Path.of(args[0]) : Path.of(DEFAULT_INPUT_FILE_PATH);
     }
-
 
     private static void writeOutput(Workbook workbook) throws IOException {
         ExcelFileWriter writer = new ExcelFileWriter();
@@ -157,7 +74,7 @@ public class Main {
 
     private static void createResourceFiles() throws URISyntaxException {
         Path jarDir = getJarDirectory();
-        for (ResourceFiles resource : values()) {
+        for (ResourceFiles resource : ResourceFiles.values()) {
             copyResourceIfNotExists(jarDir, resource);
         }
     }
@@ -185,3 +102,4 @@ public class Main {
         }
     }
 }
+

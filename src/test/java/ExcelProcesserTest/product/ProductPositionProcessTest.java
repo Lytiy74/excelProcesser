@@ -1,8 +1,8 @@
 package ExcelProcesserTest.product;
 
-import org.lytiy.product.Gender;
-import org.lytiy.product.ProductPosition;
-import org.lytiy.product.productprocess.ProductProcess;
+import org.lytiy.cargo.product.Gender;
+import org.lytiy.cargo.product.ProductPosition;
+import org.lytiy.cargo.product.productprocess.ProductProcess;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
