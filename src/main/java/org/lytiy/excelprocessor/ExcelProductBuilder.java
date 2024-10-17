@@ -1,8 +1,8 @@
 package org.lytiy.excelprocessor;
 
 import org.apache.poi.ss.usermodel.Row;
-import org.lytiy.product.productprocess.category.ProductCategorizer;
-import org.lytiy.product.ProductPosition;
+import org.lytiy.cargo.product.productprocess.category.ProductCategorizer;
+import org.lytiy.cargo.product.ProductPosition;
 
 import java.util.HashMap;
 

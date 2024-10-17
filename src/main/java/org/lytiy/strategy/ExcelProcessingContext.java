@@ -2,12 +2,13 @@ package org.lytiy.strategy;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.lytiy.cargo.product.productprocess.countryOrigin.ICountryProcess;
 import org.lytiy.excelprocessor.IExcelProductBuilder;
 import org.lytiy.excelprocessor.IExcelProductReader;
 import org.lytiy.excelprocessor.IExcelProductWriter;
-import org.lytiy.product.ProductPosition;
-import org.lytiy.product.productprocess.commodity.ICommodityProcess;
-import org.lytiy.product.productprocess.composition.IMaterialProcess;
+import org.lytiy.cargo.product.ProductPosition;
+import org.lytiy.cargo.product.productprocess.commodity.ICommodityProcess;
+import org.lytiy.cargo.product.productprocess.composition.IMaterialProcess;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ public class ExcelProcessingContext {
     private final IExcelProductWriter productWriter;
     private final IMaterialProcess IMaterialProcess;
     private final ICommodityProcess commodityProcess;
+    private final ICountryProcess countryProcess;
     private HashMap<String, ProductPosition> productPositionHashMap;
 
     private ExcelProcessingContext(Builder builder) {
@@ -37,6 +39,7 @@ public class ExcelProcessingContext {
         this.IMaterialProcess = builder.IMaterialProcess;
         this.productPositionHashMap = builder.productPositionHashMap;
         this.commodityProcess = builder.commodityProcess;
+        this.countryProcess = builder.countryProcess;
     }
 
     public static class Builder {
@@ -51,6 +54,7 @@ public class ExcelProcessingContext {
         private IMaterialProcess IMaterialProcess;
         private ICommodityProcess commodityProcess;
         private HashMap<String, ProductPosition> productPositionHashMap;
+        private ICountryProcess countryProcess;
 
         public Builder workbook(Workbook workbook) {
             this.workbook = workbook;
@@ -107,6 +111,11 @@ public class ExcelProcessingContext {
             return this;
         }
 
+        public Builder countyProcess(ICountryProcess countryProcess){
+            this.countryProcess = countryProcess;
+            return this;
+        }
+
         public ExcelProcessingContext build() {
             return new ExcelProcessingContext(this);
         }
@@ -150,6 +159,10 @@ public class ExcelProcessingContext {
 
     public ICommodityProcess getCommodityProcess() {
         return commodityProcess;
+    }
+
+    public ICountryProcess getCountryProcess(){
+        return countryProcess;
     }
 
     public HashMap<String, ProductPosition> getProductPositionHashMap() {

@@ -1,7 +1,7 @@
 package org.lytiy.strategy;
 
-import org.lytiy.product.ProductPosition;
-import org.lytiy.product.productprocess.composition.IMaterialProcess;
+import org.lytiy.cargo.product.ProductPosition;
+import org.lytiy.cargo.product.productprocess.composition.IMaterialProcess;
 
 import java.util.HashMap;
 import java.util.Map;

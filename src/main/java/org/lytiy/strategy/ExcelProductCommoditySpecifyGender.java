@@ -1,8 +1,8 @@
 package org.lytiy.strategy;
 
-import org.lytiy.product.Gender;
-import org.lytiy.product.ProductPosition;
-import org.lytiy.product.productprocess.commodity.ICommodityProcess;
+import org.lytiy.cargo.product.Gender;
+import org.lytiy.cargo.product.ProductPosition;
+import org.lytiy.cargo.product.productprocess.commodity.ICommodityProcess;
 
 import java.util.HashMap;
 import java.util.Map;

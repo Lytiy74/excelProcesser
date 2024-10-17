@@ -1,7 +1,7 @@
 package org.lytiy.excelprocessor;
 
 import org.apache.poi.ss.usermodel.*;
-import org.lytiy.product.Gender;
+import org.lytiy.cargo.product.Gender;
 
 public class ExcelCellWriteValidator {
     public static void validateAndWrite(Cell cell, Object value) {
