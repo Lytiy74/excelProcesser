@@ -13,15 +13,21 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.lytiy.cargo.product.productprocess.countryOrigin.CountryProcessImpl;
+import org.lytiy.cargo.product.productprocess.countryOrigin.ICountryProcess;
 import org.lytiy.excelprocessor.*;
-import org.lytiy.product.productprocess.commodity.ICommodityProcess;
-import org.lytiy.product.productprocess.category.ProductCategorizer;
-import org.lytiy.product.productprocess.ProductMeta;
-import org.lytiy.product.productprocess.commodity.ProductCommodityProcess;
-import org.lytiy.product.productprocess.composition.IMaterialProcess;
-import org.lytiy.product.productprocess.composition.MaterialProcessImpl;
+import org.lytiy.cargo.product.productprocess.commodity.ICommodityProcess;
+import org.lytiy.cargo.product.productprocess.category.ProductCategorizer;
+import org.lytiy.cargo.product.productprocess.ProductMeta;
+import org.lytiy.cargo.product.productprocess.commodity.ProductCommodityProcess;
+import org.lytiy.cargo.product.productprocess.composition.IMaterialProcess;
+import org.lytiy.cargo.product.productprocess.composition.MaterialProcessImpl;
 import org.lytiy.strategy.*;
-import org.lytiy.product.productprocess.commodity.CommodityItem;
+import org.lytiy.cargo.product.productprocess.commodity.CommodityItem;
+import org.lytiy.util.ITranslator;
+import org.lytiy.util.MapConverter;
+import org.lytiy.util.Translator;
+import org.lytiy.util.io.CsvFileReader;
 import org.lytiy.util.io.ExcelFileWriter;
 import org.lytiy.util.io.JsonFileReader;
 import org.slf4j.Logger;
@@ -53,8 +59,11 @@ public class Main {
         Path inputFilePath = getInputFilePath(args);
         long startedAt = System.currentTimeMillis();
         JsonFileReader jsonFileReader = new JsonFileReader();
+        CsvFileReader csvFileReader = new CsvFileReader();
         Path jarDir = getJarDirectory();
 
+        HashMap<String, String> countryTranslationMap = csvFileReader.read(jarDir.resolve(COUNTRY_TRANSLATIONS_CSV_FILE.getFileName()).toString());
+        HashMap<String, String> materialCompositionMap = MapConverter.invertColumnMap(jsonFileReader.readJsonObjectArrayToMap(jarDir.resolve(COMPOSITION_JSON_FILE.getFileName()).toString()));
         HashMap<String, List<String>> targetColumnsMap = jsonFileReader.readJsonObjectArrayToMap(jarDir.resolve(COLUMN_NAME_JSON_FILE.getFileName()).toString());
         HashMap<String, ProductMeta> metas = jsonFileReader.readProductMetaJsonToHashMap(jarDir.resolve(CLOTHES_NAMES_JSON_FILE.getFileName()).toString());
         HashMap<String, CommodityItem> harmonizedCodes = jsonFileReader.readJsonToHashMap(jarDir.resolve(HARMONIZED_CODES_JSON_FILE.getFileName()).toString());
@@ -65,10 +74,13 @@ public class Main {
             int headRowIndex = columnIdentifier.findAndGetNumberOfHeaderRow(sheet, targetColumnsMap);
             ProductCategorizer productCategorizer = new ProductCategorizer(metas);
             HashMap<String, Integer> identifiedColumns = columnIdentifier.identifyColumns(sheet.getRow(headRowIndex), targetColumnsMap);
+            ITranslator translatorForCountries = new Translator(countryTranslationMap);
+            ITranslator translatorForMaterial = new Translator(materialCompositionMap);
             IExcelProductBuilder productBuilder = new ExcelProductBuilder(new ExcelCellValueExtractorImpl(), identifiedColumns, productCategorizer);
             IExcelProductReader productReader = new ExcelProductReader(productBuilder, headRowIndex);
             IExcelProductWriter productWriter = new ExcelProductWriter(targetColumnsMap.keySet().stream().toList());
-            IMaterialProcess IMaterialProcess = new MaterialProcessImpl();
+            ICountryProcess countryProcess = new CountryProcessImpl(translatorForCountries);
+            IMaterialProcess IMaterialProcess = new MaterialProcessImpl(translatorForMaterial);
             ICommodityProcess commodityProcess = new ProductCommodityProcess(harmonizedCodes);
             ExcelProcessingContext context = new ExcelProcessingContext.Builder()
                     .workbook(workbook)
@@ -81,6 +93,7 @@ public class Main {
                     .productWriter(productWriter)
                     .materialProcess(IMaterialProcess)
                     .commodityProcess(commodityProcess)
+                    .countyProcess(countryProcess)
                     .build();
             for (String arg : args) {
                 // Перетворюємо аргумент у відповідну операцію з enum
@@ -120,6 +133,9 @@ public class Main {
             case PROCESS_PRODUCT_HS_CODE -> {
                 return new ExcelProductCommoditySpecifyGender(context.getCommodityProcess());
             }
+            case TRANSLATE_PRODUCT_COUNTRY -> {
+                return new ExcelProductTranslateCountryOrigin(context.getCountryProcess());
+            }
         }
         return null;
     }
@@ -141,7 +157,7 @@ public class Main {
 
     private static void createResourceFiles() throws URISyntaxException {
         Path jarDir = getJarDirectory();
-        for (ResourceFiles resource : ResourceFiles.values()) {
+        for (ResourceFiles resource : values()) {
             copyResourceIfNotExists(jarDir, resource);
         }
     }
