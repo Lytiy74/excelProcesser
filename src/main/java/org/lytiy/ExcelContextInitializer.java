@@ -36,7 +36,8 @@ public class ExcelContextInitializer {
         HashMap<String, ProductMeta> metas = jsonFileReader.readProductMetaJsonToHashMap(jarDir.resolve(CLOTHES_NAMES_JSON_FILE.getFileName()).toString());
         HashMap<String, CommodityItem> harmonizedCodes = jsonFileReader.readJsonToHashMap(jarDir.resolve(HARMONIZED_CODES_JSON_FILE.getFileName()).toString());
 
-        try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString()); Workbook outWorkbook = new XSSFWorkbook()) {
+        try (Workbook workbook = new XSSFWorkbook(inputFilePath.toString())) {
+            Workbook outWorkbook = new XSSFWorkbook();
             IExcelColumnIdentifier columnIdentifier = new ExcelColumnIdentifierImpl();
             Sheet sheet = workbook.getSheetAt(DEFAULT_SHEET_INDEX);
             int headRowIndex = columnIdentifier.findAndGetNumberOfHeaderRow(sheet, targetColumnsMap);
