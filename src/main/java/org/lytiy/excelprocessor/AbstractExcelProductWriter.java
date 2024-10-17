@@ -2,7 +2,7 @@ package org.lytiy.excelprocessor;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.lytiy.product.ProductPosition;
+import org.lytiy.cargo.product.ProductPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
