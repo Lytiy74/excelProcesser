@@ -3,6 +3,7 @@
     "арт",
     "артикул",
     "article",
+    "style",
     "art.nr.",
     "modell",
     "artikelnr",
@@ -23,6 +24,8 @@
     "розмір",
     "размер",
     "größe",
+    "size",
+    "sizes",
     "goresse",
     "grösse"
   ],
@@ -64,6 +67,7 @@
     "composition details",
     "состав",
     "100% co",
+    "fabric",
     "zusammensetzung"
   ],
   "gender": [
@@ -76,6 +80,7 @@
     "митний код",
     "hscode",
     "код вэд",
+    "preference",
     "warennummer",
     "zolltarifnummer",
     "custom code",
@@ -94,6 +99,7 @@
   ],
   "price": [
     "загальна сума",
+    "wholesale price",
     "cума",
     "цена",
     "ціна",
