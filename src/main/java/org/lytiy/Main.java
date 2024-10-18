@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.lytiy.strategy.*;
@@ -15,26 +17,43 @@ import org.lytiy.util.io.ExcelFileWriter;
 import org.lytiy.util.io.JsonFileReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import picocli.CommandLine;
 
-
-public class Main {
+@CommandLine.Command(name = "ExcelProcessor", mixinStandardHelpOptions = true, version = "1.0",
+        description = "Processes Excel files with specified operations")
+public class Main implements Callable<Integer> {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    protected static final int DEFAULT_SHEET_INDEX = 0;
-    protected static final String DEFAULT_INPUT_FILE_PATH = "опис.xlsx";
-    protected static final String DEFAULT_OUTPUT_FILE_PATH = "result.xlsx";
 
-    public static void main(String[] args) {
+    protected static final int DEFAULT_SHEET_INDEX = 0;
+
+    @CommandLine.Parameters(index = "0", description = "Input Excel file path")
+    protected static String INPUT_FILE_PATH = "опис.xlsx";
+
+    @CommandLine.Option(names = {"-o", "--output"}, description = "Output Excel file path")
+    protected static String OUTPUT_FILE_PATH = "result.xlsx";
+
+    @CommandLine.Parameters(index = "1..*", description = "Operations to perform (e.g., COLLECT_PRODUCTS, PROCESS_PRODUCTS, SAVE_RESULTS)")
+    private static List<Operation> operations;
+
+
+    @Override
+    public Integer call() {
         logger.info("Start processing");
         try {
             createResourceFiles();
-            processExcelFiles(args);
+            processExcelFiles(operations);
         } catch (IOException | URISyntaxException e) {
             logger.error("An error occurred during processing", e);
         }
+        return 0;
+    }
+    public static void main(String[] args) {
+        int exitCode = new CommandLine(new Main()).execute(args);
+        System.exit(exitCode);
     }
 
-    private static void processExcelFiles(String[] args) throws IOException, URISyntaxException {
-        Path inputFilePath = getInputFilePath(args);
+    private static void processExcelFiles(List<Operation> args) throws IOException, URISyntaxException {
+        Path inputFilePath = getInputFilePath();
         Path jarDir = getJarDirectory();
 
         JsonFileReader jsonFileReader = new JsonFileReader();
@@ -43,14 +62,7 @@ public class Main {
         ExcelProcessingContext context = ExcelContextInitializer.initialize(inputFilePath, jarDir, jsonFileReader, csvFileReader);
         long startedAt = System.currentTimeMillis();
 
-        for (String arg : args) {
-            Operation operation;
-            try {
-                operation = Operation.valueOf(arg.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                logger.error("Invalid operation: " + arg);
-                continue;
-            }
+        for (Operation operation : args) {
             IExcelProcessingStrategy strategy = StrategyFactory.getStrategy(operation, context);
             if (strategy != null) strategy.execute(context);
         }
@@ -59,13 +71,13 @@ public class Main {
         logger.info("Finished processing. Wasted time = {}s", (System.currentTimeMillis() - startedAt) / 1000);
     }
 
-    private static Path getInputFilePath(String[] args) {
-        return args.length > 0 && args[0] != null ? Path.of(args[0]) : Path.of(DEFAULT_INPUT_FILE_PATH);
+    private static Path getInputFilePath() {
+        return Path.of(INPUT_FILE_PATH);
     }
 
     private static void writeOutput(Workbook workbook) throws IOException {
         ExcelFileWriter writer = new ExcelFileWriter();
-        writer.write(workbook, DEFAULT_OUTPUT_FILE_PATH);
+        writer.write(workbook, OUTPUT_FILE_PATH);
     }
 
     private static Path getJarDirectory() throws URISyntaxException {
