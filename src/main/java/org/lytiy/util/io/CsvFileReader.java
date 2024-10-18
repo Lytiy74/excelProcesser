@@ -19,6 +19,7 @@ public class CsvFileReader {
                 String alpha3Code = values[2];
                 String ukrainianName = values[3];
 
+                countryTranslationMap.put(ukrainianName,ukrainianName);
                 countryTranslationMap.put(alpha2Code, ukrainianName);
                 countryTranslationMap.put(countryName, ukrainianName);
                 countryTranslationMap.put(alpha3Code, ukrainianName);
