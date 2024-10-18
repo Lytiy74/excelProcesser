@@ -24,16 +24,18 @@ import picocli.CommandLine;
 public class Main implements Callable<Integer> {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-    protected static final int DEFAULT_SHEET_INDEX = 0;
-
     @CommandLine.Parameters(index = "0", description = "Input Excel file path")
-    protected static String INPUT_FILE_PATH = "опис.xlsx";
+    protected static String INPUT_FILE_PATH;
+
+    @CommandLine.Parameters(index = "1..*", description = "Operations to perform (e.g., COLLECT_PRODUCTS, PROCESS_PRODUCTS, SAVE_RESULTS)")
+    private static List<Operation> operations;
 
     @CommandLine.Option(names = {"-o", "--output"}, description = "Output Excel file path")
     protected static String OUTPUT_FILE_PATH = "result.xlsx";
 
-    @CommandLine.Parameters(index = "1..*", description = "Operations to perform (e.g., COLLECT_PRODUCTS, PROCESS_PRODUCTS, SAVE_RESULTS)")
-    private static List<Operation> operations;
+    @CommandLine.Option(names = {"-s", "--sheetIndex"}, description = "Sheet index Excel file")
+    protected static int DEFAULT_SHEET_INDEX = 0;
+
 
 
     @Override
