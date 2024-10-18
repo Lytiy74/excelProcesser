@@ -16,10 +16,11 @@ public class Translator implements ITranslator{
 
     @Override
     public String translate(String inputString) {
+        JaccardCalculation jaccardCalculation = new JaccardCalculation();
         String translated = translationsMap.get(inputString);
         if (translated == null) {
             logger.debug("Cant find translations in map for '{}', going to jaccardCalculation", inputString);
-            translated = JaccardCalculation.findBestMatch(inputString, translationsMap);
+            translated = jaccardCalculation.findBestMatch(inputString, translationsMap);
             translated = translated.contains("N/A") ? translated.concat(" (" + inputString + ")") : translated;
             translationsMap.put(inputString, translated);
         }

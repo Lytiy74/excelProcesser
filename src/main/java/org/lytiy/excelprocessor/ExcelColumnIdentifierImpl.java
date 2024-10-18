@@ -5,6 +5,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.lytiy.util.JaccardCalculation;
 import org.lytiy.util.MapConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,18 +14,22 @@ import java.util.List;
 
 public class ExcelColumnIdentifierImpl implements IExcelColumnIdentifier {
 
+    private static final Logger logger = LoggerFactory.getLogger(ExcelColumnIdentifierImpl.class);
+
     @Override
     public HashMap<String, Integer> identifyColumns(Row source, HashMap<String, List<String>> targetColumns) {
         HashMap<String, String> columnKeyMap = MapConverter.invertColumnMap(targetColumns);
         List<String> sourceColumns = extractColumnNames(source);
 
         HashMap<String, Integer> identifiedColumns = new HashMap<>();
+        JaccardCalculation jaccardCalculation = new JaccardCalculation();
         for (int i = 0; i < sourceColumns.size(); i++) {
             String column = sourceColumns.get(i);
-            String bestMatchCategory = JaccardCalculation.findBestMatch(column, columnKeyMap);
-            identifiedColumns.put(bestMatchCategory, i);  // Додаємо індекс стовпця
+            String bestMatchCategory = jaccardCalculation.findBestMatch(column, columnKeyMap);
+            if (bestMatchCategory.equals("N/A")) continue;
+            identifiedColumns.put(bestMatchCategory, i);
         }
-
+        logger.debug("Identified columns {}", identifiedColumns);
         return identifiedColumns;
     }
 

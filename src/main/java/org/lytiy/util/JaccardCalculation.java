@@ -11,9 +11,12 @@ import java.util.*;
 public class JaccardCalculation {
     private static final Logger logger = LoggerFactory.getLogger(JaccardCalculation.class);
     private static final double JACCARD_PASSABLE_VALUE = 0.55;
-    private static final double EDGE_SIMILARITY = 0.7;
+    private static final double EDGE_SIMILARITY = 0.55;
+    private final HashMap<String, Double> bestScoreForCategory;
 
-    private static Map<String, Double> existingMatches = new HashMap<>();
+    public JaccardCalculation() {
+        this.bestScoreForCategory = new HashMap<>();
+    }
 
     /**
      * This method calculates a Jaccard coefficient.
@@ -38,24 +41,21 @@ public class JaccardCalculation {
      * @param keyMap The inverted target map.
      * @return The best match category for the given column name.
      */
-    public static String findBestMatch(String var1, HashMap<String, String> keyMap) {
+    public String findBestMatch(String var1, HashMap<String, String> keyMap) {
         logger.debug("Looking for best match for '{}'", var1);
-        if (var1 == null || var1.isEmpty()) return "N/A";
-        // Convert the column name to a set of characters
-        Set<Character> set = stringToLowerCaseCharSet(var1);
-
         // Initialize variables to store the best match category and score
         String bestMatch = "N/A";
         double bestScore = 0;  // Use 0 as initial score to directly compare against JACCARD_PASSABLE_VALUE
-
-        if(existingMatches.containsKey(var1)){
-            bestScore = existingMatches.get(var1);
-        }
+        if (var1 == null || var1.isEmpty()) return bestMatch;
+        // Convert the column name to a set of characters
+        Set<Character> set = stringToLowerCaseCharSet(var1);
 
         // Iterate through the entries in the inverted column map
         for (Map.Entry<String, String> entry : keyMap.entrySet()) {
+            double bestForCategory = 0;
             String possibleName = entry.getKey();
             String category = entry.getValue();
+            if (bestScoreForCategory.containsKey(category)) bestForCategory = bestScoreForCategory.get(category);
 
             // Convert the possible column name to a set of characters
             Set<Character> possibleSet = stringToLowerCaseCharSet(possibleName);
@@ -65,18 +65,18 @@ public class JaccardCalculation {
 
             // If the score is higher than the current best score, update the best match category and score
             logger.trace("Possible match: '{}' , Category: '{}', Score: {}", possibleName, category, score);
-            if (score > bestScore && score > JACCARD_PASSABLE_VALUE) {
+            if (score > bestScore && score > bestForCategory && score > JACCARD_PASSABLE_VALUE) {
                 bestScore = score;
                 bestMatch = category;
+                bestScoreForCategory.put(bestMatch ,bestScore);
+                break;
             }
-        }
-        if (!"N/A".equals(bestMatch)) {
-            existingMatches.put(var1, bestScore);
         }
 
 
         // Return the best match category
-        logger.debug("Best match for '{}' is '{}', Score: {}", var1, bestMatch, bestScore);
+
+        if(!bestMatch.equals("N/A"))logger.debug("Best match for '{}' is '{}', Score: {}", var1, bestMatch, bestScore);
         return bestMatch;
     }
 

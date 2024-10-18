@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JaccardCalculationTest {
     private static final Logger logger = LoggerFactory.getLogger(JaccardCalculationTest.class);
+    JaccardCalculation jaccardCalculation = new JaccardCalculation();
 
     @Test
     public void findBestMatch_nullInputForVar1_returnsUnknown() {
@@ -20,7 +21,7 @@ public class JaccardCalculationTest {
         keyMap.put("lytiy", "Category1");
 
         // Act
-        String result = JaccardCalculation.findBestMatch(var1, keyMap);
+        String result = jaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
         assertEquals("N/A", result);
@@ -34,7 +35,7 @@ public class JaccardCalculationTest {
         keyMap.put("lytiy", "Category1");
 
         // Act
-        String result = JaccardCalculation.findBestMatch(var1, keyMap);
+        String result = jaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
         assertEquals("N/A", result);
@@ -48,7 +49,7 @@ public class JaccardCalculationTest {
         keyMap.put("lytiy", "Category1");
 
         // Act
-        String result = JaccardCalculation.findBestMatch(var1, keyMap);
+        String result = jaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
         assertEquals("N/A", result);
@@ -62,7 +63,7 @@ public class JaccardCalculationTest {
         keyMap.put("lytiy", "Category1");
 
         // Act
-        String result = JaccardCalculation.findBestMatch(var1, keyMap);
+        String result = jaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
         assertEquals("N/A", result);
@@ -76,7 +77,7 @@ public class JaccardCalculationTest {
         keyMap.put("lytiy", "Category1");
 
         // Act
-        String result = JaccardCalculation.findBestMatch(var1, keyMap);
+        String result = jaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
         assertEquals("N/A", result);
@@ -90,7 +91,7 @@ public class JaccardCalculationTest {
         keyMap.put("lytiy", "Category1");
 
         // Act
-        String result = JaccardCalculation.findBestMatch(var1, keyMap);
+        String result = jaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
         assertEquals("Category1", result);
@@ -105,7 +106,7 @@ public class JaccardCalculationTest {
         keyMap.put("examination", "Category2");
 
         // Act
-        String result = JaccardCalculation.findBestMatch(var1, keyMap);
+        String result = jaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
         assertEquals("Category1", result);
@@ -120,7 +121,7 @@ public class JaccardCalculationTest {
         keyMap.put("examination", "Category2");
 
         // Act
-        String result = JaccardCalculation.findBestMatch(var1, keyMap);
+        String result = jaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
         assertEquals("N/A", result);
@@ -134,7 +135,7 @@ public class JaccardCalculationTest {
         keyMap.put("example", "Category1");
 
         // Act
-        String result = JaccardCalculation.findBestMatch(var1, keyMap);
+        String result = jaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
         assertEquals("Category1", result);
@@ -149,7 +150,7 @@ public class JaccardCalculationTest {
         keyMap.put("тест", "Category2");
 
         // Act
-        String result = JaccardCalculation.findBestMatch(var1, keyMap);
+        String result = jaccardCalculation.findBestMatch(var1, keyMap);
 
         // Assert
         assertEquals("Category2", result);

@@ -32,10 +32,11 @@ class MaterialTranslator implements ITranslator {
     @Deprecated(since = "17.10.2024")
     @Override
     public String translate(String inputString) {
+        JaccardCalculation jaccardCalculation = new JaccardCalculation();
         String translated = materialTranslationMap.get(inputString);
         if (translated == null) {
             logger.debug("Cant find translations in map for '{}', going to jaccardCalculation", inputString);
-            translated = JaccardCalculation.findBestMatch(inputString, materialTranslationMap);
+            translated = jaccardCalculation.findBestMatch(inputString, materialTranslationMap);
             translated = translated.contains("N/A") ? translated.concat(" (" + inputString + ")") : translated;
             materialTranslationMap.put(inputString, translated);
         }
