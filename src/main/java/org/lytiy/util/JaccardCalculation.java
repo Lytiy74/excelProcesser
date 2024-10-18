@@ -10,8 +10,10 @@ import java.util.*;
 
 public class JaccardCalculation {
     private static final Logger logger = LoggerFactory.getLogger(JaccardCalculation.class);
-    public static final double JACCARD_PASSABLE_VALUE = 0.55;
-    public static final double EDGE_SIMILARITY = 0.8;
+    private static final double JACCARD_PASSABLE_VALUE = 0.55;
+    private static final double EDGE_SIMILARITY = 0.7;
+
+    private static Map<String, Double> existingMatches = new HashMap<>();
 
     /**
      * This method calculates a Jaccard coefficient.
@@ -46,6 +48,10 @@ public class JaccardCalculation {
         String bestMatch = "N/A";
         double bestScore = 0;  // Use 0 as initial score to directly compare against JACCARD_PASSABLE_VALUE
 
+        if(existingMatches.containsKey(var1)){
+            bestScore = existingMatches.get(var1);
+        }
+
         // Iterate through the entries in the inverted column map
         for (Map.Entry<String, String> entry : keyMap.entrySet()) {
             String possibleName = entry.getKey();
@@ -64,6 +70,10 @@ public class JaccardCalculation {
                 bestMatch = category;
             }
         }
+        if (!"N/A".equals(bestMatch)) {
+            existingMatches.put(var1, bestScore);
+        }
+
 
         // Return the best match category
         logger.debug("Best match for '{}' is '{}', Score: {}", var1, bestMatch, bestScore);
